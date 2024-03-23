@@ -8,7 +8,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 
 const Setting = () => {
     const navigation = [
-        { name: 'Dashboard', href: '#', current: true },
+        { name: 'Dashboard', href: '/', current: true },
         { name: 'Calculation', href: '#', current: false }
     ]
 
