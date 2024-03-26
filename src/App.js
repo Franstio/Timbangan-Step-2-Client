@@ -4,6 +4,7 @@ import "./index.css"
 import Setting from "./components/Settings.jsx"
 import Dashboardv2 from "./components/Dashboardv2.jsx"
 import Page from "./components/Newpage.jsx"
+import Page2 from "./components/Page.jsx"
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/setting" element={<Setting />} />
           <Route path="/dashboardv2" element={<Dashboardv2 />} />
           <Route path="/page" element={<Page />} />
+          <Route path="/page2" element={<Page2 />} />
         </Routes>
       
     </div>
