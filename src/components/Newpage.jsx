@@ -2,19 +2,47 @@
 import React, { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { FaCircle } from 'react-icons/fa';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { IoSettingsOutline } from "react-icons/io5";
+import { FiRefreshCcw } from "react-icons/fi";
 
-const Setting = () => {
+import { styled } from '@mui/material/styles';
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import Pagination from '@mui/material/Pagination';
+
+
+
+const Home = () => {
     const navigation = [
-        { name: 'Dashboard', href: '/', current: true },
+        { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
     ]
 
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
     }
+
+    const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
+        height: 10,
+        borderRadius: 5,
+        [`&.${linearProgressClasses.colorPrimary}`]: {
+            backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+        },
+        [`& .${linearProgressClasses.bar}`]: {
+            borderRadius: 5,
+            backgroundColor: value > 70 ? '#f44336' : theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
+        },
+    }));
+
+    const CustomLinearProgress = ({ value }) => {
+        return (
+            <LinearProgress
+                variant="determinate"
+                value={value}
+                color={value > 70 ? 'error' : 'primary'}
+                style={{ width: '90%', height: 10, borderRadius: 5, marginRight: '10px' }}
+            />
+        );
+    };
 
     return (
         <main>
@@ -148,42 +176,106 @@ const Setting = () => {
                     </>
                 )}
             </Disclosure>
-            <div className='bg-gray-400 p-5'>
-                <div className='p-5 bg-white'>
-                    <h1 className='text-lg font-semibold mb-5'>Manual Button</h1>
-
-                    <h2 className='text-lg '>Tower Lamp</h2>
-                    <div className='flex flex-warp gap-5'>
-                    <button className='border rounded bg-sky-300 w-20 py-3 relative'>
-                            Green
-                            <FiberManualRecordIcon fontSize="small" style={{ color: 'green', position: 'absolute', top: 0, right: 0 }} />
-                        </button>
-                        <button className='border rounded bg-sky-300 w-20 py-2 relative'>
-                            Yellow
-                            <FiberManualRecordIcon fontSize="small" style={{ color: 'green', position: 'absolute', top: 0, right: 0 }} />
-                        </button>
-                        <button className='border rounded bg-sky-300 w-20 py-2 relative'>
-                            Red
-                            <FiberManualRecordIcon fontSize="small" style={{ color: 'green', position: 'absolute', top: 0, right: 0 }} />
-                        </button>
+            <div className='bg-[#f4f6f9] p-5'>
+                {/*  <div class="flex justify-center grid grid-cols-2 gap-5">
+                    <div className='flex-1 p-4 border rounded bg-white'>
+                        <h1 className='text-blue-600 font-semibold mb-2 text-xl mb-20'>Weight A</h1>
+                        <div class=''>
+                            <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                            <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
+                        </div>
                     </div>
 
-                    <h2 className='text-lg mt-5'>Lock Button</h2>
-                    <div className='flex flex-warp gap-5 relative'>
-                        <button className='border rounded bg-sky-300 w-20 py-3 relative'>
-                            Top
-                            <FiberManualRecordIcon fontSize="small" style={{ color: 'green', position: 'absolute', top: 0, right: 0 }} />
-                        </button>
-                        <button className='border rounded bg-sky-300 w-20 py-3 relative'>
-                            Bottom
-                            <FiberManualRecordIcon fontSize="small" style={{ color: 'red', position: 'absolute', top: 0, right: 0 }} />
-                        </button>
+                    <div className='flex-1 p-4 border rounded bg-white'>
+                        <h1 className='text-blue-600 font-semibold text-xl mb-3'>Scanner Result</h1>
+                        <p>UserId</p>
+                        <input
+                            type="text"
+                            name="text"
+                            id="userId"
+                            className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            placeholder="luGGIatKmKvdMkcxpKc8SZD64ex5W0"
+                        />
+                        <div>
+                            <p>Type Waste</p>
+                            <input
+                                type="text"
+                                name="text"
+                                id="typeWaste"
+                                className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                placeholder="Iron"
+                            />
+                        </div>
+                        <a className='block w-full border rounded py-2 flex justify-center items-center bg-white font-bold mt-5 bg-sky-400 text-white text-lg' href='/'>Submit</a>
+                        <div className='text-lg mt-5'>
+                            <p>Username: fahri</p>
+                            <p>Type Waste: Iron</p>
+                        </div>
                     </div>
 
+
+                    <div className='flex-1 p-4 border rounded bg-white'>
+                        <h1 className='text-blue-600 font-semibold mb-2 text-xl mb-12'>Weight B</h1>
+                        <div class=''>
+                            <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                            <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
+                        </div>
+                    </div>
+                </div> */}
+
+                <div class="grid grid-rows-3 grid-flow-col gap-5">
+                    <div class="row-span-1">   
+                    <div className='flex-1 p-4 border rounded bg-white'>
+                        <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Weight B</h1>
+                        <div class=''>
+                            <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                            <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
+                        </div>
+                    </div></div>
+                    <div class="col-span-1 ...">   
+                    <div className='flex-1 p-4 border rounded bg-white'>
+                        <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Weight B</h1>
+                        <div class=''>
+                            <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                            <p className='flex justify-center text-2xl font-bold'>Gram</p>
+                        </div>
+                    </div></div>
+                    <div class="row-span-2 col-span-1"> 
+                    <div className='flex-1 p-4 border rounded bg-white h-full'>
+                        <h1 className='text-blue-600 font-semibold text-xl mb-3'>Scanner Result</h1>
+                        <p>UserId</p>
+                        <input
+                            type="text"
+                            name="text"
+                            id="userId"
+                            className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            placeholder="luGGIatKmKvdMkcxpKc8SZD64ex5W0"
+                        />
+                        <div>
+                            <p>Type Waste</p>
+                            <input
+                                type="text"
+                                name="text"
+                                id="typeWaste"
+                                className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                placeholder="Iron"
+                            />
+                        </div>
+                        <a className='block w-full border rounded py-2 flex justify-center items-center bg-white font-bold mt-5 bg-sky-400 text-white text-lg' href='/'>Submit</a>
+                        <div className='text-lg mt-5'>
+                            <p>Username: fahri</p>
+                            <p>Type Waste: Iron</p>
+                        </div>
+                    </div></div>
                 </div>
+
             </div>
+            <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
+                <p>Server Status: 192.168.1.5 Online</p>
+                <p>Status PLC : Online</p>
+            </footer>
         </main>
     );
 };
 
-export default Setting;
+export default Home;
