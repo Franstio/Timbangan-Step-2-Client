@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home.jsx"
-import "./index.css"
 import Setting from "./components/Settings.jsx"
 import Dashboardv2 from "./components/Dashboardv2.jsx"
 import Page from "./components/Newpage.jsx"
-import Page2 from "./components/Page.jsx"
+import Page3 from "./components/Page.jsx"
+import Page2 from "./components/Page2.jsx"
 
 function App() {
   return (
@@ -15,6 +15,7 @@ function App() {
           <Route path="/dashboardv2" element={<Dashboardv2 />} />
           <Route path="/page" element={<Page />} />
           <Route path="/page2" element={<Page2 />} />
+          <Route path="/page3" element={<Page3 />} />
         </Routes>
       
     </div>

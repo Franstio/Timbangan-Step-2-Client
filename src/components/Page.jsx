@@ -224,7 +224,7 @@ const Home = () => {
                                     </div>
                                     <div className='text-center mt-2 text-lg font-bold'>
                                         <p>10 kg</p>
-                                        <a href='/' className='block w-full border rounded flex justify-center items-center bg-white mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
                                     </div>
                                 </div>
                             </div>
@@ -239,7 +239,7 @@ const Home = () => {
                                     </div>
                                     <div className='text-center mt-2 text-lg font-bold'>
                                         <p>10 kg</p>
-                                        <a href='/' className='block w-full border rounded flex justify-center items-center bg-white mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
                                     </div>
                                 </div>
                             </div>
@@ -254,7 +254,7 @@ const Home = () => {
                                     </div>
                                     <div className='text-center mt-2 text-lg font-bold'>
                                         <p>10 kg</p>
-                                        <a href='/' className='block w-full border rounded flex justify-center items-center bg-white mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
                                     </div>
                                 </div>
                             </div>
@@ -269,7 +269,7 @@ const Home = () => {
                                     </div>
                                     <div className='text-center mt-2 text-lg font-bold'>
                                         <p>10 kg</p>
-                                        <a href='/' className='block w-full border rounded flex justify-center items-center bg-white mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
                                     </div>
                                 </div>
                             </div>
@@ -284,7 +284,7 @@ const Home = () => {
                                     </div>
                                     <div className='text-center mt-2 text-lg font-bold'>
                                         <p>10 kg</p>
-                                        <a href='/' className='block w-full border rounded flex justify-center items-center bg-white mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
                                     </div>
                                 </div>
                             </div>
@@ -298,7 +298,7 @@ const Home = () => {
                                     </div>
                                     <div className='text-center mt-2 text-lg font-bold'>
                                         <p>10 kg</p>
-                                        <a href='/' className='block w-full border rounded flex justify-center items-center bg-white mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
                                     </div>
                                 </div>
                             </div>
@@ -312,7 +312,7 @@ const Home = () => {
                                     </div>
                                     <div className='text-center mt-2 text-lg font-bold'>
                                         <p>10 kg</p>
-                                        <a href='/' className='block w-full border rounded flex justify-center items-center bg-white mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
                                     </div>
                                 </div>
                             </div>
@@ -326,12 +326,12 @@ const Home = () => {
                                     </div>
                                     <div className='text-center mt-2 text-lg font-bold'>
                                         <p>10 kg</p>
-                                        <a href='/' className='block w-full border rounded flex justify-center items-center bg-white mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className='flex justify-center mt-5'>
+                        <div className='flex justify-end  mt-5'>
                             <Pagination count={10} color="primary" />
                         </div>
                     </div>
@@ -356,7 +356,7 @@ const Home = () => {
 
                                 <div className="bg-white rounded p-8 max-w-md mx-auto z-50">
                                     <div className="text-center mb-4">
-                                        <h1 className="text-xl font-bold">Login</h1>
+                                      
                                     </div>
                                     <form>
                                         <Typography variant="h4" align="center" gutterBottom>

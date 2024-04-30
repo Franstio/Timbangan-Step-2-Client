@@ -226,6 +226,15 @@ const Home = () => {
                 <div class="grid grid-cols-3 grid-flow-col gap-5">
                     <div class="row-span-1 col-span-2">   
                     <div className='flex-1 p-4 border rounded bg-white'>
+                        <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Weight A</h1>
+                        <div class=''>
+                            <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                            <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="row-span-1">   
+                    <div className='flex-1 p-4 border rounded bg-white'>
                         <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Bruto</h1>
                         <div class=''>
                             <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
@@ -233,7 +242,7 @@ const Home = () => {
                         </div>
                     </div>
                     </div>
-                    <div class="row-span-1 col-span-2">   
+                    <div class="col-span-1 ...">   
                     <div className='flex-1 p-4 border rounded bg-white'>
                         <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
                         <div class=''>

@@ -4,11 +4,10 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { IoSettingsOutline } from "react-icons/io5";
 import { FiRefreshCcw } from "react-icons/fi";
-
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import Pagination from '@mui/material/Pagination';
-
+import Button from '@mui/material/Button';
 
 
 const Home = () => {
@@ -177,7 +176,7 @@ const Home = () => {
                 )}
             </Disclosure>
             <div className='bg-[#f4f6f9] p-5'>
-                <div class="flex justify-center gap-5">
+                {/*   <div class="flex justify-center gap-5">
                     <div className='flex-1 p-4 border rounded bg-white'>
                         <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Weight A</h1>
                         <div class='flex justify-center'>
@@ -209,7 +208,7 @@ const Home = () => {
                                     </div>
                                     <div className='text-center mt-2 text-lg font-bold'>
                                         <p>10 kg</p>
-                                        <a href='/' className='block w-full border rounded flex justify-center items-center bg-white mt-2 bg-sky-300 text-white'>123-123-546</a>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center bg-white mt-2 bg-sky-400 text-white'>123-123-546</a>
                                     </div>
                                 </div>
                             </div>
@@ -347,6 +346,176 @@ const Home = () => {
                         </div>
                     </div>
 
+                </div> */}
+
+                <div class="grid grid-rows-3 grid-flow-col gap-4">
+                    <div class="row-span-3 col-span-5">
+                    <div className='flex justify-between gap-5 h-full'>
+                    <div className='flex-1 p-4 border rounded bg-white '>
+                        <h1 className='text-blue-600 font-semibold text-xl'>Bin List</h1>
+                        <div class="grid grid-cols-4 gap-4 flex justify-between">
+                            <div className=''>
+                                <div className='flex-1 p-4 border rounded bg-white mt-5'>
+
+                                    <h1 className='text-center mb-2 font-bold text-lg'>Iron</h1>
+                                    <div className='' style={{ display: 'flex', alignItems: 'center' }}>
+                                        <BorderLinearProgress variant="determinate" value={70} style={{ width: '90%', height: '12px', marginRight: '10px' }} />
+                                        70%
+                                    </div>
+                                    <div className='text-center mt-2 text-lg font-bold'>
+                                        <p>10 kg</p>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className=''>
+                                <div className='flex-1 p-4 border rounded bg-white mt-5'>
+
+                                    <h1 className='text-center mb-2 font-bold text-lg'>Type Weste</h1>
+                                    <div className='' style={{ display: 'flex', alignItems: 'center' }}>
+                                        <BorderLinearProgress variant="determinate" value={50} style={{ width: '90%', height: '12px', marginRight: '10px' }} />
+                                        50%
+                                    </div>
+                                    <div className='text-center mt-2 text-lg font-bold'>
+                                        <p>10 kg</p>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className=''>
+                                <div className='flex-1 p-4 border rounded bg-white mt-5'>
+
+                                    <h1 className='text-center mb-2 font-bold text-lg'>Type Weste</h1>
+                                    <div className='' style={{ display: 'flex', alignItems: 'center' }}>
+                                        <BorderLinearProgress variant="determinate" value={5} style={{ width: '90%', height: '12px', marginRight: '10px' }} />
+                                        5%
+                                    </div>
+                                    <div className='text-center mt-2 text-lg font-bold'>
+                                        <p>10 kg</p>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className=''>
+                                <div className='flex-1 p-4 border rounded bg-white mt-5'>
+
+                                    <h1 className='text-center mb-2 font-bold text-lg'>Type Weste</h1>
+                                    <div className='' style={{ display: 'flex', alignItems: 'center' }}>
+                                        <BorderLinearProgress variant="determinate" value={100} style={{ width: '90%', height: '12px', marginRight: '10px' }} />
+                                        100%
+                                    </div>
+                                    <div className='text-center mt-2 text-lg font-bold'>
+                                        <p>100 kg</p>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className=''>
+                                <div className='flex-1 p-4 border rounded bg-white mt-5'>
+
+                                    <h1 className='text-center mb-2 font-bold text-lg'>Type Weste</h1>
+                                    <div className='' style={{ display: 'flex', alignItems: 'center' }}>
+                                        <BorderLinearProgress variant="determinate" value={75} style={{ width: '90%', height: '12px', marginRight: '10px' }} />
+                                        75%
+                                    </div>
+                                    <div className='text-center mt-2 text-lg font-bold'>
+                                        <p>100 kg</p>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className=''>
+                                <div className='flex-1 p-4 border rounded bg-white mt-5'>
+
+                                    <h1 className='text-center mb-2 font-bold text-lg'>Type Weste</h1>
+                                    <div className='' style={{ display: 'flex', alignItems: 'center' }}>
+                                        <BorderLinearProgress variant="determinate" value={100} style={{ width: '90%', height: '12px', marginRight: '10px' }} />
+                                        100%
+                                    </div>
+                                    <div className='text-center mt-2 text-lg font-bold'>
+                                        <p>100 kg</p>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className=''>
+                                <div className='flex-1 p-4 border rounded bg-white mt-5'>
+
+                                    <h1 className='text-center mb-2 font-bold text-lg'>Type Weste</h1>
+                                    <div className='' style={{ display: 'flex', alignItems: 'center' }}>
+                                        <BorderLinearProgress variant="determinate" value={100} style={{ width: '90%', height: '12px', marginRight: '10px' }} />
+                                        100%
+                                    </div>
+                                    <div className='text-center mt-2 text-lg font-bold'>
+                                        <p>100 kg</p>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className=''>
+                                <div className='flex-1 p-4 border rounded bg-white mt-5'>
+
+                                    <h1 className='text-center mb-2 font-bold text-lg'>Type Weste</h1>
+                                    <div className='' style={{ display: 'flex', alignItems: 'center' }}>
+                                        <BorderLinearProgress variant="determinate" value={100} style={{ width: '90%', height: '12px', marginRight: '10px' }} />
+                                        100%
+                                    </div>
+                                    <div className='text-center mt-2 text-lg font-bold'>
+                                        <p>100 kg</p>
+                                        <a href='/' className='block w-full border rounded flex justify-center items-center mt-2 bg-sky-400 text-white'>123-123-546</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='flex justify-end mt-5'>
+                            <Pagination count={10} color="primary" />
+                        </div>
+                    </div>
+
+                </div>
+                    </div>
+                    <div class="col-span-2 ">
+                    <div className='flex-1 p-4 border rounded bg-white'>
+                        <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Weight</h1>
+                        <div class='flex justify-warp'>
+                            <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-center text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                            <p className='flex items-center text-2xl font-bold'>Kg</p>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="row-span-2 col-span-2 ...">
+                    <div className='flex-1 p-4 border rounded bg-white'>
+                        <h1 className='text-blue-600 font-semibold text-xl mb-3'>Scanner Result</h1>
+                        <p>UserId</p>
+                        <input
+                            type="text"
+                            name="text"
+                            id="userId"
+                            className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            placeholder="luGGIatKmKvdMkcxpKc8SZD64ex5W0"
+                        />
+                        <div>
+                            <p>Type Waste</p>
+                            <input
+                                type="text"
+                                name="text"
+                                id="typeWaste"
+                                className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                placeholder="Iron"
+                            />
+                        </div>
+                        <a className='block w-full border rounded py-2 flex justify-center items-center font-bold mt-5 bg-sky-400 text-white text-lg' href='/'>Submit</a>
+                      {/*   <Button className='block w-full border rounded py-2 mt-5'  variant="contained">Submit</Button> */}
+                        <div className='text-lg mt-5'>
+                            <p>Username: fahri</p>
+                           <p>Type Waste: Iron</p> 
+                        </div>
+                    </div>
+
+                    </div>
                 </div>
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
