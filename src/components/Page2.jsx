@@ -1,5 +1,5 @@
 
-import React, { Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from "react";
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { IoSettingsOutline } from "react-icons/io5";
@@ -7,11 +7,12 @@ import { FiRefreshCcw } from "react-icons/fi";
 
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import Pagination from '@mui/material/Pagination';
+import axios from "axios";
 
 
 
 const Home = () => {
+    const [Scales, setScales4Kg] = useState([]);
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -42,6 +43,15 @@ const Home = () => {
                 style={{ width: '90%', height: 10, borderRadius: 5, marginRight: '10px' }}
             />
         );
+    };
+
+    useEffect(() => {
+        getScales4Kg();
+    }, []);
+
+    const getScales4Kg = async () => {
+        const response = await axios.get("http://localhost:5000/Scales4Kg");
+        setScales4Kg(response.data);
     };
 
     return (
@@ -224,60 +234,60 @@ const Home = () => {
                 </div> */}
 
                 <div class="grid grid-cols-3 grid-flow-col gap-5">
-                    <div class="row-span-1 col-span-2">   
-                    <div className='flex-1 p-4 border rounded bg-white'>
-                        <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Weight A</h1>
-                        <div class=''>
-                            <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
-                            <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
+                    <div class="row-span-1 col-span-2">
+                        <div className='flex-1 p-4 border rounded bg-white'>
+                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Weight A</h1>
+                            <div class=''>
+                                <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales}<FiRefreshCcw size={20} /></div>
+                                <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
+                            </div>
                         </div>
                     </div>
-                    </div>
-                    <div class="row-span-1">   
-                    <div className='flex-1 p-4 border rounded bg-white'>
-                        <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Bruto</h1>
-                        <div class=''>
-                            <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
-                            <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
+                    <div class="row-span-1">
+                        <div className='flex-1 p-4 border rounded bg-white'>
+                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Bruto</h1>
+                            <div class=''>
+                                <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                                <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
+                            </div>
                         </div>
                     </div>
-                    </div>
-                    <div class="col-span-1 ...">   
-                    <div className='flex-1 p-4 border rounded bg-white'>
-                        <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
-                        <div class=''>
-                            <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
-                            <p className='flex justify-center text-2xl font-bold'>Gram</p>
+                    <div class="col-span-1 ...">
+                        <div className='flex-1 p-4 border rounded bg-white'>
+                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
+                            <div class=''>
+                                <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                                <p className='flex justify-center text-2xl font-bold'>Gram</p>
+                            </div>
                         </div>
                     </div>
-                    </div>
-                    <div class="row-span-2 col-span-2"> 
-                    <div className='flex-1 p-4 border rounded bg-white h-full'>
-                        <h1 className='text-blue-600 font-semibold text-xl mb-3'>Scanner Result</h1>
-                        <p>UserId</p>
-                        <input
-                            type="text"
-                            name="text"
-                            id="userId"
-                            className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            placeholder="luGGIatKmKvdMkcxpKc8SZD64ex5W0"
-                        />
-                        <div>
-                            <p>Type Waste</p>
+                    <div class="row-span-2 col-span-2">
+                        <div className='flex-1 p-4 border rounded bg-white h-full'>
+                            <h1 className='text-blue-600 font-semibold text-xl mb-3'>Scanner Result</h1>
+                            <p>UserId</p>
                             <input
                                 type="text"
                                 name="text"
-                                id="typeWaste"
+                                id="userId"
                                 className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                placeholder="Iron"
+                                placeholder="luGGIatKmKvdMkcxpKc8SZD64ex5W0"
                             />
-                        </div>
-                        <a className='block w-full border rounded py-2 flex justify-center items-center font-bold mt-5 bg-sky-400 text-white text-lg' href='/'>Submit</a>
-                        <div className='text-lg mt-5'>
-                            <p>Username: fahri</p>
-                            <p>Type Waste: Iron</p>
-                        </div>
-                    </div></div>
+                            <div>
+                                <p>Type Waste</p>
+                                <input
+                                    type="text"
+                                    name="text"
+                                    id="typeWaste"
+                                    className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    placeholder="Iron"
+                                />
+                            </div>
+                            <a className='block w-full border rounded py-2 flex justify-center items-center font-bold mt-5 bg-sky-400 text-white text-lg' href='/'>Submit</a>
+                            <div className='text-lg mt-5'>
+                                <p>Username: fahri</p>
+                                <p>Type Waste: Iron</p>
+                            </div>
+                        </div></div>
                 </div>
 
             </div>
