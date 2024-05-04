@@ -8,11 +8,12 @@ import { FiRefreshCcw } from "react-icons/fi";
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import axios from "axios";
-
+import io from 'socket.io-client';
 
 
 const Home = () => {
     const [Scales, setScales4Kg] = useState([]);
+    const socket = io('http://localhost:5000/'); // Sesuaikan dengan alamat server
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -45,14 +46,33 @@ const Home = () => {
         );
     };
 
+  useEffect(() => {
+        socket.on ('data', (data) => {
+            console.log(data);
+            setScales4Kg(data)
+        });
+        
+//        getScales4Kg();
+    }, []); 
+
+  const getScales4Kg = async () => {
+//        const response = await axios.get("http://localhost:5000/Scales4Kg");
+
+    }; 
+/* 
     useEffect(() => {
         getScales4Kg();
-    }, []);
-
-    const getScales4Kg = async () => {
-        const response = await axios.get("http://localhost:5000/Scales4Kg");
-        setScales4Kg(response.data);
-    };
+        // Terima data dari server
+        socket.on('data', (data) => {
+        setScales4Kg(data.weight);
+        });
+    
+        // Clean up saat komponen unmount
+        return () => {
+          socket.disconnect();
+        };
+      }, []); */
+    
 
     return (
         <main>
@@ -187,11 +207,11 @@ const Home = () => {
                 )}
             </Disclosure>
             <div className='bg-[#f4f6f9] p-5'>
-                {/*  <div class="flex justify-center grid grid-cols-2 gap-5">
+                {/*  <div className="flex justify-center grid grid-cols-2 gap-5">
                     <div className='flex-1 p-4 border rounded bg-white'>
                         <h1 className='text-blue-600 font-semibold mb-2 text-xl mb-20'>Weight A</h1>
-                        <div class=''>
-                            <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                        <div className=''>
+                            <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
                             <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
                         </div>
                     </div>
@@ -226,42 +246,42 @@ const Home = () => {
 
                     <div className='flex-1 p-4 border rounded bg-white'>
                         <h1 className='text-blue-600 font-semibold mb-2 text-xl mb-12'>Weight B</h1>
-                        <div class=''>
-                            <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                        <div className=''>
+                            <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
                             <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
                         </div>
                     </div>
                 </div> */}
 
-                <div class="grid grid-cols-3 grid-flow-col gap-5">
-                    <div class="row-span-1 col-span-2">
+                <div className="grid grid-cols-3 grid-flow-col gap-5">
+                    <div className="row-span-1 col-span-2">
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Weight A</h1>
-                            <div class=''>
-                                <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales}<FiRefreshCcw size={20} /></div>
+                            <div className=''>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales}<FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
                             </div>
                         </div>
                     </div>
-                    <div class="row-span-1">
+                    <div className="row-span-1">
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Bruto</h1>
-                            <div class=''>
-                                <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                            <div className=''>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-1 ...">
+                    <div className="col-span-1 ...">
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
-                            <div class=''>
-                                <div class='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                            <div className=''>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Gram</p>
                             </div>
                         </div>
                     </div>
-                    <div class="row-span-2 col-span-2">
+                    <div className="row-span-2 col-span-2">
                         <div className='flex-1 p-4 border rounded bg-white h-full'>
                             <h1 className='text-blue-600 font-semibold text-xl mb-3'>Scanner Result</h1>
                             <p>UserId</p>
