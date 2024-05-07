@@ -12,7 +12,8 @@ import io from 'socket.io-client';
 
 
 const Home = () => {
-    const [Scales, setScales4Kg] = useState([]);
+    const [Scales4Kg, setScales4Kg] = useState({});
+    const [Scales50Kg, setScales50Kg] = useState({});
     const socket = io('http://localhost:5000/'); // Sesuaikan dengan alamat server
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -48,12 +49,19 @@ const Home = () => {
 
   useEffect(() => {
         socket.on ('data', (data) => {
-            console.log(data);
+        
             setScales4Kg(data)
         });
-        
-//        getScales4Kg();
     }, []); 
+
+
+    useEffect(() => {
+        socket.on ('data1', (weight50Kg) => {
+            
+            setScales50Kg(weight50Kg)
+        });
+    }, []); 
+
 
   const getScales4Kg = async () => {
 //        const response = await axios.get("http://localhost:5000/Scales4Kg");
@@ -72,6 +80,21 @@ const Home = () => {
           socket.disconnect();
         };
       }, []); */
+
+      const [hostName,setHostname] = useState('');
+
+    
+      async function sendControlRequest(address, value) {
+        try {
+            const response = await axios.post(`http://${hostName}.local/controlLock`, {
+                address: address,
+                value: value
+            });
+            console.log(response.data.msg);
+        } catch (error) {
+            console.error(error.response.data.msg);
+        }
+    }
     
 
     return (
@@ -254,20 +277,29 @@ const Home = () => {
                 </div> */}
 
                 <div className="grid grid-cols-3 grid-flow-col gap-5">
-                    <div className="row-span-1 col-span-2">
+                <div className="col-span-1 ...">
                         <div className='flex-1 p-4 border rounded bg-white'>
-                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Weight A</h1>
+                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Bruto</h1>
                             <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales}<FiRefreshCcw size={20} /></div>
-                                <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales4Kg.weight}<FiRefreshCcw size={20} /></div>
+                                <p className='flex justify-center text-2xl font-bold'>Gram</p>
                             </div>
                         </div>
                     </div>
                     <div className="row-span-1">
                         <div className='flex-1 p-4 border rounded bg-white'>
-                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Bruto</h1>
+                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
                             <div className=''>
                                 <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                                <p className='flex justify-center text-2xl font-bold'>Gram</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-span-1 ...">
+                        <div className='flex-1 p-4 border rounded bg-white'>
+                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Bruto</h1>
+                            <div className=''>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales50Kg.weight50Kg}<FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
                             </div>
                         </div>
@@ -277,7 +309,7 @@ const Home = () => {
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
                             <div className=''>
                                 <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
-                                <p className='flex justify-center text-2xl font-bold'>Gram</p>
+                                <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
                             </div>
                         </div>
                     </div>
@@ -295,6 +327,8 @@ const Home = () => {
                             <div>
                                 <p>Type Waste</p>
                                 <input
+                                value={hostName}
+                                onChange={(e)=> setHostname(e.target.value)}
                                     type="text"
                                     name="text"
                                     id="typeWaste"
@@ -302,7 +336,7 @@ const Home = () => {
                                     placeholder="Iron"
                                 />
                             </div>
-                            <a className='block w-full border rounded py-2 flex justify-center items-center font-bold mt-5 bg-sky-400 text-white text-lg' href='/'>Submit</a>
+                            <button className='block w-full border rounded py-2 flex justify-center items-center font-bold mt-5 bg-sky-400 text-white text-lg'  onClick={() => sendControlRequest(5, 1)}>Submit</button>
                             <div className='text-lg mt-5'>
                                 <p>Username: fahri</p>
                                 <p>Type Waste: Iron</p>
