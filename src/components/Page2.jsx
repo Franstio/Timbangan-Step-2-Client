@@ -59,11 +59,16 @@ const Home = () => {
 
 
     useEffect(() => {
-        socket.on ('data1', (weight50Kg) => {
-            
-            setScales50Kg(weight50Kg)
+        socket.on('data1', (weight50Kg) => {
+            try {
+                //console.log(weight50Kg)
+                weight50Kg.weight50Kg = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
+                //  console.log(weight50Kg)
+                setScales50Kg(weight50Kg);
+            }
+            catch { }
         });
-    }, []); 
+    }, []);
 
 
   const getScales4Kg = async () => {
@@ -122,7 +127,6 @@ const Home = () => {
                     } else {
                         alert("User not found");
                         setUser(null);
-                        
                         setScanData('');
                     }
                 }
