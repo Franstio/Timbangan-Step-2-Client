@@ -122,7 +122,7 @@ const Home = () => {
                     } else {
                         alert("User not found");
                         setUser(null);
-                        setContainerName(res.data.name || '');
+                        
                         setScanData('');
                     }
                 }
