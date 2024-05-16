@@ -14,6 +14,7 @@ import io from 'socket.io-client';
 const Home = () => {
     const [Scales4Kg, setScales4Kg] = useState({});
     const [Scales50Kg, setScales50Kg] = useState({});
+    const [scanData, setScanData] = useState('');
     const socket = io('http://localhost:5000/'); // Sesuaikan dengan alamat server
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -96,6 +97,49 @@ const Home = () => {
         }
     }
     
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            if (user == null)
+                handleScan();
+            else if (isFinalStep) {
+                console.log(wasteId);
+                console.log(container.waste.bin.filter(x => x.type_waste == wasteId));
+                if (container.waste.bin.filter(x => x.type_waste == wasteId).length < 1) {
+                    alert("Mismatch Name: " + scanData);
+                    return;
+                }
+                updateBinWeight();
+
+            }
+            else {
+                handleScan1();
+            }
+        }
+    };
+
+    const handleScan = () => {
+        axios.post('http://localhost:5000/ScanBadgeid', { badgeId: scanData })
+            .then(res => {
+                if (res.data.error) {
+                    alert(res.data.error);
+                } else {
+                    if (res.data.user) {
+                        setUser(res.data.user);
+                        setScanData('');
+                    } else {
+                        alert("User not found");
+                        setUser(null);
+                        setContainerName(res.data.name || '');
+                        setScanData('');
+                    }
+                }
+            })
+            .catch(err => console.error(err));
+    };
+
+
+
+
 
     return (
         <main>
@@ -230,52 +274,6 @@ const Home = () => {
                 )}
             </Disclosure>
             <div className='bg-[#f4f6f9] p-5'>
-                {/*  <div className="flex justify-center grid grid-cols-2 gap-5">
-                    <div className='flex-1 p-4 border rounded bg-white'>
-                        <h1 className='text-blue-600 font-semibold mb-2 text-xl mb-20'>Weight A</h1>
-                        <div className=''>
-                            <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
-                            <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
-                        </div>
-                    </div>
-
-                    <div className='flex-1 p-4 border rounded bg-white'>
-                        <h1 className='text-blue-600 font-semibold text-xl mb-3'>Scanner Result</h1>
-                        <p>UserId</p>
-                        <input
-                            type="text"
-                            name="text"
-                            id="userId"
-                            className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            placeholder="luGGIatKmKvdMkcxpKc8SZD64ex5W0"
-                        />
-                        <div>
-                            <p>Type Waste</p>
-                            <input
-                                type="text"
-                                name="text"
-                                id="typeWaste"
-                                className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                placeholder="Iron"
-                            />
-                        </div>
-                        <a className='block w-full border rounded py-2 flex justify-center items-center bg-white font-bold mt-5 bg-sky-400 text-white text-lg' href='/'>Submit</a>
-                        <div className='text-lg mt-5'>
-                            <p>Username: fahri</p>
-                            <p>Type Waste: Iron</p>
-                        </div>
-                    </div>
-
-
-                    <div className='flex-1 p-4 border rounded bg-white'>
-                        <h1 className='text-blue-600 font-semibold mb-2 text-xl mb-12'>Weight B</h1>
-                        <div className=''>
-                            <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
-                            <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
-                        </div>
-                    </div>
-                </div> */}
-
                 <div className="grid grid-cols-3 grid-flow-col gap-5">
                 <div className="col-span-1 ...">
                         <div className='flex-1 p-4 border rounded bg-white'>
@@ -316,30 +314,22 @@ const Home = () => {
                     <div className="row-span-2 col-span-2">
                         <div className='flex-1 p-4 border rounded bg-white h-full'>
                             <h1 className='text-blue-600 font-semibold text-xl mb-3'>Scanner Result</h1>
-                            <p>UserId</p>
+                            <p>Please Scan..</p>
                             <input
                                 type="text"
                                 name="text"
                                 id="userId"
+                                value={scanData}
+                                onKeyDown={e => handleKeyPress(e)}
+                                onChange={e => setScanData(e.target.value)}
                                 className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 placeholder="luGGIatKmKvdMkcxpKc8SZD64ex5W0"
                             />
-                            <div>
-                                <p>Type Waste</p>
-                                <input
-                                value={hostName}
-                                onChange={(e)=> setHostname(e.target.value)}
-                                    type="text"
-                                    name="text"
-                                    id="typeWaste"
-                                    className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    placeholder="Iron"
-                                />
-                            </div>
                             <button className='block w-full border rounded py-2 flex justify-center items-center font-bold mt-5 bg-sky-400 text-white text-lg'  onClick={() => sendControlRequest(5, 1)}>Submit</button>
                             <div className='text-lg mt-5'>
-                                <p>Username: fahri</p>
-                                <p>Type Waste: Iron</p>
+                            <p>Username: {user?.username} </p>
+                            <p>Container Id: {container?.name}</p>
+                            <p>Type Waste: {container?.waste.name}</p>
                             </div>
                         </div></div>
                 </div>
