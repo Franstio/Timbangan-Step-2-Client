@@ -12,8 +12,10 @@ import io from 'socket.io-client';
 
 
 const Home = () => {
+    const [user, setUser] = useState(null);
     const [Scales4Kg, setScales4Kg] = useState({});
     const [Scales50Kg, setScales50Kg] = useState({});
+    const [isFinalStep, setFinalStep] = useState(false);
     const [scanData, setScanData] = useState('');
     const socket = io('http://localhost:5000/'); // Sesuaikan dengan alamat server
     const navigation = [
@@ -102,17 +104,8 @@ const Home = () => {
             if (user == null)
                 handleScan();
             else if (isFinalStep) {
-                console.log(wasteId);
-                console.log(container.waste.bin.filter(x => x.type_waste == wasteId));
-                if (container.waste.bin.filter(x => x.type_waste == wasteId).length < 1) {
-                    alert("Mismatch Name: " + scanData);
-                    return;
-                }
-                updateBinWeight();
-
             }
             else {
-                handleScan1();
             }
         }
     };
@@ -328,8 +321,8 @@ const Home = () => {
                             <button className='block w-full border rounded py-2 flex justify-center items-center font-bold mt-5 bg-sky-400 text-white text-lg'  onClick={() => sendControlRequest(5, 1)}>Submit</button>
                             <div className='text-lg mt-5'>
                             <p>Username: {user?.username} </p>
-                            <p>Container Id: {container?.name}</p>
-                            <p>Type Waste: {container?.waste.name}</p>
+                            <p>Container Id: </p>
+                            <p>Type Waste: </p>
                             </div>
                         </div></div>
                 </div>
