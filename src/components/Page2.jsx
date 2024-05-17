@@ -62,7 +62,7 @@ const Home = () => {
         socket.emit('connectScale');
         socket.on('data1', (weight50Kg) => {
             try {
-                //console.log(weight50Kg)
+                console.log(weight50Kg)
                 weight50Kg.weight50Kg = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
                 //  console.log(weight50Kg)
                 setScales50Kg(weight50Kg);
