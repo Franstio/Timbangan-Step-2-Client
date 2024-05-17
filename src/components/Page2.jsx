@@ -4,11 +4,20 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { IoSettingsOutline } from "react-icons/io5";
 import { FiRefreshCcw } from "react-icons/fi";
-
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import axios from "axios";
 import io from 'socket.io-client';
+import {
+    Container,
+    Card,
+    CardContent,
+    TextField,
+    Button,
+    Typography,
+    CircularProgress,
+    Grid,
+} from '@mui/material';
 
 
 const Home = () => {
@@ -17,6 +26,14 @@ const Home = () => {
     const [Scales50Kg, setScales50Kg] = useState({});
     const [isFinalStep, setFinalStep] = useState(false);
     const [scanData, setScanData] = useState('');
+    const [container, setContainer] = useState(null);
+    const [wasteId, setWasteId] = useState(null);
+    const [containerName, setContainerName] = useState('');
+    const [isFreeze, freezeNeto] = useState(false);
+    const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [neto, setNeto] = useState(0);
+    const [rollingDoorId, setRollingDoorId] = useState(-1);
     const socket = io('http://localhost:5000/'); // Sesuaikan dengan alamat server
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -54,14 +71,14 @@ const Home = () => {
 
     useEffect(() => {
         socket.emit('connectScale');
-        
-        socket.on ('data', (data) => {
-            console.log({'4kg':data.weight});
+
+        socket.on('data', (data) => {
+            console.log({ '4kg': data.weight });
             setScales4Kg(data)
         });
         socket.on('data1', (weight50Kg) => {
             try {
-                console.log({"50kg": weight50Kg.weight50Kg});
+                console.log({ "50kg": weight50Kg.weight50Kg });
                 weight50Kg.weight50Kg = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
                 //  console.log(weight50K)
                 setScales50Kg(weight50Kg);
@@ -71,28 +88,14 @@ const Home = () => {
     }, []);
 
 
-  const getScales4Kg = async () => {
-//        const response = await axios.get("http://localhost:5000/Scales4Kg");
+    const getScales4Kg = async () => {
+        //        const response = await axios.get("http://localhost:5000/Scales4Kg");
 
-    }; 
-/* 
-    useEffect(() => {
-        getScales4Kg();
-        // Terima data dari server
-        socket.on('data', (data) => {
-        setScales4Kg(data.weight);
-        });
-    
-        // Clean up saat komponen unmount
-        return () => {
-          socket.disconnect();
-        };
-      }, []); */
+    };
+    const [hostName, setHostname] = useState('');
 
-      const [hostName,setHostname] = useState('');
 
-    
-      async function sendControlRequest(address, value) {
+    async function sendControlRequest(address, value) {
         try {
             const response = await axios.post(`http://${hostName}.local/controlLock`, {
                 address: address,
@@ -103,7 +106,19 @@ const Home = () => {
             console.error(error.response.data.msg);
         }
     }
-    
+
+    /*  useEffect(() => {
+         if (rollingDoorId > -1) {
+             sendRollingDoorUp();
+             triggerAvailableBin(false, container.idWaste);
+         }
+     }, [rollingDoorId]); */
+
+    const toggleModal = () => {
+        freezeNeto(true);
+        setShowModal(!showModal);
+    };
+
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             if (user == null)
@@ -111,6 +126,7 @@ const Home = () => {
             else if (isFinalStep) {
             }
             else {
+                handleScan1();
             }
         }
     };
@@ -134,9 +150,51 @@ const Home = () => {
             .catch(err => console.error(err));
     };
 
+    const handleScan1 = () => {
+        axios.post('http://localhost:5000/ScanContainer', { containerId: scanData })
+            .then(res => {
+                if (res.data.error) {
+                    alert(res.data.error);
+                } else {
+                    if (res.data.container) {
+                        if (res.data.container.idWaste != wasteId && wasteId != null) {
+                            alert("Waste  Mismatch");
+                            return;
+                        }
+                        setContainer(res.data.container);
+                        //triggerAvailableBin(true, res.data.container.idWaste);
+                        setScanData('');
+                        setIsSubmitAllowed(true);
 
+                    } else {
+                        alert("Countainer not found");
+                        setUser(null);
+                        setContainer(null);
+                        setContainerName(res.data.name || '');
+                        setScanData('');
+                        setIsSubmitAllowed(false);
+                    }
+                }
+            })
+            .catch(err => console.error(err));
+    };
 
+    const handleSubmit = () => {
+        const binWeight = container?.weightbin ?? 0;
+        const totalWeight = parseFloat(neto) + parseFloat(binWeight);
+        console.log(binWeight);
+        if (totalWeight > 100) {
+            // setErrorMessage('bin penuh.');
+            return;
+        }
+        //CheckBinCapacity();
 
+    }
+
+    const handleCancel = () => {
+        toggleModal();
+        freezeNeto(false);
+    };
 
     return (
         <main>
@@ -272,7 +330,7 @@ const Home = () => {
             </Disclosure>
             <div className='bg-[#f4f6f9] p-5'>
                 <div className="grid grid-cols-3 grid-flow-col gap-5">
-                <div className="col-span-1 ...">
+                    <div className="col-span-1 ...">
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Bruto</h1>
                             <div className=''>
@@ -322,13 +380,39 @@ const Home = () => {
                                 className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 placeholder="luGGIatKmKvdMkcxpKc8SZD64ex5W0"
                             />
-                            <button className='block w-full border rounded py-2 flex justify-center items-center font-bold mt-5 bg-sky-400 text-white text-lg'  onClick={() => sendControlRequest(5, 1)}>Submit</button>
+                            <button className='block w-full border rounded py-2 flex justify-center items-center font-bold mt-5 bg-sky-400 text-white text-lg' disabled={!isSubmitAllowed} onClick={toggleModal}>Submit</button>
                             <div className='text-lg mt-5'>
-                            <p>Username: {user?.username} </p>
-                            <p>Container Id: </p>
-                            <p>Type Waste: </p>
+                                <p>Username: {user?.username} </p>
+                                <p>Container Id: {container?.name}</p>
+                                <p>Type Waste: {container?.waste.name}</p>
                             </div>
                         </div></div>
+                </div>
+
+                <div className='flex justify-start'>
+                    {showModal && (
+                        <div className="fixed z-10 inset-0 overflow-y-auto">
+                            <div className="flex items-center justify-center min-h-screen">
+                                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                                <div className="bg-white rounded p-8 max-w-md mx-auto z-50">
+                                    <div className="text-center mb-4">
+
+                                    </div>
+                                    <form>
+                                        <Typography variant="h4" align="center" gutterBottom>
+                                            {neto}Kg
+                                        </Typography>
+                                        <p>Data Timbangan Sudah Sesuai?</p>
+                                        <div className="flex justify-center mt-5">
+                                            <button type="button" onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
+                                            <button type="button" onClick={handleCancel} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
             </div>
