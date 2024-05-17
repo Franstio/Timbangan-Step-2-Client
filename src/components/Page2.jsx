@@ -50,21 +50,20 @@ const Home = () => {
         );
     };
 
-  useEffect(() => {
-        socket.on ('data', (data) => {
-        
-            setScales4Kg(data)
-        });
-    }, []); 
 
 
     useEffect(() => {
         socket.emit('connectScale');
+        
+        socket.on ('data', (data) => {
+            console({'4kg':data.weight});
+            setScales4Kg(data)
+        });
         socket.on('data1', (weight50Kg) => {
             try {
-                console.log(weight50Kg)
+                console.log({"50kg": weight50Kg.weight50Kg});
                 weight50Kg.weight50Kg = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
-                //  console.log(weight50Kg)
+                //  console.log(weight50K)
                 setScales50Kg(weight50Kg);
             }
             catch { }
