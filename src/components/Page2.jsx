@@ -56,7 +56,7 @@ const Home = () => {
         socket.emit('connectScale');
         
         socket.on ('data', (data) => {
-            console({'4kg':data.weight});
+            console.log({'4kg':data.weight});
             setScales4Kg(data)
         });
         socket.on('data1', (weight50Kg) => {
