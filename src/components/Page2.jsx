@@ -59,6 +59,7 @@ const Home = () => {
 
 
     useEffect(() => {
+        socket.emit('connectScale');
         socket.on('data1', (weight50Kg) => {
             try {
                 //console.log(weight50Kg)
