@@ -131,6 +131,28 @@ const Home = () => {
         }
     };
 
+    const CheckBinCapacity = async () => {
+        try {
+            console.log(container);
+            const response = await axios.post('http://localhost:5000/CheckBinCapacity', {
+                IdWaste: container.IdWaste,
+                neto: neto
+            }).then(x => {
+                const res = x.data;
+                if (!res.success) {
+                    alert(res.message);
+                    return;
+                }
+                //setRollingDoorId(res.bin.id);
+               // saveTransaksi();
+            });
+            console.log(response);
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
     const handleScan = () => {
         axios.post('http://localhost:5000/ScanBadgeid', { badgeId: scanData })
             .then(res => {
@@ -187,7 +209,7 @@ const Home = () => {
             // setErrorMessage('bin penuh.');
             return;
         }
-        //CheckBinCapacity();
+        CheckBinCapacity();
 
     }
 
