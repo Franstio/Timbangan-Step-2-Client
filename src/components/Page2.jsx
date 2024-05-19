@@ -28,12 +28,14 @@ const Home = () => {
     const [scanData, setScanData] = useState('');
     const [container, setContainer] = useState(null);
     const [wasteId, setWasteId] = useState(null);
+    const [Idbin, setIdbin] = useState(-1);
     const [containerName, setContainerName] = useState('');
     const [isFreeze, freezeNeto] = useState(false);
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [neto, setNeto] = useState(0);
-    const [rollingDoorId, setRollingDoorId] = useState(-1);
+    const [toplockId, settoplockId] = useState({});
+    const [instruksimsg, setinstruksimsg] = useState("");
     const socket = io('http://localhost:5000/'); // Sesuaikan dengan alamat server
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -92,20 +94,19 @@ const Home = () => {
         //        const response = await axios.get("http://localhost:5000/Scales4Kg");
 
     };
-    const [hostName, setHostname] = useState('');
 
-
-    async function sendControlRequest(address, value) {
-        try {
-            const response = await axios.post(`http://${hostName}.local/controlLock`, {
-                address: address,
-                value: value
-            });
-            console.log(response.data.msg);
-        } catch (error) {
-            console.error(error.response.data.msg);
-        }
-    }
+    /* 
+        async function sendControlRequest(address, value) {
+            try {
+                const response = await axios.post(`http://${hostName}.local/controlLock`, {
+                    address: address,
+                    value: value
+                });
+                console.log(response.data.msg);
+            } catch (error) {
+                console.error(error.response.data.msg);
+            }
+        } */
 
     /*  useEffect(() => {
          if (rollingDoorId > -1) {
@@ -131,6 +132,16 @@ const Home = () => {
         }
     };
 
+    useEffect(() => {
+        const weight = Scales50Kg?.weight50Kg ?? 0;
+        //  const binWeight = container?.weightbin ?? 0;
+        //weight = weight - binWeight;
+        //	console.log({w:weight,bin:binWeight,w2:Scales50Kg,c:container});
+        if (isFreeze)
+            return
+        setNeto(weight)
+    }, [Scales50Kg])
+
     const CheckBinCapacity = async () => {
         try {
             console.log(container);
@@ -143,12 +154,27 @@ const Home = () => {
                     alert(res.message);
                     return;
                 }
-                //setRollingDoorId(res.bin.id);
-               // saveTransaksi();
+                settoplockId(res.bin.name_hostname);
+                setIdbin(res.bin.id);
+                saveTransaksi();
+                sendLockTop();
             });
             console.log(response);
         }
         catch (error) {
+            console.error(error);
+        }
+    };
+
+    async function sendLockTop() {
+        try {
+            console.log(toplockId);
+            const response = await axios.post(`http://${toplockId}.local:5000/locktop/`, {
+                idLockTop: 1
+            });
+            setinstruksimsg("buka pintu atas");
+            console.log(response.data);
+        } catch (error) {
             console.error(error);
         }
     }
@@ -201,6 +227,48 @@ const Home = () => {
             .catch(err => console.error(err));
     };
 
+    const saveTransaksi = () => {
+        axios.post("http://localhost:5000/SaveTransaksi", {
+            payload: {
+                idContainer: container.containerId,
+                badgeId: user.badgeId,
+                IdWaste: container.IdWaste,
+                neto: neto
+                //createdAt: new Date().toISOString().replace('T', ' ')
+            }
+        }).then(res => {
+            setWasteId(container.IdWaste);
+            //setIsSubmitAllowed(false);
+            setScanData('');
+            updateBinWeight();
+            toggleModal();
+            //setShowModalConfirmWeight(true);
+            // CheckBinCapacity();
+        });
+    };
+
+    const updateBinWeight = async () => {
+        try {
+            const response = await axios.post('http://localhost:5000/UpdateBinWeight', {
+                binId: Idbin,
+                neto: neto
+            }).then(x => {
+                //   closeRollingDoor();
+                //setRollingDoorId(-1);
+                setScanData('');
+                setUser(null);
+                setContainer(null);
+                setNeto(0);
+                freezeNeto(false);
+                setFinalStep(false);
+                setIsSubmitAllowed(false);
+            });
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
     const handleSubmit = () => {
         const binWeight = container?.weightbin ?? 0;
         const totalWeight = parseFloat(neto) + parseFloat(binWeight);
@@ -209,6 +277,7 @@ const Home = () => {
             // setErrorMessage('bin penuh.');
             return;
         }
+        setShowModal(false);
         CheckBinCapacity();
 
     }
@@ -437,6 +506,7 @@ const Home = () => {
                     )}
                 </div>
 
+                <p>Instruksi : {instruksimsg}</p>
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: 192.168.1.5 Online</p>
