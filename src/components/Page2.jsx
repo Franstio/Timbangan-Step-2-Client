@@ -28,7 +28,7 @@ const Home = () => {
     const [scanData, setScanData] = useState('');
     const [container, setContainer] = useState(null);
     const [wasteId, setWasteId] = useState(null);
-    const [Idbin, setIdbin] = useState(-1);
+    const [Idbin, setIdbin] = useState('');
     const [containerName, setContainerName] = useState('');
     const [isFreeze, freezeNeto] = useState(false);
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
@@ -36,7 +36,8 @@ const Home = () => {
     const [neto, setNeto] = useState(0);
     const [toplockId, settoplockId] = useState({});
     const [instruksimsg, setinstruksimsg] = useState("");
-    const socket = io('http://localhost:5000/'); // Sesuaikan dengan alamat server
+    const [socket, setSocket] = useState(io('http://localhost:5000/')); // Sesuaikan dengan alamat server
+    //    const socket = null;
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
