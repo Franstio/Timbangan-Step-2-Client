@@ -28,15 +28,17 @@ const Home = () => {
     const [scanData, setScanData] = useState('');
     const [container, setContainer] = useState(null);
     const [wasteId, setWasteId] = useState(null);
-    const [Idbin, setIdbin] = useState('');
+    const [Idbin, setIdbin] = useState(-1);
     const [containerName, setContainerName] = useState('');
     const [isFreeze, freezeNeto] = useState(false);
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [neto, setNeto] = useState(0);
-    const [toplockId, settoplockId] = useState({});
+    const [toplockId, settoplockId] = useState('');
     const [instruksimsg, setinstruksimsg] = useState("");
-    const [socket, setSocket] = useState(io('http://localhost:5000/')); // Sesuaikan dengan alamat server
+    const [type, setType] = useState("");
+    const [bottomLockHostData,setBottomLockData] = useState({binId: '',hostname:''});
+    const [socket, setSocket] = useState(io('http://192.168.1.9:5000/')); // Sesuaikan dengan alamat server
     //    const socket = null;
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -70,8 +72,46 @@ const Home = () => {
         );
     };
 
+    const sendLockBottom = async () =>{
+        try
+        {
+            const response = await axios.post(`http://${bottomLockHostData.hostname}.local/lockBottom`,{
+                idLockBottom : 1
+            });
+            UpdateBinWeightCollection();
+            if (response.status!=200)
+            {
+                console.log(response);
+                return;
+            }
 
+        }
+        catch (error)
+        {
+            console.log(error);
+        }
+    }
+    useEffect(()=>{
+        if (bottomLockHostData.binId != '' && bottomLockHostData.hostname != '')
+        {
+            sendLockBottom();
+        }
+    },[bottomLockHostData]);
+    
+    const UpdateBinWeightCollection = async ()=>{
+        try
+        {
+            const response = await axios.post('http://192.168.1.9:5000/UpdateBinWeightCollection',{
+                binId : bottomLockHostData.binId
+            });
 
+            setBottomLockData({binId: '',hostname:''});
+        }
+        catch (error)
+        {
+            console.log(error);
+        }
+    }
     useEffect(() => {
         socket.emit('connectScale');
 
@@ -89,33 +129,7 @@ const Home = () => {
             catch { }
         });
     }, []);
-
-
-    const getScales4Kg = async () => {
-        //        const response = await axios.get("http://localhost:5000/Scales4Kg");
-
-    };
-
-    /* 
-        async function sendControlRequest(address, value) {
-            try {
-                const response = await axios.post(`http://${hostName}.local/controlLock`, {
-                    address: address,
-                    value: value
-                });
-                console.log(response.data.msg);
-            } catch (error) {
-                console.error(error.response.data.msg);
-            }
-        } */
-
-    /*  useEffect(() => {
-         if (rollingDoorId > -1) {
-             sendRollingDoorUp();
-             triggerAvailableBin(false, container.idWaste);
-         }
-     }, [rollingDoorId]); */
-
+   
     const toggleModal = () => {
         freezeNeto(true);
         setShowModal(!showModal);
@@ -142,11 +156,23 @@ const Home = () => {
             return
         setNeto(weight)
     }, [Scales50Kg])
-
+    useEffect(()=>{
+        if (Idbin != -1)
+        {
+            saveTransaksi();
+        }
+    },[Idbin])
+    useEffect(()=>{
+        if (toplockId!='')
+        {
+            sendLockTop();
+            settoplockId('');
+        }
+    },[toplockId]);
     const CheckBinCapacity = async () => {
         try {
             console.log(container);
-            const response = await axios.post('http://localhost:5000/CheckBinCapacity', {
+            const response = await axios.post('http://192.168.1.9:5000/CheckBinCapacity', {
                 IdWaste: container.IdWaste,
                 neto: neto
             }).then(x => {
@@ -155,15 +181,15 @@ const Home = () => {
                     alert(res.message);
                     return;
                 }
+                console.log(res);
                 settoplockId(res.bin.name_hostname);
                 setIdbin(res.bin.id);
-                saveTransaksi();
-                sendLockTop();
+                
             });
             console.log(response);
         }
         catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
@@ -181,7 +207,7 @@ const Home = () => {
     }
 
     const handleScan = () => {
-        axios.post('http://localhost:5000/ScanBadgeid', { badgeId: scanData })
+        axios.post('http://192.168.1.9:5000/ScanBadgeid', { badgeId: scanData },{withCredentials:false})
             .then(res => {
                 if (res.data.error) {
                     alert(res.data.error);
@@ -200,7 +226,7 @@ const Home = () => {
     };
 
     const handleScan1 = () => {
-        axios.post('http://localhost:5000/ScanContainer', { containerId: scanData })
+        axios.post('http://192.168.1.9:5000/ScanContainer', { containerId: scanData })
             .then(res => {
                 if (res.data.error) {
                     alert(res.data.error);
@@ -211,6 +237,7 @@ const Home = () => {
                             return;
                         }
                         setContainer(res.data.container);
+                        setType(res.data.container.type);
                         //triggerAvailableBin(true, res.data.container.idWaste);
                         setScanData('');
                         setIsSubmitAllowed(true);
@@ -229,7 +256,7 @@ const Home = () => {
     };
 
     const saveTransaksi = () => {
-        axios.post("http://localhost:5000/SaveTransaksi", {
+        axios.post("http://192.168.1.9:5000/SaveTransaksi", {
             payload: {
                 idContainer: container.containerId,
                 badgeId: user.badgeId,
@@ -242,7 +269,7 @@ const Home = () => {
             //setIsSubmitAllowed(false);
             setScanData('');
             updateBinWeight();
-            toggleModal();
+//            toggleModal();
             //setShowModalConfirmWeight(true);
             // CheckBinCapacity();
         });
@@ -250,7 +277,7 @@ const Home = () => {
 
     const updateBinWeight = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/UpdateBinWeight', {
+            const response = await axios.post('http://192.168.1.9:5000/UpdateBinWeight', {
                 binId: Idbin,
                 neto: neto
             }).then(x => {
@@ -263,6 +290,7 @@ const Home = () => {
                 freezeNeto(false);
                 setFinalStep(false);
                 setIsSubmitAllowed(false);
+                setIdbin(-1);
             });
         }
         catch (error) {
@@ -274,12 +302,25 @@ const Home = () => {
         const binWeight = container?.weightbin ?? 0;
         const totalWeight = parseFloat(neto) + parseFloat(binWeight);
         console.log(binWeight);
-        if (totalWeight > 100) {
-            // setErrorMessage('bin penuh.');
+        console.log(type);
+        if (type == "Collection" ) {
+        const _bin = container.waste.bin.find(item => item.name == container.name);
+            
+            if (!_bin)
+            {
+                console.log([_bin,container.name,container.waste.bin.map(x=>x.name)]);
+                alert("Bin Collection error");
+                return;
+            }
+            setBottomLockData({binId: _bin.id,hostname:_bin.name_hostname });
+            setShowModal(false);
             return;
         }
+        else if (type=='Dispose')
+        {
+            CheckBinCapacity();
+        }
         setShowModal(false);
-        CheckBinCapacity();
 
     }
 

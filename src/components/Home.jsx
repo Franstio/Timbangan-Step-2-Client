@@ -1,14 +1,10 @@
 
-import React, { Fragment } from 'react';
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { FaCircle } from 'react-icons/fa';
+import React, { Fragment,useState,useEffect } from 'react';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { IoSettingsOutline } from "react-icons/io5";
-
-
+import axios from "axios";
 
 const Home = () => {
+    const [hostname, setHostname] = useState('');
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -16,6 +12,32 @@ const Home = () => {
 
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
+    }
+
+    useEffect(() => {
+        axios.get('http://localhost:5000/hostname',{withCredentials:false})
+          .then(response => {
+            setHostname(response.data.hostname);
+          })
+          .catch(error => {
+            console.error('Error fetching the hostname:', error);
+          });
+      }, []);
+
+    async function sendLockBottom() {
+        try {
+            const response = await axios.post(`http://${hostname}.local:5000/lockBottom/`, {
+                idLockBottom: 1
+            });
+            //setinstruksimsg("buka pintu atas");
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleSubmit = () => {
+        sendLockBottom();
     }
 
     return (
@@ -76,7 +98,7 @@ const Home = () => {
                         </div>
                     </div>
 
-                    <button className='flex-1 p-4 border rounded max-w-xs flex justify-center items-center bg-white font-semibold'>Lock Bottom
+                    <button className='flex-1 p-4 border rounded max-w-xs flex justify-center items-center bg-white font-semibold' onClick={handleSubmit}>Lock Bottom
                     </button>
                 </div>
                 {/*  <footer className='flex-1 rounded border mt-10 flex justify-center gap-40 p-3 bg-white'  >
