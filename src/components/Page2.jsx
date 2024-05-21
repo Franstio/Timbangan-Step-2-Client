@@ -19,6 +19,9 @@ import {
     Grid,
 } from '@mui/material';
 
+const apiClient = apiClient.create({
+    withCredentials:false
+});
 
 const Home = () => {
     const [user, setUser] = useState(null);
@@ -75,7 +78,7 @@ const Home = () => {
     const sendLockBottom = async () =>{
         try
         {
-            const response = await axios.post(`http://${bottomLockHostData.hostname}.local/lockBottom`,{
+            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local/lockBottom`,{
                 idLockBottom : 1
             });
             UpdateBinWeightCollection();
@@ -101,7 +104,7 @@ const Home = () => {
     const UpdateBinWeightCollection = async ()=>{
         try
         {
-            const response = await axios.post('http://PCS.local:5000/UpdateBinWeightCollection',{
+            const response = await apiClient.post('http://PCS.local:5000/UpdateBinWeightCollection',{
                 binId : bottomLockHostData.binId
             });
 
@@ -172,7 +175,7 @@ const Home = () => {
     const CheckBinCapacity = async () => {
         try {
             console.log(container);
-            const response = await axios.post('http://PCS.local:5000/CheckBinCapacity', {
+            const response = await apiClient.post('http://PCS.local:5000/CheckBinCapacity', {
                 IdWaste: container.IdWaste,
                 neto: neto
             }).then(x => {
@@ -196,7 +199,7 @@ const Home = () => {
     async function sendLockTop() {
         try {
             console.log(toplockId);
-            const response = await axios.post(`http://${toplockId}.local:5000/locktop/`, {
+            const response = await apiClient.post(`http://${toplockId}.local:5000/locktop/`, {
                 idLockTop: 1
             });
             setinstruksimsg("buka pintu atas");
@@ -207,7 +210,7 @@ const Home = () => {
     }
 
     const handleScan = () => {
-        axios.post('http://PCS.local:5000/ScanBadgeid', { badgeId: scanData })
+        apiClient.post('http://PCS.local:5000/ScanBadgeid', { badgeId: scanData })
             .then(res => {
                 if (res.data.error) {
                     alert(res.data.error);
@@ -226,7 +229,7 @@ const Home = () => {
     };
 
     const handleScan1 = () => {
-        axios.post('http://PCS.local:5000/ScanContainer', { containerId: scanData })
+        apiClient.post('http://PCS.local:5000/ScanContainer', { containerId: scanData })
             .then(res => {
                 if (res.data.error) {
                     alert(res.data.error);
@@ -256,7 +259,7 @@ const Home = () => {
     };
 
     const saveTransaksi = () => {
-        axios.post("http://PCS.local:5000/SaveTransaksi", {
+        apiClient.post("http://PCS.local:5000/SaveTransaksi", {
             payload: {
                 idContainer: container.containerId,
                 badgeId: user.badgeId,
@@ -277,7 +280,7 @@ const Home = () => {
 
     const updateBinWeight = async () => {
         try {
-            const response = await axios.post('http://PCS.local:5000/UpdateBinWeight', {
+            const response = await apiClient.post('http://PCS.local:5000/UpdateBinWeight', {
                 binId: Idbin,
                 neto: neto
             }).then(x => {
