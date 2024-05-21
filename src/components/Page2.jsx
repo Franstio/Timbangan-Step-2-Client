@@ -207,7 +207,7 @@ const Home = () => {
     }
 
     const handleScan = () => {
-        axios.post('http://192.168.1.9:5000/ScanBadgeid', { badgeId: scanData })
+        axios.post('http://localhost:5000/ScanBadgeid', { badgeId: scanData })
             .then(res => {
                 if (res.data.error) {
                     alert(res.data.error);
