@@ -88,7 +88,6 @@ const Home = () => {
                 console.log(response);
                 return;
             }
-
         }
         catch (error)
         {
@@ -114,9 +113,6 @@ const Home = () => {
                     return;
                 }
                 console.log(res);
-                setScanData('');
-                setUser(null);
-                setContainer(null);
             });
 
             setBottomLockData({binId: '',hostname:''});
@@ -329,6 +325,9 @@ const Home = () => {
             setBottomLockData({binId: _bin.id,hostname:_bin.name_hostname });
             setShowModal(false);
             UpdateBinWeightCollection();
+            setScanData('');
+            setUser(null);
+            setContainer(null);
             return;
         }
         else if (type=='Dispose')
