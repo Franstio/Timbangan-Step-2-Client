@@ -101,7 +101,7 @@ const Home = () => {
     const UpdateBinWeightCollection = async ()=>{
         try
         {
-            const response = await axios.post('http://192.168.1.9:5000/UpdateBinWeightCollection',{
+            const response = await axios.post('http://localhost:5000/UpdateBinWeightCollection',{
                 binId : bottomLockHostData.binId
             });
 
@@ -172,7 +172,7 @@ const Home = () => {
     const CheckBinCapacity = async () => {
         try {
             console.log(container);
-            const response = await axios.post('http://192.168.1.9:5000/CheckBinCapacity', {
+            const response = await axios.post('http://localhost:5000/CheckBinCapacity', {
                 IdWaste: container.IdWaste,
                 neto: neto
             }).then(x => {
@@ -226,7 +226,7 @@ const Home = () => {
     };
 
     const handleScan1 = () => {
-        axios.post('http://192.168.1.9:5000/ScanContainer', { containerId: scanData })
+        axios.post('http://localhost:5000/ScanContainer', { containerId: scanData })
             .then(res => {
                 if (res.data.error) {
                     alert(res.data.error);
@@ -256,7 +256,7 @@ const Home = () => {
     };
 
     const saveTransaksi = () => {
-        axios.post("http://192.168.1.9:5000/SaveTransaksi", {
+        axios.post("http://localhost:5000/SaveTransaksi", {
             payload: {
                 idContainer: container.containerId,
                 badgeId: user.badgeId,
@@ -277,7 +277,7 @@ const Home = () => {
 
     const updateBinWeight = async () => {
         try {
-            const response = await axios.post('http://192.168.1.9:5000/UpdateBinWeight', {
+            const response = await axios.post('http://localhost:5000/UpdateBinWeight', {
                 binId: Idbin,
                 neto: neto
             }).then(x => {
