@@ -81,6 +81,7 @@ const Home = () => {
             const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/lockBottom`,{
                 idLockBottom : 1
             });
+            setinstruksimsg("buka pintu bawah");
             UpdateBinWeightCollection();
             if (response.status!=200)
             {
@@ -106,6 +107,16 @@ const Home = () => {
         {
             const response = await apiClient.post('http://PCS.local:5000/UpdateBinWeightCollection',{
                 binId : bottomLockHostData.binId
+            }).then(x => {
+                const res = x.data;
+                if (!res.success) {
+                    alert(res.message);
+                    return;
+                }
+                console.log(res);
+                setScanData('');
+                setUser(null);
+                setContainer(null);
             });
 
             setBottomLockData({binId: '',hostname:''});
@@ -317,6 +328,7 @@ const Home = () => {
             }
             setBottomLockData({binId: _bin.id,hostname:_bin.name_hostname });
             setShowModal(false);
+            UpdateBinWeightCollection();
             return;
         }
         else if (type=='Dispose')
