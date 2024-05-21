@@ -19,7 +19,7 @@ import {
     Grid,
 } from '@mui/material';
 
-const apiClient = apiClient.create({
+const apiClient = axios.create({
     withCredentials:false
 });
 
