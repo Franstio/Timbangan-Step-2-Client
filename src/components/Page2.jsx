@@ -78,7 +78,7 @@ const Home = () => {
     const sendLockBottom = async () =>{
         try
         {
-            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local/lockBottom`,{
+            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/lockBottom`,{
                 idLockBottom : 1
             });
             UpdateBinWeightCollection();
