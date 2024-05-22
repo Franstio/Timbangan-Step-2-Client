@@ -250,30 +250,7 @@ const Home = () => {
                         setType(res.data.container.type);
                         //triggerAvailableBin(true, res.data.container.idWaste);
                         setScanData('');
-                        //setIsSubmitAllowed(true); 
-                        if (type == "Collection" ) {
-                            const _bin = container.waste.bin.find(item => item.name == container.name);
-                                
-                                if (!_bin)
-                                {
-                                    console.log([_bin,container.name,container.waste.bin.map(x=>x.name)]);
-                                    alert("Bin Collection error");
-                                    return;
-                                }
-                                setBottomLockData({binId: _bin.id,hostname:_bin.name_hostname });
-                                setShowModal(false);
-                                UpdateBinWeightCollection();
-                                setScanData('');
-                                setUser(null);
-                                setContainer(null);
-                                return;
-                            }
-                            else if (type=='Dispose')
-                            {
-                                setIsSubmitAllowed(true);
-                            }
-                            setShowModal(false);
-
+                        //setIsSubmitAllowed(true);
                     } else {
                         alert("Countainer not found");
                         setUser(null);
