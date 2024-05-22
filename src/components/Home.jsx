@@ -10,7 +10,7 @@ const apiClient = axios.create({
 const Home = () => {
     const [hostname, setHostname] = useState('');
     const [socket, setSocket] = useState(io(`http://PCS.local:5000/`)); // Sesuaikan dengan alamat server
-    const [Getweightbin, setGetweightbin] = useState("");
+    const [Getweightbin, setGetweightbin] = useState(0);
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
