@@ -42,7 +42,7 @@ const Home = () => {
         });*/
         socket.on('getweight', (data) => {
             console.log(data);
-            if (data.weight)
+            if (data && data.weight)
                 setGetweightbin(data);
             else
                 console.log(data.error);
