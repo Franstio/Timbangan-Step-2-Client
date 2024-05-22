@@ -86,6 +86,7 @@ const Home = () => {
                 console.log(response);
                 return;
             }
+            setBottomLockData({binId:'',hostname:''});
         }
         catch (error) {
             console.log(error);
@@ -229,7 +230,7 @@ const Home = () => {
 
     const handleScan1 = () => {
         apiClient.post('http://PCS.local:5000/ScanContainer', { containerId: scanData })
-            .then(async (res) => {
+            .then( (res) => {
                 if (res.data.error) {
                     alert(res.data.error);
                 } else {
@@ -248,7 +249,7 @@ const Home = () => {
                             }
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
-                            await UpdateBinWeightCollection();
+//                            await UpdateBinWeightCollection();
                             setScanData('');
                             setUser(null);
                             setContainer(null);
