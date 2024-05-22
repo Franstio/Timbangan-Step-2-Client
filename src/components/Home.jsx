@@ -31,14 +31,14 @@ const Home = () => {
           });
       }, []);
       useEffect(()=>{
-        console.log(hostname);
+        console.log("Get Bin For "+hostname);
         socket.emit('getWeightBin',hostname);
       },[hostname]);
       useEffect(() => {
-        socket.on('connect', ()=>{
+        /*socket.on('connect', ()=>{
             console.log("LAUNCH CONNECT " + hostname);
             socket.emit('getWeightBin',hostname);
-        });
+        });*/
         socket.on('getweight', (data) => {
             console.log(data);
             if (data.weight)
