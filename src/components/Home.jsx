@@ -43,7 +43,7 @@ const Home = () => {
         socket.on('getweight', (data) => {
             console.log(["Input",data]);
             if (data && data.weight)
-                setGetweightbin(data);
+                setGetweightbin({...data});
             else
                 console.log(data.error);
         });
