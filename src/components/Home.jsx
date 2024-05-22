@@ -34,6 +34,7 @@ const Home = () => {
 
       useEffect(() => {
         socket.on('getweight', (data) => {
+            console.log(data);
             if (data.weight)
                 setGetweightbin(data);
             else
