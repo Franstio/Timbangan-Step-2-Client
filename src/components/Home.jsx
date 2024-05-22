@@ -32,6 +32,7 @@ const Home = () => {
       }, []);
       useEffect(()=>{
         console.log("Get Bin For "+hostname);
+        if (hostname && hostname != '')
         socket.emit('getWeightBin',hostname);
       },[hostname]);
       useEffect(() => {
@@ -44,7 +45,7 @@ const Home = () => {
             if (data.weight)
                 setGetweightbin(data);
             else
-                alert(data.error);
+                console.log(data.error);
         });
     }, []);
 
