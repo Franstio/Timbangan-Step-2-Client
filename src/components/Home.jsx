@@ -31,6 +31,7 @@ const Home = () => {
           });
       }, []);
       useEffect(()=>{
+        console.log(hostname);
         socket.emit('getWeightBin',hostname);
       },[hostname]);
       useEffect(() => {
