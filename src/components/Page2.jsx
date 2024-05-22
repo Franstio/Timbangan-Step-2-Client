@@ -240,7 +240,7 @@ const Home = () => {
                         }
                         console.log(res.data.container);
                         if (res.data.container.type == "Collection") {
-                            const _bin = res.data.container.waste.bin.find(item => item.name == container.name);
+                            const _bin = res.data.container.waste.bin.find(item => item.name == res.data.container.name);
 
                             if (!_bin) {
                                 alert("Bin Collection error");
