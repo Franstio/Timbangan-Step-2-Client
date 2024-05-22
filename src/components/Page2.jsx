@@ -104,10 +104,6 @@ const Home = () => {
                 binId: bottomLockHostData.binId
             }).then(x => {
                 const res = x.data;
-                if (!res.success) {
-                    alert(res.message);
-                    return;
-                }
                 console.log(res);
             });
 
