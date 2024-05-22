@@ -10,7 +10,7 @@ const apiClient = axios.create({
 const Home = () => {
     const [hostname, setHostname] = useState('');
     const [socket, setSocket] = useState(io(`http://PCS.local:5000/`)); // Sesuaikan dengan alamat server
-    const [Getweightbin, setGetweightbin] = useState({weight:-1});
+    const [Getweightbin, setGetweightbin] = useState(0);
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -43,7 +43,7 @@ const Home = () => {
         socket.on('getweight', (data) => {
             console.log(["Input",data]);
             if (data && data.weight)
-                setGetweightbin({...data});
+                setGetweightbin(data.weight);
             else
                 console.log(data.error);
         });
@@ -73,7 +73,7 @@ const Home = () => {
                     <div className='flex-1 p-4 border rounded bg-white'>
                     <h1 className='text-center text-blue-600 font-semibold'>Weight</h1>
                     <div class='flex justify-warp'>
-                        <div class='flex-1 p-4 border rounded bg-gray-300 text-center text-5xl font-semibold max-w-xl'>{Getweightbin.weight}</div>
+                        <div class='flex-1 p-4 border rounded bg-gray-300 text-center text-5xl font-semibold max-w-xl'>{Getweightbin}</div>
                         <p className='flex items-center text-2xl font-bold'>Kg</p>
                     </div>
                     </div>
