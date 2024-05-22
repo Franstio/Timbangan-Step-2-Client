@@ -24,7 +24,6 @@ const Home = () => {
         axios.get('http://localhost:5000/hostname',{withCredentials:false})
           .then(response => {
             
-            socket.emit('getWeightBin',response.data.hostname);
             setHostname(response.data.hostname);
           })
           .catch(error => {
@@ -33,6 +32,10 @@ const Home = () => {
       }, []);
 
       useEffect(() => {
+        socket.on('connection', ()=>{
+            console.log("LAUNCH CONNECT " + hostname);
+            socket.emit('getWeightBin',response.data.hostname);
+        });
         socket.on('getweight', (data) => {
             console.log(data);
             if (data.weight)
