@@ -250,7 +250,7 @@ const Home = () => {
                         setType(res.data.container.type);
                         //triggerAvailableBin(true, res.data.container.idWaste);
                         setScanData('');
-                        setIsSubmitAllowed(true); 
+                        //setIsSubmitAllowed(true); 
                         if (type == "Collection" ) {
                             const _bin = container.waste.bin.find(item => item.name == container.name);
                                 
@@ -268,6 +268,12 @@ const Home = () => {
                                 setContainer(null);
                                 return;
                             }
+                            else if (type=='Dispose')
+                            {
+                                setIsSubmitAllowed(true);
+                            }
+                            setShowModal(false);
+
                     } else {
                         alert("Countainer not found");
                         setUser(null);
