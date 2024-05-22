@@ -73,7 +73,7 @@ const Home = () => {
                     <div className='flex-1 p-4 border rounded bg-white'>
                     <h1 className='text-center text-blue-600 font-semibold'>Weight</h1>
                     <div class='flex justify-warp'>
-                        <div class='flex-1 p-4 border rounded bg-gray-300 text-center text-5xl font-semibold max-w-xl'>{Getweightbin}</div>
+                        <div class='flex-1 p-4 border rounded bg-gray-300 text-center text-5xl font-semibold max-w-xl'>{Getweightbin.weight}</div>
                         <p className='flex items-center text-2xl font-bold'>Kg</p>
                     </div>
                     </div>
