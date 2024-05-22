@@ -2,6 +2,9 @@
 import React, { Fragment,useState,useEffect } from 'react';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import axios from "axios";
+const apiClient = axios.create({
+    withCredentials:false
+});
 
 const Home = () => {
     const [hostname, setHostname] = useState('');
@@ -26,7 +29,7 @@ const Home = () => {
 
     async function sendLockBottom() {
         try {
-            const response = await axios.post(`http://${hostname}.local:5000/lockBottom/`, {
+            const response = await apiClient.post(`http://${hostname}.local:5000/lockBottom/`, {
                 idLockBottom: 1
             });
             //setinstruksimsg("buka pintu atas");
