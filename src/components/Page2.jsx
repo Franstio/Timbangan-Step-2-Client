@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 
 const apiClient = axios.create({
-    withCredentials:false
+    withCredentials: false
 });
 
 const Home = () => {
@@ -40,7 +40,7 @@ const Home = () => {
     const [toplockId, settoplockId] = useState('');
     const [instruksimsg, setinstruksimsg] = useState("");
     const [type, setType] = useState("");
-    const [bottomLockHostData,setBottomLockData] = useState({binId: '',hostname:''});
+    const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
     const [socket, setSocket] = useState(io('http://PCS.local:5000/')); // Sesuaikan dengan alamat server
     //    const socket = null;
     const navigation = [
@@ -75,37 +75,32 @@ const Home = () => {
         );
     };
 
-    const sendLockBottom = async () =>{
-        try
-        {
-            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/lockBottom`,{
-                idLockBottom : 1
+    const sendLockBottom = async () => {
+        try {
+            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/lockBottom`, {
+                idLockBottom: 1
             });
             setinstruksimsg("buka penutup bawah");
             UpdateBinWeightCollection();
-            if (response.status!=200)
-            {
+            if (response.status != 200) {
                 console.log(response);
                 return;
             }
         }
-        catch (error)
-        {
+        catch (error) {
             console.log(error);
         }
     }
-    useEffect(()=>{
-        if (bottomLockHostData.binId != '' && bottomLockHostData.hostname != '')
-        {
+    useEffect(() => {
+        if (bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
             sendLockBottom();
         }
-    },[bottomLockHostData]);
-    
-    const UpdateBinWeightCollection = async ()=>{
-        try
-        {
-            const response = await apiClient.post('http://PCS.local:5000/UpdateBinWeightCollection',{
-                binId : bottomLockHostData.binId
+    }, [bottomLockHostData]);
+
+    const UpdateBinWeightCollection = async () => {
+        try {
+            const response = await apiClient.post('http://PCS.local:5000/UpdateBinWeightCollection', {
+                binId: bottomLockHostData.binId
             }).then(x => {
                 const res = x.data;
                 if (!res.success) {
@@ -115,10 +110,9 @@ const Home = () => {
                 console.log(res);
             });
 
-            setBottomLockData({binId: '',hostname:''});
+            setBottomLockData({ binId: '', hostname: '' });
         }
-        catch (error)
-        {
+        catch (error) {
             console.log(error);
         }
     }
@@ -139,7 +133,7 @@ const Home = () => {
             catch { }
         });
     }, []);
-   
+
     const toggleModal = () => {
         freezeNeto(true);
         setShowModal(!showModal);
@@ -166,19 +160,17 @@ const Home = () => {
             return
         setNeto(weight)
     }, [Scales50Kg])
-    useEffect(()=>{
-        if (Idbin != -1)
-        {
+    useEffect(() => {
+        if (Idbin != -1) {
             saveTransaksi();
         }
-    },[Idbin])
-    useEffect(()=>{
-        if (toplockId!='')
-        {
+    }, [Idbin])
+    useEffect(() => {
+        if (toplockId != '') {
             sendLockTop();
             settoplockId('');
         }
-    },[toplockId]);
+    }, [toplockId]);
     const CheckBinCapacity = async () => {
         try {
             console.log(container);
@@ -194,7 +186,7 @@ const Home = () => {
                 console.log(res);
                 settoplockId(res.bin.name_hostname);
                 setIdbin(res.bin.id);
-                
+
             });
             console.log(response);
         }
@@ -246,10 +238,28 @@ const Home = () => {
                             alert("Waste  Mismatch");
                             return;
                         }
-                        setContainer(res.data.container);
-                        setType(res.data.container.type);
-                        //triggerAvailableBin(true, res.data.container.idWaste);
-                        setScanData('');
+                        if (res.data.container.type == "Collection") {
+                            const _bin = res.data.container.waste.bin.find(item => item.name == container.name);
+
+                            if (!_bin) {
+                                alert("Bin Collection error");
+                                return;
+                            }
+                            setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
+                            setShowModal(false);
+                            UpdateBinWeightCollection();
+                            setScanData('');
+                            setUser(null);
+                            setContainer(null);
+                            return;
+                        }
+                        else{
+                            
+                            setContainer(res.data.container);
+                            setType(res.data.container.type);
+                            //triggerAvailableBin(true, res.data.container.idWaste);
+                            setScanData('');
+                        }
                         //setIsSubmitAllowed(true);
                     } else {
                         alert("Countainer not found");
@@ -278,7 +288,7 @@ const Home = () => {
             //setIsSubmitAllowed(false);
             setScanData('');
             updateBinWeight();
-//            toggleModal();
+            //            toggleModal();
             //setShowModalConfirmWeight(true);
             // CheckBinCapacity();
         });
@@ -312,25 +322,8 @@ const Home = () => {
         const totalWeight = parseFloat(neto) + parseFloat(binWeight);
         console.log(binWeight);
         console.log(type);
-        if (type == "Collection" ) {
-        const _bin = container.waste.bin.find(item => item.name == container.name);
-            
-            if (!_bin)
-            {
-                console.log([_bin,container.name,container.waste.bin.map(x=>x.name)]);
-                alert("Bin Collection error");
-                return;
-            }
-            setBottomLockData({binId: _bin.id,hostname:_bin.name_hostname });
-            setShowModal(false);
-            UpdateBinWeightCollection();
-            setScanData('');
-            setUser(null);
-            setContainer(null);
-            return;
-        }
-        else if (type=='Dispose')
-        {
+
+        if (type == 'Dispose') {
             CheckBinCapacity();
         }
         setShowModal(false);
