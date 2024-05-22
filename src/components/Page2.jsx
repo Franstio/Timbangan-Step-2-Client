@@ -229,7 +229,7 @@ const Home = () => {
 
     const handleScan1 = () => {
         apiClient.post('http://PCS.local:5000/ScanContainer', { containerId: scanData })
-            .then(res => {
+            .then(async (res) => {
                 if (res.data.error) {
                     alert(res.data.error);
                 } else {
@@ -238,6 +238,7 @@ const Home = () => {
                             alert("Waste  Mismatch");
                             return;
                         }
+                        console.log(res.data.container);
                         if (res.data.container.type == "Collection") {
                             const _bin = res.data.container.waste.bin.find(item => item.name == container.name);
 
@@ -247,7 +248,7 @@ const Home = () => {
                             }
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
-                            UpdateBinWeightCollection();
+                            await UpdateBinWeightCollection();
                             setScanData('');
                             setUser(null);
                             setContainer(null);
@@ -258,8 +259,9 @@ const Home = () => {
                             setContainer(res.data.container);
                             setType(res.data.container.type);
                             //triggerAvailableBin(true, res.data.container.idWaste);
-                            setScanData('');
+
                         }
+                        setScanData('');
                         //setIsSubmitAllowed(true);
                     } else {
                         alert("Countainer not found");
