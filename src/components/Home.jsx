@@ -2,12 +2,15 @@
 import React, { Fragment,useState,useEffect } from 'react';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import axios from "axios";
+import io from 'socket.io-client';
 const apiClient = axios.create({
     withCredentials:false
 });
 
 const Home = () => {
     const [hostname, setHostname] = useState('');
+    const [socket, setSocket] = useState(io(`http://PCS.local:5000/`)); // Sesuaikan dengan alamat server
+    const [Getweightbin, setGetweightbin] = useState("");
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -20,12 +23,23 @@ const Home = () => {
     useEffect(() => {
         axios.get('http://localhost:5000/hostname',{withCredentials:false})
           .then(response => {
+            
+            socket.emit('getWeightBin',response.data.hostname);
             setHostname(response.data.hostname);
           })
           .catch(error => {
             console.error('Error fetching the hostname:', error);
           });
       }, []);
+
+      useEffect(() => {
+        socket.on('getweight', (data) => {
+            if (data.weight)
+                setGetweightbin(data);
+            else
+                alert(data.error);
+        });
+    }, []);
 
     async function sendLockBottom() {
         try {
@@ -51,7 +65,7 @@ const Home = () => {
                     <div className='flex-1 p-4 border rounded bg-white'>
                     <h1 className='text-center text-blue-600 font-semibold'>Weight</h1>
                     <div class='flex justify-warp'>
-                        <div class='flex-1 p-4 border rounded bg-gray-300 text-center text-5xl font-semibold max-w-xl'>10.00</div>
+                        <div class='flex-1 p-4 border rounded bg-gray-300 text-center text-5xl font-semibold max-w-xl'>{Getweightbin}</div>
                         <p className='flex items-center text-2xl font-bold'>Kg</p>
                     </div>
                     </div>
