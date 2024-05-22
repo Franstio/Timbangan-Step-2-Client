@@ -32,7 +32,7 @@ const Home = () => {
       }, []);
 
       useEffect(() => {
-        socket.on('connection', ()=>{
+        socket.on('connect', ()=>{
             console.log("LAUNCH CONNECT " + hostname);
             socket.emit('getWeightBin',hostname);
         });
