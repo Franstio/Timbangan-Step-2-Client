@@ -33,7 +33,7 @@ const Home = () => {
       useEffect(()=>{
         console.log("Get Bin For "+hostname);
         if (hostname && hostname != '')
-        socket.emit('getWeightBin',hostname);
+            socket.emit('getWeightBin',hostname);
       },[hostname]);
       useEffect(() => {
         /*socket.on('connect', ()=>{
@@ -41,7 +41,7 @@ const Home = () => {
             socket.emit('getWeightBin',hostname);
         });*/
         socket.on('getweight', (data) => {
-            console.log(data);
+            console.log(["Input",data]);
             if (data && data.weight)
                 setGetweightbin(data);
             else
