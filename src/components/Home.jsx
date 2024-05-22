@@ -30,7 +30,9 @@ const Home = () => {
             console.error('Error fetching the hostname:', error);
           });
       }, []);
-
+      useEffect(()=>{
+        socket.emit('getWeightBin',hostname);
+      },[hostname]);
       useEffect(() => {
         socket.on('connect', ()=>{
             console.log("LAUNCH CONNECT " + hostname);
