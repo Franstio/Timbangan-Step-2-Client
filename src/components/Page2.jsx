@@ -81,7 +81,7 @@ const Home = () => {
             const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/lockBottom`,{
                 idLockBottom : 1
             });
-            setinstruksimsg("buka pintu bawah");
+            setinstruksimsg("buka penutup bawah");
             UpdateBinWeightCollection();
             if (response.status!=200)
             {
@@ -209,7 +209,7 @@ const Home = () => {
             const response = await apiClient.post(`http://${toplockId}.local:5000/locktop/`, {
                 idLockTop: 1
             });
-            setinstruksimsg("buka pintu atas");
+            setinstruksimsg("buka penutup atas");
             console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -271,7 +271,7 @@ const Home = () => {
                 idContainer: container.containerId,
                 badgeId: user.badgeId,
                 IdWaste: container.IdWaste,
-                neto: neto
+                type: type
                 //createdAt: new Date().toISOString().replace('T', ' ')
             }
         }).then(res => {
