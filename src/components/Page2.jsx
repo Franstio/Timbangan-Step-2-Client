@@ -40,6 +40,7 @@ const Home = () => {
     const [toplockId, settoplockId] = useState('');
     const [instruksimsg, setinstruksimsg] = useState("");
     const [type, setType] = useState("");
+    const [weightbin, setWeightbin] = useState("");
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
     const [socket, setSocket] = useState(io('http://PCS.local:5000/')); // Sesuaikan dengan alamat server
     //    const socket = null;
@@ -82,6 +83,7 @@ const Home = () => {
             });
             setinstruksimsg("buka penutup bawah");
             UpdateBinWeightCollection();
+            sendGreenlampOn();
             if (response.status != 200) {
                 console.log(response);
                 return;
@@ -90,6 +92,17 @@ const Home = () => {
         }
         catch (error) {
             console.log(error);
+        }
+    }
+
+    async function sendGreenlampOn() {
+        try {
+            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/greenlampon/`, {
+                idLockBottom: 1
+            });
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
         }
     }
     useEffect(() => {
@@ -115,7 +128,6 @@ const Home = () => {
     }
     useEffect(() => {
         socket.emit('connectScale');
-
         socket.on('data', (data) => {
             console.log({ '4kg': data.weight });
             setScales4Kg(data)
@@ -130,6 +142,35 @@ const Home = () => {
             catch { }
         });
     }, []);
+
+    /* useEffect(() => {
+        socket.on('data', (data) => {
+            const weight4Kg = parseFloat(data) || 0;
+            setScales4Kg(weight4Kg);
+
+            if (weight4Kg > 0) {
+                setScales4Kg(weight4Kg, 0);
+            }
+        });
+
+    }, []);
+
+    useEffect(() => {
+        socket.emit('connectScale');
+        socket.on('data1', (weight50Kg) => {
+            try {
+                const weight50KgValue = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
+                setScales50Kg(weight50KgValue);
+
+                if (weight50KgValue > 0) {
+                    setScales50Kg(0, weight50KgValue);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
+    }, []); */
 
     const toggleModal = () => {
         freezeNeto(true);
@@ -150,13 +191,11 @@ const Home = () => {
 
     useEffect(() => {
         const weight = Scales50Kg?.weight50Kg ?? 0;
-        //  const binWeight = container?.weightbin ?? 0;
-        //weight = weight - binWeight;
-        //	console.log({w:weight,bin:binWeight,w2:Scales50Kg,c:container});
+        const weight1 = Scales4Kg?.weight4Kg ?? 0;
         if (isFreeze)
             return
-        setNeto(weight)
-    }, [Scales50Kg])
+        setNeto(weight,weight1)
+    }, [Scales50Kg],[Scales4Kg])
     useEffect(() => {
         if (Idbin != -1) {
             saveTransaksi();
@@ -206,7 +245,7 @@ const Home = () => {
     }
 
     const handleScan = () => {
-        apiClient.post('http://PCS.local:5000/ScanBadgeid', { badgeId: scanData })
+        apiClient.post('http://localhost:5000/ScanBadgeid', { badgeId: scanData })
             .then(res => {
                 if (res.data.error) {
                     alert(res.data.error);
@@ -225,7 +264,7 @@ const Home = () => {
     };
 
     const handleScan1 = () => {
-        apiClient.post('http://PCS.local:5000/ScanContainer', { containerId: scanData })
+        apiClient.post('http://localhost:5000/ScanContainer', { containerId: scanData })
             .then( (res) => {
                 if (res.data.error) {
                     alert(res.data.error);
@@ -243,6 +282,7 @@ const Home = () => {
                                 alert("Bin Collection error");
                                 return;
                             }
+                            saveTransaksiCollection();
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
 //                            await UpdateBinWeightCollection();
@@ -255,6 +295,7 @@ const Home = () => {
                             
                             setContainer(res.data.container);
                             setType(res.data.container.type);
+                            setWeightbin(res.data.container.weight);
                             //triggerAvailableBin(true, res.data.container.idWaste);
 
                         }
@@ -280,6 +321,27 @@ const Home = () => {
                 badgeId: user.badgeId,
                 IdWaste: container.IdWaste,
                 type: type
+                //createdAt: new Date().toISOString().replace('T', ' ')
+            }
+        }).then(res => {
+            setWasteId(container.IdWaste);
+            //setIsSubmitAllowed(false);
+            setScanData('');
+            updateBinWeight();
+            //            toggleModal();
+            //setShowModalConfirmWeight(true);
+            // CheckBinCapacity();
+        });
+    };
+
+    const saveTransaksiCollection = () => {
+        apiClient.post("http://PCS.local:5000/SaveTransaksiCollection", {
+            payload: {
+                idContainer: container.containerId,
+                badgeId: user.badgeId,
+                IdWaste: container.IdWaste,
+                type: type,
+                weight: weightbin
                 //createdAt: new Date().toISOString().replace('T', ' ')
             }
         }).then(res => {
@@ -326,7 +388,6 @@ const Home = () => {
             CheckBinCapacity();
         }
         setShowModal(false);
-
     }
 
     const handleCancel = () => {

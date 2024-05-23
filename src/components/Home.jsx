@@ -51,6 +51,19 @@ const Home = () => {
             const response = await apiClient.post(`http://${hostname}.local:5000/lockBottom/`, {
                 idLockBottom: 1
             });
+            //setinstruksimsg("buka penutup bawah");
+            sendGreenlampOff();
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function sendGreenlampOff() {
+        try {
+            const response = await apiClient.post(`http://${hostname}.local:5000/greenlampoff/`, {
+                idLockBottom: 1
+            });
             //setinstruksimsg("buka pintu atas");
             console.log(response.data);
         } catch (error) {
