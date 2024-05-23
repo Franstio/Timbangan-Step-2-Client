@@ -171,9 +171,6 @@ const Home = () => {
         });
 
         socket.on('data', (data) => {
-            const data = parseFloat(data) || 0;
-            setScales4Kg(data);
-
             if (data > 0) {
                 setScales4Kg(data, 0);
             }
