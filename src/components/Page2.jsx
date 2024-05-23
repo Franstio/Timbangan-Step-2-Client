@@ -36,6 +36,7 @@ const Home = () => {
     const [isFreeze, freezeNeto] = useState(false);
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [neto, setNeto] = useState(0);
     const [neto50kg, setNeto50kg] = useState(0);
     const [neto4kg, setNeto4kg] = useState(0);
     const [toplockId, settoplockId] = useState('');
@@ -127,7 +128,7 @@ const Home = () => {
             console.log(error);
         }
     }
-    useEffect(() => {
+   /*  useEffect(() => {
         socket.emit('connectScale');
         socket.on('data', (data) => {
             console.log({ '4kg': data.weight });
@@ -142,7 +143,7 @@ const Home = () => {
             }
             catch { }
         });
-    }, []); 
+    }, []);  */
 
 /*     useEffect(() => {
         socket.on('data', (data) => {
@@ -155,33 +156,37 @@ const Home = () => {
         });
 
     }, []); */
-/* 
+
     useEffect(() => {
         socket.emit('connectScale');
         socket.on('data1', (weight50Kg) => {
             try {
-                const weight50KgValue = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg ?? '0') : 0;
-                setScales50Kg(weight50KgValue);
+                const weight50KgValue = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
+                setNeto50kg(weight50KgValue);
 
                 if (weight50KgValue > 0) {
-                    setScales50Kg(0, weight50KgValue);
+                    setNeto(weight50KgValue, 0);
                 }
             } catch (error) {
                 console.error(error);
             }
         });
-
         socket.on('data', (data) => {
+            setNeto4kg(data)
             if (data > 0) {
-                setScales4Kg(data, 0);
+                 const weight4KgInKg = data / 1000;
+                setNeto(weight4KgInKg, 0);
             }
         });
 
-    }, []);  */
+    }, []);
 
     useEffect(() => {
         const weight = Scales50Kg?.weight50Kg ?? 0;
         const weight1 = Scales4Kg?.weight4Kg ?? 0;
+        const binWeight = container?.weightbin ?? 0;
+        weight = weight - binWeight;
+        weight1 = weight - binWeight;
         if (isFreeze)
             return
         setNeto50kg(weight)
@@ -328,7 +333,8 @@ const Home = () => {
                 idContainer: container.containerId,
                 badgeId: user.badgeId,
                 IdWaste: container.IdWaste,
-                type: type
+                type: type,
+                weight: neto
                 //createdAt: new Date().toISOString().replace('T', ' ')
             }
         }).then(res => {
