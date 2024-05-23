@@ -25,8 +25,8 @@ const apiClient = axios.create({
 
 const Home = () => {
     const [user, setUser] = useState(null);
-    const [Scales4Kg, setScales4Kg] = useState({});
-    const [Scales50Kg, setScales50Kg] = useState({});
+    const [Scales4Kg, setScales4Kg] = useState(0);
+    const [Scales50Kg, setScales50Kg] = useState(0);
     const [isFinalStep, setFinalStep] = useState(false);
     const [scanData, setScanData] = useState('');
     const [container, setContainer] = useState(null);
