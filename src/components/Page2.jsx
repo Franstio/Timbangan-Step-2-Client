@@ -143,7 +143,7 @@ const Home = () => {
         });
     }, []); */
 
-    useEffect(() => {
+/*     useEffect(() => {
         socket.on('data', (data) => {
             const weight4Kg = parseFloat(data) || 0;
             setScales4Kg(weight4Kg);
@@ -153,7 +153,7 @@ const Home = () => {
             }
         });
 
-    }, []);
+    }, []); */
 
     useEffect(() => {
         socket.emit('connectScale');
@@ -167,6 +167,15 @@ const Home = () => {
                 }
             } catch (error) {
                 console.error(error);
+            }
+        });
+
+        socket.on('data', (data) => {
+            const weight4Kg = parseFloat(data) || 0;
+            setScales4Kg(weight4Kg);
+
+            if (weight4Kg > 0) {
+                setScales4Kg(weight4Kg, 0);
             }
         });
 
@@ -542,7 +551,7 @@ const Home = () => {
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
                             <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto} <FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Gram</p>
                             </div>
                         </div>
@@ -560,7 +569,7 @@ const Home = () => {
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
                             <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>10.00 <FiRefreshCcw size={20} /></div>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto} <FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
                             </div>
                         </div>
