@@ -171,11 +171,11 @@ const Home = () => {
         });
 
         socket.on('data', (data) => {
-            const weight4Kg = parseFloat(data) || 0;
-            setScales4Kg(weight4Kg);
+            const data = parseFloat(data) || 0;
+            setScales4Kg(data);
 
-            if (weight4Kg > 0) {
-                setScales4Kg(weight4Kg, 0);
+            if (data > 0) {
+                setScales4Kg(data, 0);
             }
         });
 
