@@ -34,9 +34,6 @@ const Home = () => {
         console.log("Get Bin For "+hostname);
         if (hostname && hostname != '')
             socket.emit('getWeightBin',hostname);
-
-        if (hostname && hostname != '')
-            socket.emit('checkMaxweight',hostname);
       },[hostname]);
       useEffect(() => {
         /*socket.on('connect', ()=>{
