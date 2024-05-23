@@ -162,20 +162,18 @@ const Home = () => {
         socket.on('data1', (weight50Kg) => {
             try {
                 const weight50KgValue = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
-                setNeto50kg(weight50KgValue);
-
                 if (weight50KgValue > 0) {
-                    setNeto(weight50KgValue, 0);
+                    setScales50Kg(weight50KgValue, 0);
                 }
             } catch (error) {
                 console.error(error);
             }
         });
         socket.on('data', (data) => {
-            setNeto4kg(data)
+            console.log(data);
             if (data > 0) {
                  const weight4KgInKg = data / 1000;
-                setNeto(weight4KgInKg, 0);
+                setScales4Kg(weight4KgInKg, 0);
             }
         });
 
