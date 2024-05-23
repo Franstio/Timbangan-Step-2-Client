@@ -126,7 +126,7 @@ const Home = () => {
             console.log(error);
         }
     }
-/*     useEffect(() => {
+    useEffect(() => {
         socket.emit('connectScale');
         socket.on('data', (data) => {
             console.log({ '4kg': data.weight });
@@ -141,7 +141,7 @@ const Home = () => {
             }
             catch { }
         });
-    }, []); */
+    }, []); 
 
 /*     useEffect(() => {
         socket.on('data', (data) => {
@@ -154,7 +154,7 @@ const Home = () => {
         });
 
     }, []); */
-
+/* 
     useEffect(() => {
         socket.emit('connectScale');
         socket.on('data1', (weight50Kg) => {
@@ -176,7 +176,7 @@ const Home = () => {
             }
         });
 
-    }, []); 
+    }, []);  */
 
     useEffect(() => {
         const weight = Scales50Kg?.weight50Kg ?? 0;
