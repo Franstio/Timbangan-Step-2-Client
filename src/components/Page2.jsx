@@ -126,7 +126,7 @@ const Home = () => {
             console.log(error);
         }
     }
-    useEffect(() => {
+/*     useEffect(() => {
         socket.emit('connectScale');
         socket.on('data', (data) => {
             console.log({ '4kg': data.weight });
@@ -141,9 +141,9 @@ const Home = () => {
             }
             catch { }
         });
-    }, []);
+    }, []); */
 
-    /* useEffect(() => {
+    useEffect(() => {
         socket.on('data', (data) => {
             const weight4Kg = parseFloat(data) || 0;
             setScales4Kg(weight4Kg);
@@ -159,7 +159,7 @@ const Home = () => {
         socket.emit('connectScale');
         socket.on('data1', (weight50Kg) => {
             try {
-                const weight50KgValue = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
+                const weight50KgValue = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg ?? '0') : 0;
                 setScales50Kg(weight50KgValue);
 
                 if (weight50KgValue > 0) {
@@ -170,7 +170,15 @@ const Home = () => {
             }
         });
 
-    }, []); */
+    }, []); 
+
+    useEffect(() => {
+        const weight = Scales50Kg?.weight50Kg ?? 0;
+        const weight1 = Scales4Kg?.weight4Kg ?? 0;
+        if (isFreeze)
+            return
+        setNeto(weight,weight1)
+    }, [Scales50Kg],[Scales4Kg])
 
     const toggleModal = () => {
         freezeNeto(true);
@@ -188,14 +196,6 @@ const Home = () => {
             }
         }
     };
-
-    useEffect(() => {
-        const weight = Scales50Kg?.weight50Kg ?? 0;
-        const weight1 = Scales4Kg?.weight4Kg ?? 0;
-        if (isFreeze)
-            return
-        setNeto(weight,weight1)
-    }, [Scales50Kg],[Scales4Kg])
     useEffect(() => {
         if (Idbin != -1) {
             saveTransaksi();
