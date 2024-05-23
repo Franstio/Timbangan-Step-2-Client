@@ -36,7 +36,8 @@ const Home = () => {
     const [isFreeze, freezeNeto] = useState(false);
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [neto, setNeto] = useState(0);
+    const [neto50kg, setNeto50kg] = useState(0);
+    const [neto4kg, setNeto4kg] = useState(0);
     const [toplockId, settoplockId] = useState('');
     const [instruksimsg, setinstruksimsg] = useState("");
     const [type, setType] = useState("");
@@ -183,7 +184,8 @@ const Home = () => {
         const weight1 = Scales4Kg?.weight4Kg ?? 0;
         if (isFreeze)
             return
-        setNeto(weight,weight1)
+        setNeto50kg(weight)
+        setNeto4kg(weight1)
     }, [Scales50Kg],[Scales4Kg])
 
     const toggleModal = () => {
@@ -548,7 +550,7 @@ const Home = () => {
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
                             <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto} <FiRefreshCcw size={20} /></div>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto4kg} <FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Gram</p>
                             </div>
                         </div>
@@ -566,7 +568,7 @@ const Home = () => {
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
                             <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto} <FiRefreshCcw size={20} /></div>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto50kg} <FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
                             </div>
                         </div>
