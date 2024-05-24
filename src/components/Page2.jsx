@@ -380,7 +380,7 @@ const Home = () => {
             setWasteId(_container.IdWaste);
             //setIsSubmitAllowed(false);
             setScanData('');
-            updateBinWeight();
+            UpdateBinWeightCollection();
             //            toggleModal();
             //setShowModalConfirmWeight(true);
             // CheckBinCapacity();
