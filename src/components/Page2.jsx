@@ -38,8 +38,8 @@ const Home = () => {
     const [showModal, setShowModal] = useState(false);
     const [finalneto, setFinalNeto] = useState(0);
     const [neto, setNeto] = useState({});
-    const [neto50kg, setNeto50kg] = useState(0);
-    const [neto4kg, setNeto4kg] = useState(0);
+    const [neto50Kg, setNeto50kg] = useState(0);
+    const [neto4Kg, setNeto4kg] = useState(0);
     const [toplockId, settoplockId] = useState('');
     const [instruksimsg, setinstruksimsg] = useState("");
     const [type, setType] = useState("");
