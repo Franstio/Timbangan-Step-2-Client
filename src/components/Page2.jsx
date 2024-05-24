@@ -37,6 +37,7 @@ const Home = () => {
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [finalneto, setFinalNeto] = useState(0);
+    cont  [neto, setNeto] = useState({});
     const [neto50kg, setNeto50kg] = useState(0);
     const [neto4kg, setNeto4kg] = useState(0);
     const [toplockId, settoplockId] = useState('');
@@ -562,7 +563,7 @@ const Home = () => {
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
                             <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto4kg} <FiRefreshCcw size={20} /></div>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales4Kg} <FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Gram</p>
                             </div>
                         </div>
@@ -580,7 +581,7 @@ const Home = () => {
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
                             <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto50kg} <FiRefreshCcw size={20} /></div>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales50Kg} <FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
                             </div>
                         </div>
