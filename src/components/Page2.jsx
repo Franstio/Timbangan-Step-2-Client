@@ -22,7 +22,6 @@ import {
 const apiClient = axios.create({
     withCredentials: false
 });
-const socket = io('http://PCS.local:5000/');
 const Home = () => {
     const [user, setUser] = useState(null);
     const [Scales4Kg, setScales4Kg] = useState({});
@@ -45,7 +44,7 @@ const Home = () => {
     const [type, setType] = useState("");
     const [weightbin, setWeightbin] = useState("");
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
-//    const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
+    const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
     //    const socket = null;
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -159,6 +158,13 @@ const Home = () => {
     }, []); */
 
     useEffect(() => {
+        setSocket(io('http://PCS.local:5000/'));
+
+    
+    }, []);
+    useEffect(()=>{
+        if (!socket)
+            return;
         socket.emit('connectScale');
     
         socket.on('data1', (weight50Kg) => {
@@ -180,8 +186,7 @@ const Home = () => {
                 setScales4Kg({ weight4Kg: weight4KgInKg });
             }
         });
-    
-    }, []);
+    },[socket])
     
     useEffect(() => {
         const binWeight = container?.weightbin ?? 0;
