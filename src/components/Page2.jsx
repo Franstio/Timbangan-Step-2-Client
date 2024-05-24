@@ -25,8 +25,8 @@ const apiClient = axios.create({
 
 const Home = () => {
     const [user, setUser] = useState(null);
-    const [Scales4Kg, setScales4Kg] = useState(0);
-    const [Scales50Kg, setScales50Kg] = useState(0);
+    const [Scales4Kg, setScales4Kg] = useState({});
+    const [Scales50Kg, setScales50Kg] = useState({});
     const [isFinalStep, setFinalStep] = useState(false);
     const [scanData, setScanData] = useState('');
     const [container, setContainer] = useState(null);
@@ -186,17 +186,17 @@ const Home = () => {
         const binWeight = container?.weightbin ?? 0;
         let finalWeight = 0;
     
-        if (Scales50Kg?.weight50Kg > 0) {
+        if (Scales50Kg?.weight50Kg > 0) { 
             finalWeight = Scales50Kg.weight50Kg - binWeight;
         } else if (Scales4Kg?.weight4Kg > 0) {
             finalWeight = Scales4Kg.weight4Kg - binWeight;
         }
-    
+
         if (finalWeight > 0) {
             setFinalNeto(finalWeight);
         }
     
-    }, [Scales50Kg, Scales4Kg, container?.weightbin]);
+    }, [Scales50Kg, Scales4Kg, container?.weightbin]); 
     
     
 
@@ -553,7 +553,7 @@ const Home = () => {
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Bruto</h1>
                             <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales4Kg.toFixed(2)}<FiRefreshCcw size={20} /></div>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales4Kg.weight4Kg.toFixed(2)}<FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Gram</p>
                             </div>
                         </div>
@@ -571,7 +571,7 @@ const Home = () => {
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Bruto</h1>
                             <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales50Kg.toFixed(2)}<FiRefreshCcw size={20} /></div>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales50Kg.weight50Kg.toFixed(2)}<FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
                             </div>
                         </div>
