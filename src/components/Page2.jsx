@@ -327,7 +327,7 @@ const Home = () => {
 
                         }
                         setScanData('');
-                        //setIsSubmitAllowed(true);
+                        setIsSubmitAllowed(true);
                     } else {
                         alert("Countainer not found");
                         setUser(null);
