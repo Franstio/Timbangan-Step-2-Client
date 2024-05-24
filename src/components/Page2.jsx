@@ -310,7 +310,7 @@ const Home = () => {
                                 return;
                             }
                             setIdbin(_bin.id);
-                            saveTransaksiCollection(res.data.container);
+                            saveTransaksiCollection(res.data.container & {weight: _bin.weight});
                             
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
