@@ -95,7 +95,7 @@ const Home = () => {
 
     async function sendGreenlampOn() {
         try {
-            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/greenlampon/`, {
+            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/greenlampon`, {
                 idLockBottom: 1
             });
             console.log(response.data);
@@ -366,6 +366,7 @@ const Home = () => {
     };
 
     const saveTransaksiCollection = (_container) => {
+        console.log(_container);
         apiClient.post("http://PCS.local:5000/SaveTransaksiCollection", {
             payload: {
                 idContainer: _container.containerId,
