@@ -413,10 +413,7 @@ const Home = () => {
         console.log(binWeight);
         console.log(type);
         CheckBinCapacity();
-       /*  if (type == 'Dispose') {
-            CheckBinCapacity();
-        } */
-        setShowModal(false);
+        setShowModal(true);
     }
 
     const handleCancel = () => {
