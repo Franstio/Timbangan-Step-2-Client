@@ -187,19 +187,21 @@ const Home = () => {
         const binWeight = container?.weightbin ?? 0;
         let finalWeight = 0;
     
-        if (Scales50Kg?.weight50Kg > 0) { 
-            finalWeight = Scales50Kg.weight50Kg - binWeight;
-        } else if (Scales4Kg?.weight4Kg > 0) {
-            finalWeight = Scales4Kg.weight4Kg - binWeight;
+        if (Scales50Kg?.weight50Kg ) { 
+            finalWeight = parseFloat(Scales50Kg.weight50Kg) - parseFloat(binWeight);
         }
-
-        if (finalWeight > 0) {
-            setFinalNeto(finalWeight);
+        setNeto50kg(finalWeight);
+    
+    }, [Scales50Kg, , container?.weightbin]); 
+    
+    useEffect(()=> {
+        let finalWeight= 0;
+        const binWeight = container?.weightbin ?? 0;
+        if (Scales4Kg?.weight4Kg ) {
+            finalWeight = parseFloat(Scales4Kg.weight4Kg) - parseFloat(binWeight);
         }
-    
-    }, [Scales50Kg, Scales4Kg, container?.weightbin]); 
-    
-    
+        setNeto4kg(finalWeight);
+    },[Scales4Kg,container?.weightbin]);
 
     const toggleModal = () => {
         freezeNeto(true);
@@ -335,13 +337,14 @@ const Home = () => {
     };
 
     const saveTransaksi = () => {
+        const _finalNeto = neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
         apiClient.post("http://PCS.local:5000/SaveTransaksi", {
             payload: {
                 idContainer: container.containerId,
                 badgeId: user.badgeId,
                 IdWaste: container.IdWaste,
                 type: type,
-                weight: finalneto
+                weight: _finalNeto
                 //createdAt: new Date().toISOString().replace('T', ' ')
             }
         }).then(res => {
@@ -563,7 +566,7 @@ const Home = () => {
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
                             <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{finalneto.toFixed(2)} <FiRefreshCcw size={20} /></div>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto4Kg.toFixed(2)} <FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Gram</p>
                             </div>
                         </div>
@@ -581,7 +584,7 @@ const Home = () => {
                         <div className='flex-1 p-4 border rounded bg-white'>
                             <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
                             <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{finalneto.toFixed(2)} <FiRefreshCcw size={20} /></div>
+                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto50Kg.toFixed(2)} <FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
                             </div>
                         </div>
