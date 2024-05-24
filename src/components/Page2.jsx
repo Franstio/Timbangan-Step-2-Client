@@ -343,7 +343,6 @@ const Home = () => {
 
     const saveTransaksi = () => {
         const _finalNeto = neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
-        setFinalNeto(_finalNeto)
         apiClient.post("http://PCS.local:5000/SaveTransaksi", {
             payload: {
                 idContainer: container.containerId,
@@ -631,7 +630,7 @@ const Home = () => {
                                     </div>
                                     <form>
                                         <Typography variant="h4" align="center" gutterBottom>
-                                            {finalneto}Kg
+                                            {neto50Kg > neto4Kg ? neto50Kg : neto4Kg}Kg
                                         </Typography>
                                         <p>Data Timbangan Sudah Sesuai?</p>
                                         <div className="flex justify-center mt-5">
