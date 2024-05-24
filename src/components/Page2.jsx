@@ -300,7 +300,7 @@ const Home = () => {
                 } else {
                     if (res.data.container) {
                         if (res.data.container.idWaste != wasteId && wasteId != null) {
-                            alert("Waste  Mismatch");
+                            alert("Waste Mismatch");
                             return;
                         }
                         console.log(res.data.container);
@@ -314,6 +314,7 @@ const Home = () => {
                             saveTransaksiCollection(res.data.container);
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
+                            setWasteId(res.data.container.idWaste);
 //                            await UpdateBinWeightCollection();
                             setScanData('');
                             setUser(null);
