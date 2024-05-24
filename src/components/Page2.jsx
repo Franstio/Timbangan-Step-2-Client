@@ -37,7 +37,7 @@ const Home = () => {
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [finalneto, setFinalNeto] = useState(0);
-    cont  [neto, setNeto] = useState({});
+    const [neto, setNeto] = useState({});
     const [neto50kg, setNeto50kg] = useState(0);
     const [neto4kg, setNeto4kg] = useState(0);
     const [toplockId, settoplockId] = useState('');
