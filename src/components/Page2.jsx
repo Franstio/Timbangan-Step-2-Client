@@ -311,6 +311,7 @@ const Home = () => {
                                 alert("Bin Collection error");
                                 return;
                             }
+                            setIdbin(_bin.id);
                             saveTransaksiCollection(res.data.container);
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
