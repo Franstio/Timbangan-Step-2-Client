@@ -83,14 +83,10 @@ const Home = () => {
             const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/lockBottom`, {
                 idLockBottom: 1
             });
-            setinstruksimsg("buka penutup bawah");
-            UpdateBinWeightCollection();
-            sendGreenlampOn();
             if (response.status != 200) {
                 console.log(response);
                 return;
             }
-            setBottomLockData({binId:'',hostname:''});
         }
         catch (error) {
             console.log(error);
@@ -110,6 +106,10 @@ const Home = () => {
     useEffect(() => {
         if (bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
             sendLockBottom();
+            setinstruksimsg("buka penutup bawah");
+            UpdateBinWeightCollection();
+            sendGreenlampOn();
+            setBottomLockData({binId:'',hostname:''});
         }
     }, [bottomLockHostData]);
 
@@ -313,7 +313,6 @@ const Home = () => {
                             }
                             setIdbin(_bin.id);
                             saveTransaksiCollection(res.data.container);
-                            setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
                             setWasteId(res.data.container.idWaste);
 //                          await UpdateBinWeightCollection();
@@ -380,7 +379,8 @@ const Home = () => {
             setWasteId(_container.IdWaste);
             //setIsSubmitAllowed(false);
             setScanData('');
-            UpdateBinWeightCollection();
+            setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
+//            UpdateBinWeightCollection();
             //            toggleModal();
             //setShowModalConfirmWeight(true);
             // CheckBinCapacity();
