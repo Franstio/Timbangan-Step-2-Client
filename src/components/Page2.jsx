@@ -236,11 +236,12 @@ const Home = () => {
         }
     }, [toplockId]);
     const CheckBinCapacity = async () => {
+        const _finalNeto = neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
         try {
             console.log(container);
             const response = await apiClient.post('http://PCS.local:5000/CheckBinCapacity', {
                 IdWaste: container.IdWaste,
-              //  neto: neto
+                neto: _finalNeto
             }).then(x => {
                 const res = x.data;
                 if (!res.success) {
