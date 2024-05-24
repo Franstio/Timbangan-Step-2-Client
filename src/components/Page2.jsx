@@ -412,11 +412,11 @@ const Home = () => {
         const totalWeight = parseFloat(neto) + parseFloat(binWeight);
         console.log(binWeight);
         console.log(type);
-
-        if (type == 'Dispose') {
+        CheckBinCapacity();
+       /*  if (type == 'Dispose') {
             CheckBinCapacity();
-        }
-        setShowModal(true);
+        } */
+        setShowModal(false);
     }
 
     const handleCancel = () => {
