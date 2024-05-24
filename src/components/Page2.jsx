@@ -22,7 +22,7 @@ import {
 const apiClient = axios.create({
     withCredentials: false
 });
-
+const socket = io('http://PCS.local:5000/');
 const Home = () => {
     const [user, setUser] = useState(null);
     const [Scales4Kg, setScales4Kg] = useState({});
@@ -45,7 +45,7 @@ const Home = () => {
     const [type, setType] = useState("");
     const [weightbin, setWeightbin] = useState("");
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
-    const [socket, setSocket] = useState(io('http://PCS.local:5000/')); // Sesuaikan dengan alamat server
+//    const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
     //    const socket = null;
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -163,7 +163,7 @@ const Home = () => {
     
         socket.on('data1', (weight50Kg) => {
             try {
-                console.log(weight50Kg);
+                //console.log(weight50Kg);
                 const weight50KgValue = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
                 if (weight50KgValue > 0) {
                     setScales50Kg({ weight50Kg: weight50KgValue });
@@ -174,7 +174,7 @@ const Home = () => {
         });
     
         socket.on('data', (data) => {
-            console.log(data);
+           // console.log(data);
             if (data.weight > 0) {
                 const weight4KgInKg = parseFloat(data.weight) / 1000;
                 setScales4Kg({ weight4Kg: weight4KgInKg });
