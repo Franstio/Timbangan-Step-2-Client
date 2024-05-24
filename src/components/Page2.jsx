@@ -316,7 +316,7 @@ const Home = () => {
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
                             setWasteId(res.data.container.idWaste);
-//                            await UpdateBinWeightCollection();
+//                          await UpdateBinWeightCollection();
                             setScanData('');
                             setUser(null);
                             setContainer(null);
