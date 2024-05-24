@@ -418,7 +418,7 @@ const Home = () => {
         if (type == 'Dispose') {
             CheckBinCapacity();
         }
-        setShowModal(true);
+        setShowModal(false);
     }
 
     const handleCancel = () => {
