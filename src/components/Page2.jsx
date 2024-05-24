@@ -412,7 +412,10 @@ const Home = () => {
         const totalWeight = parseFloat(neto) + parseFloat(binWeight);
         console.log(binWeight);
         console.log(type);
-        CheckBinCapacity();
+
+        if (type == 'Dispose') {
+            CheckBinCapacity();
+        }
         setShowModal(true);
     }
 
@@ -626,7 +629,7 @@ const Home = () => {
                                     </div>
                                     <form>
                                         <Typography variant="h4" align="center" gutterBottom>
-                                            {neto}Kg
+                                            {_finalNeto}Kg
                                         </Typography>
                                         <p>Data Timbangan Sudah Sesuai?</p>
                                         <div className="flex justify-center mt-5">
