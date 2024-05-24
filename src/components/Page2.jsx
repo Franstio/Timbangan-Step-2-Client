@@ -36,7 +36,7 @@ const Home = () => {
     const [isFreeze, freezeNeto] = useState(false);
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [neto, setNeto] = useState(0);
+    const [finalneto, setFinalNeto] = useState(0);
     const [neto50kg, setNeto50kg] = useState(0);
     const [neto4kg, setNeto4kg] = useState(0);
     const [toplockId, settoplockId] = useState('');
@@ -159,38 +159,46 @@ const Home = () => {
 
     useEffect(() => {
         socket.emit('connectScale');
+    
         socket.on('data1', (weight50Kg) => {
             try {
                 console.log(weight50Kg);
                 const weight50KgValue = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
                 if (weight50KgValue > 0) {
-                    setScales50Kg(weight50KgValue, 0);
+                    setScales50Kg({ weight50Kg: weight50KgValue });
                 }
             } catch (error) {
                 console.error(error);
             }
         });
+    
         socket.on('data', (data) => {
             console.log(data);
             if (data.weight > 0) {
-                 const weight4KgInKg = parseFloat(data.weight) / 1000;
-                setScales4Kg(weight4KgInKg, 0);
+                const weight4KgInKg = parseFloat(data.weight) / 1000;
+                setScales4Kg({ weight4Kg: weight4KgInKg });
             }
         });
-
+    
     }, []);
-
+    
     useEffect(() => {
-        let weight = Scales50Kg?.weight50Kg ?? 0;
-        let weight1 = Scales4Kg?.weight4Kg ?? 0;
         const binWeight = container?.weightbin ?? 0;
-        weight = weight - binWeight;
-        weight1 = weight - binWeight;
-        if (isFreeze)
-            return
-        setNeto50kg(weight)
-        setNeto4kg(weight1)
-    }, [Scales50Kg],[Scales4Kg])
+        let finalWeight = 0;
+    
+        if (Scales50Kg?.weight50Kg > 0) {
+            finalWeight = Scales50Kg.weight50Kg - binWeight;
+        } else if (Scales4Kg?.weight4Kg > 0) {
+            finalWeight = Scales4Kg.weight4Kg - binWeight;
+        }
+    
+        if (finalWeight > 0) {
+            setFinalNeto(finalWeight);
+        }
+    
+    }, [Scales50Kg, Scales4Kg, container?.weightbin]);
+    
+    
 
     const toggleModal = () => {
         freezeNeto(true);
@@ -224,7 +232,7 @@ const Home = () => {
             console.log(container);
             const response = await apiClient.post('http://PCS.local:5000/CheckBinCapacity', {
                 IdWaste: container.IdWaste,
-                neto: neto
+              //  neto: neto
             }).then(x => {
                 const res = x.data;
                 if (!res.success) {
@@ -294,7 +302,7 @@ const Home = () => {
                                 alert("Bin Collection error");
                                 return;
                             }
-                            saveTransaksiCollection();
+                            saveTransaksiCollection(res.data.container);
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
 //                            await UpdateBinWeightCollection();
@@ -307,7 +315,6 @@ const Home = () => {
                             
                             setContainer(res.data.container);
                             setType(res.data.container.type);
-                            setWeightbin(res.data.container.weight);
                             //triggerAvailableBin(true, res.data.container.idWaste);
 
                         }
@@ -333,7 +340,7 @@ const Home = () => {
                 badgeId: user.badgeId,
                 IdWaste: container.IdWaste,
                 type: type,
-                weight: neto
+                weight: finalneto
                 //createdAt: new Date().toISOString().replace('T', ' ')
             }
         }).then(res => {
@@ -347,18 +354,18 @@ const Home = () => {
         });
     };
 
-    const saveTransaksiCollection = () => {
+    const saveTransaksiCollection = (_container) => {
         apiClient.post("http://PCS.local:5000/SaveTransaksiCollection", {
             payload: {
-                idContainer: container.containerId,
+                idContainer: _container.containerId,
                 badgeId: user.badgeId,
-                IdWaste: container.IdWaste,
-                type: type,
-                weight: weightbin
+                IdWaste: _container.IdWaste,
+                type: _container.type,
+                weight: _container.weight
                 //createdAt: new Date().toISOString().replace('T', ' ')
             }
         }).then(res => {
-            setWasteId(container.IdWaste);
+            setWasteId(_container.IdWaste);
             //setIsSubmitAllowed(false);
             setScanData('');
             updateBinWeight();
@@ -372,7 +379,7 @@ const Home = () => {
         try {
             const response = await apiClient.post('http://PCS.local:5000/UpdateBinWeight', {
                 binId: Idbin,
-                neto: neto
+                neto: finalneto
             }).then(x => {
                 //   closeRollingDoor();
                 //setRollingDoorId(-1);
