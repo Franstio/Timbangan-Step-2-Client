@@ -631,7 +631,7 @@ const Home = () => {
                                     </div>
                                     <form>
                                         <Typography variant="h4" align="center" gutterBottom>
-                                            {neto50Kg > neto4Kg ? neto50Kg : neto4Kg}Kg
+                                            {parseFloat(neto50Kg > neto4Kg ? neto50Kg : neto4Kg).toFixed(2)}Kg
                                         </Typography>
                                         <p>Data Timbangan Sudah Sesuai?</p>
                                         <div className="flex justify-center mt-5">
