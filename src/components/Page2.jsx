@@ -309,8 +309,10 @@ const Home = () => {
                                 alert("Bin Collection error");
                                 return;
                             }
-                            setIdbin(_bin.id);
-                            saveTransaksiCollection(res.data.container & {weight: _bin.weight});
+//                            setIdbin(_bin.id);
+                            console.log(_bin);
+                            const collectionPayload = {...res.data.container,weight: _bin.weight};
+                            saveTransaksiCollection(collectionPayload);
                             
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
