@@ -121,8 +121,6 @@ const Home = () => {
                 const res = x.data;
                 console.log(res);
             });
-
-            setBottomLockData({ binId: '', hostname: '' });
         }
         catch (error) {
             console.log(error);
@@ -313,6 +311,8 @@ const Home = () => {
                             }
                             setIdbin(_bin.id);
                             saveTransaksiCollection(res.data.container);
+                            
+                            setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
                             setWasteId(res.data.container.idWaste);
 //                          await UpdateBinWeightCollection();
@@ -379,7 +379,6 @@ const Home = () => {
             setWasteId(_container.IdWaste);
             //setIsSubmitAllowed(false);
             setScanData('');
-            setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
 //            UpdateBinWeightCollection();
             //            toggleModal();
             //setShowModalConfirmWeight(true);
