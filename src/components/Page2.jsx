@@ -343,6 +343,7 @@ const Home = () => {
 
     const saveTransaksi = () => {
         const _finalNeto = neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
+        setFinalNeto(_finalNeto)
         apiClient.post("http://PCS.local:5000/SaveTransaksi", {
             payload: {
                 idContainer: container.containerId,
@@ -386,9 +387,10 @@ const Home = () => {
 
     const updateBinWeight = async () => {
         try {
+            const _finalNeto = neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
             const response = await apiClient.post('http://PCS.local:5000/UpdateBinWeight', {
                 binId: Idbin,
-                neto: finalneto
+                neto: _finalNeto
             }).then(x => {
                 //   closeRollingDoor();
                 //setRollingDoorId(-1);
@@ -629,7 +631,7 @@ const Home = () => {
                                     </div>
                                     <form>
                                         <Typography variant="h4" align="center" gutterBottom>
-                                            {_finalNeto}Kg
+                                            {finalneto}Kg
                                         </Typography>
                                         <p>Data Timbangan Sudah Sesuai?</p>
                                         <div className="flex justify-center mt-5">
