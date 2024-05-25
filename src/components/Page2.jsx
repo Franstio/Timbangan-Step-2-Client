@@ -348,23 +348,7 @@ const Home = () => {
                 if (res.data.error) {
                     alert(res.data.error);
                 } else {
-                   /*  if (res.data.container) {
-                        if (res.data.container.idWaste != wasteId && wasteId != null) {
-                            alert("Waste Mismatch");
-                            return;
-                        }
-                        console.log(res.data.container);
-                        //setScanData('');
-                        //setIsSubmitAllowed(true);
-                    } else {
-                        alert("Countainer not found");
-                        setUser(null);
-                        setContainer(null);
-                        setContainerName(res.data.name || '');
-                        setScanData('');
-                        //setIsSubmitAllowed(false);
-                    } */
-                    (res.data.bin)
+                    console.log(res.data.bin);
                 }
             })
             .catch(err => console.error(err));
