@@ -216,10 +216,10 @@ const Home = () => {
             if (user == null)
                 handleScan();
             else if (isFinalStep) {
+                VerificationScan();
             }
             else {
                 handleScan1();
-                VerificationScan();
             }
         }
     };
