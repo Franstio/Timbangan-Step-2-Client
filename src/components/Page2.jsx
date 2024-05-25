@@ -126,35 +126,6 @@ const Home = () => {
             console.log(error);
         }
     }
-   /*  useEffect(() => {
-        socket.emit('connectScale');
-        socket.on('data', (data) => {
-            console.log({ '4kg': data.weight });
-            setScales4Kg(data)
-        });
-        socket.on('data1', (weight50Kg) => {
-            try {
-                console.log({ "50kg": weight50Kg.weight50Kg });
-                weight50Kg.weight50Kg = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
-                //  console.log(weight50K)
-                setScales50Kg(weight50Kg);
-            }
-            catch { }
-        });
-    }, []);  */
-
-/*     useEffect(() => {
-        socket.on('data', (data) => {
-            const weight4Kg = parseFloat(data) || 0;
-            setScales4Kg(weight4Kg);
-
-            if (weight4Kg > 0) {
-                setScales4Kg(weight4Kg, 0);
-            }
-        });
-
-    }, []); */
-
     useEffect(() => {
         setSocket(io('http://PCS.local:5000/'));
 
@@ -216,7 +187,13 @@ const Home = () => {
             if (user == null)
                 handleScan();
             else if (isFinalStep) {
-                //VerificationScan();
+                console.log(Idbin);
+                console.log(container.waste.bin.filter(x => x.name == Idbin));
+                if(container.waste.bin.filter(x => x.name == Idbin).length < 1){
+                    alert("missmatch name" + scanData);
+                    return;
+                }
+                VerificationScan();
             }
             else {
                 handleScan1();
@@ -239,7 +216,7 @@ const Home = () => {
         const _finalNeto = neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
         try {
             console.log(container);
-            const response = await apiClient.post('http://PCS.local:5000/CheckBinCapacity', {
+            const response = await apiClient.post('http://localhost:5000/CheckBinCapacity', {
                 IdWaste: container.IdWaste,
                 neto: _finalNeto
             }).then(x => {
@@ -310,14 +287,12 @@ const Home = () => {
                                 alert("Bin Collection error");
                                 return;
                             }
-//                          setIdbin(_bin.id);
                             console.log(_bin);
                             const collectionPayload = {...res.data.container,weight: _bin.weight};
                             saveTransaksiCollection(collectionPayload);
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
                             setWasteId(res.data.container.idWaste);
-//                          await UpdateBinWeightCollection();
                             setScanData('');
                             setUser(null);
                             setContainer(null);
@@ -326,7 +301,7 @@ const Home = () => {
                         else{
                             setContainer(res.data.container);
                             setType(res.data.container.type);
-                            //triggerAvailableBin(true, res.data.container.idWaste);
+                       
                         }
                         setScanData('');
                         setIsSubmitAllowed(true);
@@ -357,23 +332,18 @@ const Home = () => {
 
     const saveTransaksi = () => {
         const _finalNeto = neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
-        apiClient.post("http://PCS.local:5000/SaveTransaksi", {
+        apiClient.post("http://localhost:5000/SaveTransaksi", {
             payload: {
                 idContainer: container.containerId,
                 badgeId: user.badgeId,
                 IdWaste: container.IdWaste,
                 type: type,
                 weight: _finalNeto
-                //createdAt: new Date().toISOString().replace('T', ' ')
             }
         }).then(res => {
             setWasteId(container.IdWaste);
-            //setIsSubmitAllowed(false);
             setScanData('');
             updateBinWeight();
-            //            toggleModal();
-            //setShowModalConfirmWeight(true);
-            // CheckBinCapacity();
         });
     };
 
@@ -386,28 +356,20 @@ const Home = () => {
                 IdWaste: _container.IdWaste,
                 type: _container.type,
                 weight: _container.weight
-                //createdAt: new Date().toISOString().replace('T', ' ')
             }
         }).then(res => {
             setWasteId(_container.IdWaste);
-            //setIsSubmitAllowed(false);
             setScanData('');
-//            UpdateBinWeightCollection();
-            //            toggleModal();
-            //setShowModalConfirmWeight(true);
-            // CheckBinCapacity();
         });
     };
 
     const updateBinWeight = async () => {
         try {
             const _finalNeto = neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
-            const response = await apiClient.post('http://PCS.local:5000/UpdateBinWeight', {
+            const response = await apiClient.post('http://localhost:5000/UpdateBinWeight', {
                 binId: Idbin,
                 neto: _finalNeto
             }).then(x => {
-                //   closeRollingDoor();
-                //setRollingDoorId(-1);
                 setScanData('');
                 setUser(null);
                 setContainer(null);
