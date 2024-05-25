@@ -422,6 +422,7 @@ const Home = () => {
         if (type == 'Dispose') {
             if (neto4Kg > 4) {
                 alert("Berat limbah melebihi kapasitas ,sihlakan menggunakan timbangan lain.");
+                return;
             }
             CheckBinCapacity();    
         }
