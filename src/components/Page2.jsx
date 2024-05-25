@@ -211,31 +211,18 @@ const Home = () => {
         setShowModal(!showModal);
     };
 
-/*     const handleKeyPress = (e) => {
+    const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             if (user == null)
                 handleScan();
             else if (isFinalStep) {
-                VerificationScan();
+                //VerificationScan();
             }
             else {
                 handleScan1();
             }
         }
-    }; */
-
-    const handleKeyPress = async (e) => {
-        if (e.key === 'Enter') {
-            if (user == null) {
-                handleScan();
-            } else if (isFinalStep) {
-                await VerificationScan();
-            } else {
-                await handleScan1();
-                await VerificationScan();
-            }
-        }
-    };
+    }; 
 
     useEffect(() => {
         if (Idbin != -1) {
