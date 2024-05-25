@@ -219,6 +219,7 @@ const Home = () => {
             }
             else {
                 handleScan1();
+                VerificationScan();
             }
         }
     };
@@ -249,7 +250,6 @@ const Home = () => {
                 console.log(res);
                 settoplockId(res.bin.name_hostname);
                 setIdbin(res.bin.id);
-
             });
             console.log(response);
         }
@@ -269,7 +269,7 @@ const Home = () => {
         } catch (error) {
             console.error(error);
         }
-    }
+    };
 
     const handleScan = () => {
         apiClient.post('http://localhost:5000/ScanBadgeid', { badgeId: scanData })
@@ -309,11 +309,10 @@ const Home = () => {
                                 alert("Bin Collection error");
                                 return;
                             }
-//                            setIdbin(_bin.id);
+//                          setIdbin(_bin.id);
                             console.log(_bin);
                             const collectionPayload = {...res.data.container,weight: _bin.weight};
                             saveTransaksiCollection(collectionPayload);
-                            
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
                             setWasteId(res.data.container.idWaste);
@@ -324,11 +323,9 @@ const Home = () => {
                             return;
                         }
                         else{
-                            
                             setContainer(res.data.container);
                             setType(res.data.container.type);
                             //triggerAvailableBin(true, res.data.container.idWaste);
-
                         }
                         setScanData('');
                         setIsSubmitAllowed(true);
@@ -340,6 +337,34 @@ const Home = () => {
                         setScanData('');
                         setIsSubmitAllowed(false);
                     }
+                }
+            })
+            .catch(err => console.error(err));
+    };
+
+    const VerificationScan = () => {
+        apiClient.post('http://localhost:5000/VerificationScan', { binName: scanData })
+            .then( (res) => {
+                if (res.data.error) {
+                    alert(res.data.error);
+                } else {
+                   /*  if (res.data.container) {
+                        if (res.data.container.idWaste != wasteId && wasteId != null) {
+                            alert("Waste Mismatch");
+                            return;
+                        }
+                        console.log(res.data.container);
+                        //setScanData('');
+                        //setIsSubmitAllowed(true);
+                    } else {
+                        alert("Countainer not found");
+                        setUser(null);
+                        setContainer(null);
+                        setContainerName(res.data.name || '');
+                        setScanData('');
+                        //setIsSubmitAllowed(false);
+                    } */
+                    (res.data.bin)
                 }
             })
             .catch(err => console.error(err));
