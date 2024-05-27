@@ -99,7 +99,7 @@ const Home = () => {
             const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/greenlampon`, {
                 idLampGreen: 1
             });
-            console.log(response.data);
+            console.log(response);
         } catch (error) {
             console.error(error);
         }
