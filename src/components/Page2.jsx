@@ -39,7 +39,7 @@ const Home = () => {
     const [neto, setNeto] = useState({});
     const [neto50Kg, setNeto50kg] = useState(0);
     const [neto4Kg, setNeto4kg] = useState(0);
-    const [toplockId, settoplockId] = useState('');
+    const [toplockId, settoplockId] = useState({hostname: ''});
     const [instruksimsg, setinstruksimsg] = useState("");
     const [type, setType] = useState("");
     const [weightbin, setWeightbin] = useState("");
@@ -293,7 +293,7 @@ const Home = () => {
                 }
                 console.log(res);
                 settoplockId(res.bin.name_hostname);
-//                setIdbin(res.bin.id);
+//              setIdbin(res.bin.id);
                 setBinDispose(res.bin);
             });
             console.log(response);
