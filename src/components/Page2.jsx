@@ -112,8 +112,12 @@ const Home = () => {
             sendLockBottom();
             setinstruksimsg("buka penutup bawah");
             UpdateBinWeightCollection();
-            sendGreenlampOn();
-            setBottomLockData({binId:'',hostname:''});
+            new Promise(()=>
+                {
+                    sendGreenlampOn();
+                    Promise.resolve();
+                }).then(()=>
+            setBottomLockData({binId:'',hostname:''}));
         }
     }, [bottomLockHostData]);
 
