@@ -273,7 +273,7 @@ const Home = () => {
                 } catch (error) {
                     console.error('Error executing actions:', error);
                 } finally {
-                    settoplockId({hostname: ''}); // Clear the toplockId after all actions are done
+                    settoplockId(''); // Clear the toplockId after all actions are done
                 }
             })();
         }
