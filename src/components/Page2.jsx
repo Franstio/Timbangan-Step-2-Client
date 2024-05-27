@@ -96,7 +96,7 @@ const Home = () => {
 
     async function sendGreenlampOn() {
         try {
-            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/greenlampon`, {
+            const response = await axios.post(`http://${bottomLockHostData.hostname}.local:5000/greenlampon`, {
                 idLampGreen: 1
             });
             console.log(response.data);
