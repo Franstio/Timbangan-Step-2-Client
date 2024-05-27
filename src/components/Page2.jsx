@@ -110,7 +110,7 @@ const Home = () => {
 
     const sendGreenlampOff = async() => {
         try {
-            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/greenlampoff`, {
+            const response = await apiClient.post(`http://${toplockId}.local:5000/greenlampoff`, {
                 idLampGreen: 1
             });
             if (response.status != 200) {
@@ -138,7 +138,7 @@ const Home = () => {
 
     const sendYellowOn = async() => {
         try {
-            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/yellowlampon`, {
+            const response = await apiClient.post(`http://${toplockId}.local:5000/yellowlampon`, {
                 idLampYellow: 1
             });
             if (response.status != 200) {
