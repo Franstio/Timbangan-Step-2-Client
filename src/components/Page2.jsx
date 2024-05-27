@@ -319,7 +319,7 @@ const Home = () => {
                             setType(res.data.container.type);
                        
                         }
-                        setWasteId(res.data.container.idWaste);
+                        setWasteId(res.data.container.IdWaste);
                         setScanData('');
                         setIsSubmitAllowed(true);
                     } else {
