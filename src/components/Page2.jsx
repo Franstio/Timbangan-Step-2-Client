@@ -109,15 +109,17 @@ const Home = () => {
     }
     useEffect(() => {
         if (bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
-            sendLockBottom();
-            setinstruksimsg("buka penutup bawah");
-            UpdateBinWeightCollection();
             new Promise(async ()=>
                 {
+                    await sendLockBottom();
+
                     await sendGreenlampOn();
                     Promise.resolve();
-                }).then(()=>
-            setBottomLockData({binId:'',hostname:''}));
+                }).then(()=>{
+                setBottomLockData({binId:'',hostname:''});
+                setinstruksimsg("buka penutup bawah");
+                UpdateBinWeightCollection();
+            });
         }
     }, [bottomLockHostData]);
 
