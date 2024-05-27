@@ -51,9 +51,13 @@ const Home = () => {
             const response = await apiClient.post(`http://${hostname}.local:5000/lockBottom/`, {
                 idLockBottom: 1
             });
+            new Promise(async ()=>
+                {
+                    await sendGreenlampOff();
+                    await sendYellowOn();
+                    Promise.resolve();
+                })
             //setinstruksimsg("buka penutup bawah");
-            sendGreenlampOff();
-            sendYellowOn();
             console.log(response.data);
         } catch (error) {
             console.error(error);
