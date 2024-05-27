@@ -74,7 +74,7 @@ const Home = () => {
 
     async function sendYellowOn() {
         try {
-            const response = await apiClient.post(`http://${hostname}.local:5000/greenlampoff/`, {
+            const response = await apiClient.post(`http://${hostname}.local:5000/yellowlampon/`, {
                 idLampYellow: 1
             });
             //setinstruksimsg("buka pintu atas");
