@@ -122,9 +122,9 @@ const Home = () => {
         }
     };
 
-    const sendGreenlampOff = async() => {
+    const sendGreenlampOff = async(targetName) => {
         try {
-            const response = await apiClient.post(`http://${toplockId}.local:5000/greenlampoff`, {
+            const response = await apiClient.post(`http://${targetName}.local:5000/greenlampoff`, {
                 idLampGreen: 1
             });
             if (response.status != 200) {
@@ -164,9 +164,9 @@ const Home = () => {
         }
     };
 
-    const sendYellowOn = async() => {
+    const sendYellowOn = async(targetName) => {
         try {
-            const response = await apiClient.post(`http://${toplockId}.local:5000/yellowlampon`, {
+            const response = await apiClient.post(`http://${targetName}.local:5000/yellowlampon`, {
                 idLampYellow: 1
             });
             if (response.status != 200) {
@@ -476,8 +476,8 @@ const Home = () => {
                 setIdbin(-1);
                 new Promise(async ()=>
                     {
-                       await sendGreenlampOff();
-                       await sendYellowOn();
+                       await sendGreenlampOff(binDispose.name_hostname);
+                       await sendYellowOn(binDispose.name_hostname);
                        Promise.resolve();
                     })
             });
