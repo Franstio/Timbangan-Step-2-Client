@@ -267,9 +267,9 @@ const Home = () => {
         if (toplockId !== '') {
             (async () => {
                 try {
-                    await sendGreenlampOn();
-                    await sendYellowOff();
                     await sendLockTop();
+                    await sendYellowOff();
+                    await sendGreenlampOn();
                 } catch (error) {
                     console.error('Error executing actions:', error);
                 } finally {
@@ -446,8 +446,12 @@ const Home = () => {
                 setFinalStep(false);
                 setIsSubmitAllowed(false);
                 setIdbin(-1);
-                sendGreenlampOff();
-                sendYellowOn();
+                new Promise(async ()=>
+                    {
+                       await sendGreenlampOff();
+                       await sendYellowOn();
+                       Promise.resolve();
+                    })
             });
         }
         catch (error) {
