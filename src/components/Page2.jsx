@@ -175,6 +175,8 @@ const Home = () => {
         if (Scales4Kg?.weight4Kg ) {
             finalWeight = parseFloat(Scales4Kg.weight4Kg) - parseFloat(binWeight);
         }
+        if (isFreeze)
+            return
         setNeto4kg(finalWeight);
     },[Scales4Kg,container?.weightbin]);
 
