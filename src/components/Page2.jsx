@@ -108,9 +108,37 @@ const Home = () => {
         }
     };
 
+    const sendGreenlampOff = async() => {
+        try {
+            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/greenlampoff`, {
+                idLampGreen: 1
+            });
+            if (response.status != 200) {
+                console.log(response);
+                return;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const sendYellowOff = async() => {
         try {
             const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/yellowlampoff`, {
+                idLampYellow: 1
+            });
+            if (response.status != 200) {
+                console.log(response);
+                return;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const sendYellowOn = async() => {
+        try {
+            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/yellowlampon`, {
                 idLampYellow: 1
             });
             if (response.status != 200) {
@@ -237,6 +265,8 @@ const Home = () => {
     }, [Idbin])
     useEffect(() => {
         if (toplockId != '') {
+            sendGreenlampOn();
+            sendYellowOff();
             sendLockTop();
             settoplockId('');
         }
@@ -409,6 +439,8 @@ const Home = () => {
                 setFinalStep(false);
                 setIsSubmitAllowed(false);
                 setIdbin(-1);
+                sendGreenlampOff();
+                sendYellowOn();
             });
         }
         catch (error) {
