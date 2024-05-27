@@ -270,7 +270,7 @@ const Home = () => {
                     await sendGreenlampOn();
                     await sendYellowOff();
                     await sendLockTop();
-                    await settoplockId('');
+                    settoplockId('');
                     Promise.resolve();
                 });
         }
