@@ -53,6 +53,7 @@ const Home = () => {
             });
             //setinstruksimsg("buka penutup bawah");
             sendGreenlampOff();
+            sendYellowOn();
             console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -62,7 +63,19 @@ const Home = () => {
     async function sendGreenlampOff() {
         try {
             const response = await apiClient.post(`http://${hostname}.local:5000/greenlampoff/`, {
-                idLockBottom: 1
+                idLampGreen: 1
+            });
+            //setinstruksimsg("buka pintu atas");
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function sendYellowOn() {
+        try {
+            const response = await apiClient.post(`http://${hostname}.local:5000/greenlampoff/`, {
+                idLampYellow: 1
             });
             //setinstruksimsg("buka pintu atas");
             console.log(response.data);
