@@ -265,10 +265,14 @@ const Home = () => {
     }, [Idbin])
     useEffect(() => {
         if (toplockId != '') {
-            sendGreenlampOn();
-            sendYellowOff();
-            sendLockTop();
-            settoplockId('');
+            new Promise(async ()=>
+                {
+                    await sendGreenlampOn();
+                    await sendYellowOff();
+                    await sendLockTop();
+                    await settoplockId('');
+                    Promise.resolve();
+                });
         }
     }, [toplockId]);
     const CheckBinCapacity = async () => {
