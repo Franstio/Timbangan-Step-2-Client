@@ -97,7 +97,7 @@ const Home = () => {
     async function sendGreenlampOn() {
         try {
             const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/greenlampon`, {
-                idLockBottom: 1
+                idLampGreen: 1
             });
             console.log(response.data);
         } catch (error) {
