@@ -43,6 +43,7 @@ const Home = () => {
     const [instruksimsg, setinstruksimsg] = useState("");
     const [type, setType] = useState("");
     const [weightbin, setWeightbin] = useState("");
+    const [binDispose,setBinDispose] = useState({});
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
     //    const socket = null;
@@ -187,13 +188,14 @@ const Home = () => {
             if (user == null)
                 handleScan();
             else if (isFinalStep) {
-                console.log(Idbin);
-                console.log(container.waste.bin.filter(x => x.name == Idbin));
-                if(container.waste.bin.filter(x => x.name == Idbin).length < 1){
-                    alert("missmatch name" + scanData);
+                console.log(binDispose);
+                if(binDispose.name != scanData ){
+                    alert("mismatch name" );
                     return;
                 }
-                VerificationScan();
+                //VerificationScan();
+                setIdbin(binDispose.id);
+                setScanData('');
             }
             else {
                 handleScan1();
@@ -227,7 +229,8 @@ const Home = () => {
                 }
                 console.log(res);
                 settoplockId(res.bin.name_hostname);
-                setIdbin(res.bin.id);
+//                setIdbin(res.bin.id);
+                setBinDispose(res.bin);
             });
             console.log(response);
         }
@@ -275,7 +278,8 @@ const Home = () => {
                     alert(res.data.error);
                 } else {
                     if (res.data.container) {
-                        if (res.data.container.idWaste != wasteId && wasteId != null) {
+                        console.log(res.data.container);
+                        if (res.data.container.IdWaste != wasteId && wasteId != null) {
                             alert("Waste Mismatch");
                             return;
                         }
@@ -396,7 +400,9 @@ const Home = () => {
                 alert("Berat limbah melebihi kapasitas ,sihlakan menggunakan timbangan lain.");
                 return;
             }
-            CheckBinCapacity();    
+            CheckBinCapacity();
+            setIsSubmitAllowed(false);
+            setFinalStep(true); 
         }
         setShowModal(false);
     }
