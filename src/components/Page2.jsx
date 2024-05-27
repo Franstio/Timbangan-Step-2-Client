@@ -108,6 +108,20 @@ const Home = () => {
         }
     };
 
+    const sendGreenlampOnCollection = async() => {
+        try {
+            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/greenlampon`, {
+                idLampGreen: 1
+            });
+            if (response.status != 200) {
+                console.log(response);
+                return;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const sendGreenlampOff = async() => {
         try {
             const response = await apiClient.post(`http://${toplockId}.local:5000/greenlampoff`, {
@@ -125,6 +139,20 @@ const Home = () => {
     const sendYellowOff = async() => {
         try {
             const response = await apiClient.post(`http://${toplockId}.local:5000/yellowlampoff`, {
+                idLampYellow: 1
+            });
+            if (response.status != 200) {
+                console.log(response);
+                return;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const sendYellowOffCollection = async() => {
+        try {
+            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/yellowlampoff`, {
                 idLampYellow: 1
             });
             if (response.status != 200) {
@@ -154,8 +182,8 @@ const Home = () => {
             new Promise(async ()=>
                 {
                     await sendLockBottom();
-                    await sendYellowOff();
-                    await sendGreenlampOn();
+                    await sendYellowOffCollection();
+                    await sendGreenlampOnCollection();
                     Promise.resolve();
                 }).then(()=>{
                 setBottomLockData({binId:'',hostname:''});
