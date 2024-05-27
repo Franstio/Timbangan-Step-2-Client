@@ -106,13 +106,27 @@ const Home = () => {
         } catch (error) {
             console.error(error);
         }
-    }
+    };
+
+    const sendYellowOff = async() => {
+        try {
+            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/yellowlampoff`, {
+                idLampYellow: 1
+            });
+            if (response.status != 200) {
+                console.log(response);
+                return;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
     useEffect(() => {
         if (bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
             new Promise(async ()=>
                 {
                     await sendLockBottom();
-
+                    await sendYellowOff();
                     await sendGreenlampOn();
                     Promise.resolve();
                 }).then(()=>{
