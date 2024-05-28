@@ -95,7 +95,7 @@ const Home = () => {
         }
     }
     useEffect(()=>{
-        sendPesanTimbangan(binDispose.name_hostname)
+        sendPesanTimbangan(binDispose.name_hostname,instruksimsg);
     },[instruksimsg]);
     const sendGreenlampOn = async() => {
         try {
@@ -316,7 +316,7 @@ const Home = () => {
                 }
                 if (!isSensorTop )
                 {
-                    alert("Pintu belum ditutup");
+                    alert("Tutup Penutup Atas.");
                     return;
                 }
 

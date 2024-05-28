@@ -27,6 +27,8 @@ const Home = () => {
         setLocalSocket(io(`http://PCS.local:5000/`));
     },[])
     useEffect(()=>{
+        if (!localSocket)
+            return;
         localSocket.on('UpdateInstruksi',(instruksi)=>{
                 setinstruksimsg(instruksi);
         });
@@ -80,15 +82,15 @@ const Home = () => {
 
     const readSensorBottom = async () => {
         try {
-            const response = await apiClient.post(`http://${hostname}.local:5000/sensortop`, {
-                SensorTopId: 1
+            const response = await apiClient.post(`http://${hostname}.local:5000/sensorbottom`, {
+                SensorBottomId: 1
             });
             if (response.status !== 200) {
                 console.log(response);
                 return;
             }
     
-            const sensorData = response.data.sensorTop; // Ambil data sensor dari respons
+            const sensorData = response.data.sensorBottom; // Ambil data sensor dari respons
     
             // Konversi nilai sensor menjadi bentuk boolean
              return  sensorData == 1; 
