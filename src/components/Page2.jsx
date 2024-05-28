@@ -459,13 +459,12 @@ const Home = () => {
                             setScanData('');
                             setUser(null);
                             setContainer(null);
-                            sendType()
+                            sendType(_bin.name_hostname,'Collection');
                             return;
                         }
                         else{
                             setContainer(res.data.container);
                             setType(res.data.container.type);
-                       
                         }
                         setWasteId(res.data.container.IdWaste);
                         setScanData('');
