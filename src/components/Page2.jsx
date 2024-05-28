@@ -236,6 +236,7 @@ const Home = () => {
         if (bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
             new Promise(async ()=>
                 {
+                    console.log({bottomLockHostData:bottomLockHostData});
                     await sendLockBottom();
                     await sendYellowOffCollection();
                     await sendGreenlampOnCollection();
