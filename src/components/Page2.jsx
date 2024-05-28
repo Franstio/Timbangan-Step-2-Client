@@ -188,7 +188,7 @@ const Home = () => {
                 return;
             }
     
-            const sensorData = response.data; // Ambil data sensor dari respons
+            const sensorData = response.data.sensorTop; // Ambil data sensor dari respons
     
             // Konversi nilai sensor menjadi bentuk boolean
              return  sensorData == 1; 
