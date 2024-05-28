@@ -188,7 +188,7 @@ const Home = () => {
                 }).then(()=>{
                 setBottomLockData({binId:'',hostname:''});
                 setinstruksimsg("buka penutup bawah");
-                UpdateBinWeightCollection();
+                //UpdateBinWeightCollection();
             });
         }
     }, [bottomLockHostData]);
@@ -386,6 +386,7 @@ const Home = () => {
                             console.log(_bin);
                             const collectionPayload = {...res.data.container,weight: _bin.weight};
                             saveTransaksiCollection(collectionPayload);
+                            UpdateBinWeightCollection();
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
                             setScanData('');
