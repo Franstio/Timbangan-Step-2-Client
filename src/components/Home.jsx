@@ -23,13 +23,14 @@ const Home = () => {
         return classes.filter(Boolean).join(' ')
     }
     useEffect(()=>{
-        setSocket(io('http://localhost:5000/'));
-        setLocalSocket(io(`http://PCS.local:5000/`));
+        setSocket(io('http://PCS.local:5000/'));
+        setLocalSocket(io(`http://localhost:5000/`));
     },[])
     useEffect(()=>{
         if (!localSocket)
             return;
         localSocket.on('UpdateInstruksi',(instruksi)=>{
+            console.log(instruksi);
                 setinstruksimsg(instruksi);
         });
     },[localSocket]);
