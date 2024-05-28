@@ -284,7 +284,7 @@ const Home = () => {
                 handleScan1();
             }
         }
-    }; 
+    };
 
     useEffect(() => {
         if (Idbin != -1) {

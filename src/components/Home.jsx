@@ -1,16 +1,18 @@
 
-import React, { Fragment,useState,useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import axios from "axios";
 import io from 'socket.io-client';
+import GaugeComponent from 'react-gauge-component'
 const apiClient = axios.create({
-    withCredentials:false
+    withCredentials: false
 });
 
 const Home = () => {
     const [hostname, setHostname] = useState('');
+    const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [socket, setSocket] = useState(io(`http://PCS.local:5000/`)); // Sesuaikan dengan alamat server
-    const [Getweightbin, setGetweightbin] = useState(0);
+    const [Getweightbin, setGetweightbin] = useState(80);
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -21,28 +23,28 @@ const Home = () => {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:5000/hostname',{withCredentials:false})
-          .then(response => {
-            
-            setHostname(response.data.hostname);
-          })
-          .catch(error => {
-            console.error('Error fetching the hostname:', error);
-          });
-      }, []);
-      useEffect(()=>{
-        console.log("Get Bin For "+hostname);
+        axios.get('http://localhost:5000/hostname', { withCredentials: false })
+            .then(response => {
+
+                setHostname(response.data.hostname);
+            })
+            .catch(error => {
+                console.error('Error fetching the hostname:', error);
+            });
+    }, []);
+    useEffect(() => {
+        console.log("Get Bin For " + hostname);
         if (hostname && hostname != '')
-            socket.emit('getWeightBin',hostname);
-      },[hostname]);
-      useEffect(() => {
+            socket.emit('getWeightBin', hostname);
+    }, [hostname]);
+    useEffect(() => {
         /*socket.on('connect', ()=>{
             console.log("LAUNCH CONNECT " + hostname);
             socket.emit('getWeightBin',hostname);
         });*/
         socket.on('getweight', (data) => {
-            console.log(["Input",data]);
-                setGetweightbin(prev=>data.weight);
+            console.log(["Input", data]);
+            setGetweightbin(prev => data.weight);
         });
     }, []);
 
@@ -51,12 +53,11 @@ const Home = () => {
             const response = await apiClient.post(`http://${hostname}.local:5000/lockBottom/`, {
                 idLockBottom: 1
             });
-            new Promise(async ()=>
-                {
-                    await sendGreenlampOff();
-                    await sendYellowOn();
-                    Promise.resolve();
-                })
+            new Promise(async () => {
+                await sendGreenlampOff();
+                await sendYellowOn();
+                Promise.resolve();
+            })
             //setinstruksimsg("buka penutup bawah");
             console.log(response.data);
         } catch (error) {
@@ -92,17 +93,57 @@ const Home = () => {
         sendLockBottom();
     }
 
+    
+      // Menghitung nilai gaugeValue sesuai dengan aturan yang ditentukan
+      const getGaugeValue = () => {
+        if (Getweightbin >= 100) {
+            return 100; // Jika Getweightbin mencapai atau melebihi 400 kg, set gaugeValue menjadi 100
+        } else {
+            return (Getweightbin / 1); // Jika tidak, hitung 25% dari Getweightbin
+        }
+    };
+
+    const gaugeValue = getGaugeValue(); // Dapatkan nilai GaugeComponent yang sesuai
     return (
         <main>
-        
+
             <div className='bg-gray-400 p-5'>
                 <div class="flex justify-center gap-10">
                     <div className='flex-1 p-4 border rounded bg-white'>
-                    <h1 className='text-center text-blue-600 font-semibold'>Weight</h1>
-                    <div class='flex justify-warp'>
-                        <div class='flex-1 p-4 border rounded bg-gray-300 text-center text-5xl font-semibold max-w-xl'>{Getweightbin}</div>
-                        <p className='flex items-center text-2xl font-bold'>Kg</p>
-                    </div>
+                        <h1 className='text-center text-blue-600 font-semibold'>Weight</h1>
+                        <div className='flex justify-center'>
+                            <GaugeComponent
+                                arc={{
+
+                                    subArcs: [
+                                        {
+                                            limit: 20,
+                                            color: 'GREEN',
+                                            showTick: true
+                                        },
+                                        {
+                                            limit: 50,
+                                            color: 'YELLOW',
+                                            showTick: true
+                                        },
+                                        {
+                                            limit: 80,
+                                            color: 'YELLOW',
+                                            showTick: true
+                                        },
+                                        {
+                                            limit: 81,
+                                            color: 'RED',
+                                            showTick: true
+                                        },
+                                    ]
+                                }}
+                                value={gaugeValue}
+                                style={{ width: '100%', height: '20%' }} // Ensure the gauge fits the container
+                            />
+
+                        </div>
+                        <p className='flex justify-center'>{Getweightbin}Kg</p>
                     </div>
 
                     <div className='flex-1 p-4 border rounded max-w-md bg-white'>
