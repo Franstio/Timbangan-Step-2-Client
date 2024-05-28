@@ -188,7 +188,7 @@ const Home = () => {
                 }).then(()=>{
                 setBottomLockData({binId:'',hostname:''});
                 setinstruksimsg("buka penutup bawah");
-                //UpdateBinWeightCollection();
+                UpdateBinWeightCollection();
             });
         }
     }, [bottomLockHostData]);
