@@ -95,6 +95,8 @@ const Home = () => {
         }
     }
     useEffect(()=>{
+        if (!binDispose)
+            return;
         sendPesanTimbangan(binDispose.name_hostname,instruksimsg);
     },[instruksimsg]);
     const sendGreenlampOn = async() => {
