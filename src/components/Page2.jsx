@@ -523,7 +523,7 @@ const Home = () => {
                 weight: _container.weight
             }
         }).then(res => {
-            setWasteId(_container.IdWaste);
+            setWasteId(null);
             setScanData('');
         });
     };
