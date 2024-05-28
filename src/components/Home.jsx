@@ -34,6 +34,15 @@ const Home = () => {
                 setinstruksimsg(instruksi);
         });
     },[localSocket]);
+
+    useEffect(()=>{
+        if (!localSocket)
+            return;
+        localSocket.on('GetType',(type)=>{
+            console.log(type);
+                setinstruksimsg(type);
+        });
+    },[localSocket]);
     useEffect(() => {
         axios.get('http://localhost:5000/hostname', { withCredentials: false })
             .then(response => {

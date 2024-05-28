@@ -95,10 +95,17 @@ const Home = () => {
         }
     }
     useEffect(()=>{
-        if (!binDispose)
+        let targetHostName='';
+        if (binDispose)
+            targetHostName = binDispose.name_hostname;
+        else if (bottomLockHostData)
+            targetHostName = binDispose.hostname;
+        if (targetHostName== '' || targetHostName==null ||targetHostName != undefined)
             return;
-        sendPesanTimbangan(binDispose.name_hostname,instruksimsg);
+        sendPesanTimbangan(targetHostName,instruksimsg);
     },[instruksimsg]);
+
+
     const sendGreenlampOn = async() => {
         try {
             const response = await apiClient.post(`http://${toplockId}.local:5000/greenlampon`, {
@@ -188,7 +195,16 @@ const Home = () => {
             const response = await apiClient.post('http://'+target+'.local:5000/instruksi', {
                 instruksi: instruksi
               });
-              //setinstruksimsg(response.data.instruksimsg);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const sendType = async(target,type) => {
+        try {
+            const response = await apiClient.post('http://'+target+'.local:5000/type', {
+                type: type
+              });
         } catch (error) {
             console.error(error);
         }
@@ -223,11 +239,11 @@ const Home = () => {
                     await sendLockBottom();
                     await sendYellowOffCollection();
                     await sendGreenlampOnCollection();
+                    await UpdateBinWeightCollection();
                     Promise.resolve();
                 }).then(()=>{
                 setBottomLockData({binId:'',hostname:''});
-                setinstruksimsg("buka penutup bawah");
-                UpdateBinWeightCollection();
+                //setinstruksimsg("buka penutup bawah");
             });
         }
     }, [bottomLockHostData]);
@@ -443,6 +459,7 @@ const Home = () => {
                             setScanData('');
                             setUser(null);
                             setContainer(null);
+                            sendType()
                             return;
                         }
                         else{
