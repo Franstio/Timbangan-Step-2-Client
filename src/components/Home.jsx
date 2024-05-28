@@ -2,7 +2,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import axios from "axios";
-import io, { io } from 'socket.io-client';
+import io from 'socket.io-client';
 import GaugeComponent from 'react-gauge-component'
 const apiClient = axios.create({
     withCredentials: false
