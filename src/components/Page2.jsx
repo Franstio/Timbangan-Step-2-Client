@@ -177,6 +177,29 @@ const Home = () => {
             console.error(error);
         }
     };
+
+    const readSensorTop = async (targetName) => {
+        try {
+            const response = await apiClient.post(`http://${targetName}.local:5000/sensortop`, {
+                SensorTopId: 1
+            });
+            if (response.status !== 200) {
+                console.log(response);
+                return;
+            }
+    
+            const sensorData = response.data; // Ambil data sensor dari respons
+    
+            // Konversi nilai sensor menjadi bentuk boolean
+             return  sensorData == 1; 
+    
+            //console.log("Sensor value:", sensorValue);
+        } catch (error) {
+            console.error(error);
+            return {error:error};
+        }
+    };
+    
     useEffect(() => {
         if (bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
             new Promise(async ()=>
@@ -266,11 +289,23 @@ const Home = () => {
         setShowModal(!showModal);
     };
 
-    const handleKeyPress = (e) => {
+    const handleKeyPress = async (e) => {
         if (e.key === 'Enter') {
             if (user == null)
                 handleScan();
             else if (isFinalStep) {
+                const isSensorTop = await readSensorTop();
+                if (isSensorTop.error)
+                {
+                    alert("Error Ketika Membaca Sensor");
+                    return;
+                }
+                if (!isSensorTop )
+                {
+                    alert("Pintu belum ditutup");
+                    return;
+                }
+
                 console.log(binDispose);
                 if(binDispose.name != scanData ){
                     alert("mismatch name" );
