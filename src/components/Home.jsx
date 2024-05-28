@@ -12,7 +12,8 @@ const Home = () => {
     const [hostname, setHostname] = useState('');
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [socket, setSocket] = useState(io(`http://PCS.local:5000/`)); // Sesuaikan dengan alamat server
-    const [Getweightbin, setGetweightbin] = useState(80);
+    const [Getweightbin, setGetweightbin] = useState(0);
+    const [instruksimsg, setinstruksimsg] = useState("");
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -58,7 +59,7 @@ const Home = () => {
                 await sendYellowOn();
                 Promise.resolve();
             })
-            //setinstruksimsg("buka penutup bawah");
+            setinstruksimsg("buka penutup bawah");
             console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -193,6 +194,7 @@ const Home = () => {
 
                     <button className='flex-1 p-4 border rounded max-w-xs flex justify-center items-center bg-white font-semibold' onClick={handleSubmit}>Lock Bottom
                     </button>
+                    <p>instruksi: {instruksimsg}</p>
                 </div>
                 {/*  <footer className='flex-1 rounded border mt-10 flex justify-center gap-40 p-3 bg-white'  >
                     <p>Server Status: 192.168.1.5 Online</p>

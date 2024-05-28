@@ -84,6 +84,7 @@ const Home = () => {
             const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/lockBottom`, {
                 idLockBottom: 1
             });
+            setinstruksimsg("Buka Penutup Bawah");
             if (response.status != 200) {
                 console.log(response);
                 return;
@@ -173,6 +174,17 @@ const Home = () => {
                 console.log(response);
                 return;
             }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const sendPesanTimbangan = async() => {
+        try {
+            const response = await apiClient.post('http://pcs.local:5000/getTimbanganData', {
+                pesan: instruksimsg 
+              });
+              setInstruksimsg(response.data.instruksimsg);
         } catch (error) {
             console.error(error);
         }
@@ -372,7 +384,7 @@ const Home = () => {
             const response = await apiClient.post(`http://${toplockId}.local:5000/locktop/`, {
                 idLockTop: 1
             });
-            setinstruksimsg("buka penutup atas");
+            setinstruksimsg("Buka Penutup Atas");
             console.log(response.data);
         } catch (error) {
             console.error(error);
