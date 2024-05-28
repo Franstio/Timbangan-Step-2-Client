@@ -2,18 +2,18 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import axios from "axios";
-import io from 'socket.io-client';
+import io, { io } from 'socket.io-client';
 import GaugeComponent from 'react-gauge-component'
 const apiClient = axios.create({
     withCredentials: false
 });
-
 const Home = () => {
     const [hostname, setHostname] = useState('');
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
-    const [socket, setSocket] = useState(io(`http://PCS.local:5000/`)); // Sesuaikan dengan alamat server
+    const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
     const [Getweightbin, setGetweightbin] = useState(0);
     const [instruksimsg, setinstruksimsg] = useState("");
+    const [localSocket,setLocalSocket] = useState();
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -22,7 +22,15 @@ const Home = () => {
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
     }
-
+    useEffect(()=>{
+        setSocket(io('http://localhost:5000/'));
+        setLocalSocket(io(`http://PCS.local:5000/`));
+    },[])
+    useEffect(()=>{
+        localSocket.on('UpdateInstruksi',(instruksi)=>{
+                setinstruksimsg(instruksi);
+        });
+    },[localSocket]);
     useEffect(() => {
         axios.get('http://localhost:5000/hostname', { withCredentials: false })
             .then(response => {
@@ -34,20 +42,24 @@ const Home = () => {
             });
     }, []);
     useEffect(() => {
+        if (!socket)
+            return;
         console.log("Get Bin For " + hostname);
         if (hostname && hostname != '')
             socket.emit('getWeightBin', hostname);
-    }, [hostname]);
+    }, [hostname,socket]);
     useEffect(() => {
         /*socket.on('connect', ()=>{
             console.log("LAUNCH CONNECT " + hostname);
             socket.emit('getWeightBin',hostname);
         });*/
+        if (!socket)
+            return;
         socket.on('getweight', (data) => {
-            console.log(["Input", data]);
+//            console.log(["Input", data]);
             setGetweightbin(prev => data.weight);
         });
-    }, []);
+    }, [socket]);
 
     async function sendLockBottom() {
         try {
@@ -55,7 +67,7 @@ const Home = () => {
                 idLockBottom: 1
             });
             new Promise(async () => {
-                await sendGreenlampOff();
+                //await sendGreenlampOff();
                 await sendYellowOn();
                 Promise.resolve();
             })
@@ -64,7 +76,29 @@ const Home = () => {
         } catch (error) {
             console.error(error);
         }
-    }
+    };
+
+    const readSensorBottom = async () => {
+        try {
+            const response = await apiClient.post(`http://${hostname}.local:5000/sensortop`, {
+                SensorTopId: 1
+            });
+            if (response.status !== 200) {
+                console.log(response);
+                return;
+            }
+    
+            const sensorData = response.data.sensorTop; // Ambil data sensor dari respons
+    
+            // Konversi nilai sensor menjadi bentuk boolean
+             return  sensorData == 1; 
+    
+            //console.log("Sensor value:", sensorValue);
+        } catch (error) {
+            console.error(error);
+            return {error:error};
+        }
+    };
 
     async function sendGreenlampOff() {
         try {

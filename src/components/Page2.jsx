@@ -94,7 +94,9 @@ const Home = () => {
             console.log(error);
         }
     }
-
+    useEffect(()=>{
+        sendPesanTimbangan(binDispose.name_hostname)
+    },[instruksimsg]);
     const sendGreenlampOn = async() => {
         try {
             const response = await apiClient.post(`http://${toplockId}.local:5000/greenlampon`, {
@@ -179,12 +181,12 @@ const Home = () => {
         }
     };
 
-    const sendPesanTimbangan = async() => {
+    const sendPesanTimbangan = async(target,instruksi) => {
         try {
-            const response = await apiClient.post('http://pcs.local:5000/getTimbanganData', {
-                pesan: instruksimsg 
+            const response = await apiClient.post('http://'+target+'.local:5000/instruksi', {
+                instruksi: instruksi
               });
-              setinstruksimsg(response.data.instruksimsg);
+              //setinstruksimsg(response.data.instruksimsg);
         } catch (error) {
             console.error(error);
         }
