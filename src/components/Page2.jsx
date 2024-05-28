@@ -184,7 +184,7 @@ const Home = () => {
             const response = await apiClient.post('http://pcs.local:5000/getTimbanganData', {
                 pesan: instruksimsg 
               });
-              setInstruksimsg(response.data.instruksimsg);
+              setinstruksimsg(response.data.instruksimsg);
         } catch (error) {
             console.error(error);
         }
