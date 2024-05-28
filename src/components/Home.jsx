@@ -239,7 +239,7 @@ const Home = () => {
                         </div>
                     </div>
 
-                    <button className='flex-1 p-4 border rounded max-w-xs flex justify-center items-center bg-white font-semibold' disabled={bottomLockEnable} onClick={handleSubmit}>Lock Bottom
+                    <button className='flex-1 p-4 border rounded max-w-xs flex justify-center items-center bg-white font-semibold' disabled={!bottomLockEnable} onClick={handleSubmit}>Lock Bottom
                     </button>
                     <p>instruksi: {instruksimsg}</p>
                 </div>
