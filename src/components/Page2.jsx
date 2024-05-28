@@ -294,7 +294,7 @@ const Home = () => {
             if (user == null)
                 handleScan();
             else if (isFinalStep) {
-                const isSensorTop = await readSensorTop();
+                const isSensorTop = await readSensorTop(binDispose.name_hostname);
                 if (isSensorTop.error)
                 {
                     alert("Error Ketika Membaca Sensor");
