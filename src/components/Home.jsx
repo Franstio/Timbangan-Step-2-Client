@@ -79,7 +79,7 @@ const Home = () => {
                 idLockBottom: 1
             });
             new Promise(async () => {
-                //await sendGreenlampOff();
+                await sendGreenlampOff();
                 await sendYellowOn();
                 Promise.resolve();
             })
