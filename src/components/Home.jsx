@@ -14,6 +14,7 @@ const Home = () => {
     const [Getweightbin, setGetweightbin] = useState(0);
     const [instruksimsg, setinstruksimsg] = useState("");
     const [localSocket,setLocalSocket] = useState();
+    const [bottomLockEnable,setBottomLock] = useState(false);
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -39,8 +40,7 @@ const Home = () => {
         if (!localSocket)
             return;
         localSocket.on('GetType',(type)=>{
-            console.log(type);
-                setinstruksimsg(type);
+            setBottomLock(type=='Collection');
         });
     },[localSocket]);
     useEffect(() => {
@@ -138,6 +138,7 @@ const Home = () => {
 
     const handleSubmit = () => {
         sendLockBottom();
+        setBottomLock(false);
     }
 
     
@@ -238,7 +239,7 @@ const Home = () => {
                         </div>
                     </div>
 
-                    <button className='flex-1 p-4 border rounded max-w-xs flex justify-center items-center bg-white font-semibold' onClick={handleSubmit}>Lock Bottom
+                    <button className='flex-1 p-4 border rounded max-w-xs flex justify-center items-center bg-white font-semibold' disabled={bottomLockEnable} onClick={handleSubmit}>Lock Bottom
                     </button>
                     <p>instruksi: {instruksimsg}</p>
                 </div>
