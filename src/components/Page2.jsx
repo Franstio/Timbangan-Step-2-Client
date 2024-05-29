@@ -108,7 +108,7 @@ const Home = () => {
             targetHostName = binDispose.name_hostname;
         else if (bottomLockHostData)
             targetHostName = binDispose.hostname;
-        console.log(targetHostName);
+        console.log([targetHostName,binDispose,bottomLockHostData]);
         if (targetHostName== '' || targetHostName==null ||targetHostName != undefined)
             return;
         sendPesanTimbangan(targetHostName,instruksimsg);
