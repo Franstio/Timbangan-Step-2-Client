@@ -281,9 +281,7 @@ const Home = () => {
             try {
                 //console.log(weight50Kg);
                 const weight50KgValue = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
-                if (weight50KgValue > 0) {
                     setScales50Kg({ weight50Kg: weight50KgValue });
-                }
             } catch (error) {
                 console.error(error);
             }
@@ -291,10 +289,8 @@ const Home = () => {
     
         socket.on('data', (data) => {
            // console.log(data);
-            if (data.weight > 0) {
-                const weight4KgInKg = parseFloat(data.weight) / 1000;
+                const weight4KgInKg = parseFloat(data?.weight ?? 0) / 1000;
                 setScales4Kg({ weight4Kg: weight4KgInKg });
-            }
         });
     },[socket])
     
