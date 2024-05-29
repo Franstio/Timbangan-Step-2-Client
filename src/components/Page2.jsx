@@ -507,7 +507,6 @@ const Home = () => {
         return waste.scales == "4Kg" ? neto4Kg : neto50Kg;
     }
     const getScaleName = ()=>{
-        setmessage('');
         return waste && waste.scales ? (waste.scales=="4Kg" ? "Silakan Gunakan Timbangan 4Kg" : "Silakan Gunakan Timbangan 50 Kg") : "";
     }
     const saveTransaksi = () => {
@@ -585,8 +584,7 @@ const Home = () => {
             }
             CheckBinCapacity();
             setIsSubmitAllowed(false);
-            setFinalStep(true);
-            //getScaleName(''); 
+            setFinalStep(true); 
             setmessage('');
             setmessage('Waiting For Verification');
         }
