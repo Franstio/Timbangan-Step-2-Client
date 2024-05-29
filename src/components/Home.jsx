@@ -69,6 +69,7 @@ const Home = () => {
                 if (final)
                 {
                     setFinal(false);
+                    setinstruksimsg('');
                     return;
                 }
                 setinstruksimsg("Tekan Tombol Lock");
