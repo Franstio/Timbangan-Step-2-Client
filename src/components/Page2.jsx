@@ -552,6 +552,7 @@ const Home = () => {
                 setScanData('');
                 setUser(null);
                 setContainer(null);
+                setmessage('');
                 setNeto(0);
                 freezeNeto(false);
                 setFinalStep(false);
