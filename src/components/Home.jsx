@@ -188,7 +188,7 @@ const Home = () => {
         setFinal(true);
     }
     useEffect(()=>{
-        if (final)
+        if (final==true)
             startProcess(final);
     },[final])
 
