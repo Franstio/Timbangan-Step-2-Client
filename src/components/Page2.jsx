@@ -42,6 +42,7 @@ const Home = () => {
     const [neto4Kg, setNeto4kg] = useState(0);
     const [toplockId, settoplockId] = useState({hostname: ''});
     const [instruksimsg, setinstruksimsg] = useState("");
+    const [message, setmessage] = useState("");
     const [type, setType] = useState("");
     const [weightbin, setWeightbin] = useState("");
     const [binDispose,setBinDispose] = useState({});
@@ -428,7 +429,7 @@ const Home = () => {
                     if (res.data.user) {
                         setUser(res.data.user);
                         setScanData('');
-                        setinstruksimsg("Scan Bin Machine");
+                        setmessage("Scan Bin Machine");
                     } else {
                         alert("User not found");
                         setUser(null);
@@ -583,8 +584,8 @@ const Home = () => {
             CheckBinCapacity();
             setIsSubmitAllowed(false);
             setFinalStep(true); 
-            setinstruksimsg('');
-            setinstruksimsg('Waiting For Verification');
+            setmessage('');
+            setmessage('Waiting For Verification');
         }
         setShowModal(false);
     }
@@ -838,7 +839,7 @@ const Home = () => {
                     )}
                 </div>
 
-                <p>Instruksi : {instruksimsg} {getScaleName()}</p>
+                <p>Instruksi : {message} {getScaleName()}</p>
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: 192.168.1.5 Online</p>
