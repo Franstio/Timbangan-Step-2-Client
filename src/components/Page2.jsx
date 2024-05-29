@@ -478,8 +478,6 @@ const Home = () => {
                         setWaste(res.data.container.waste);
                         setScanData('');
                         setIsSubmitAllowed(true);
-                        setinstruksimsg('');
-                        setinstruksimsg('Waiting For Verification');
                     } else {
                         alert("Countainer not found");
                         setUser(null);
@@ -585,6 +583,8 @@ const Home = () => {
             CheckBinCapacity();
             setIsSubmitAllowed(false);
             setFinalStep(true); 
+            setinstruksimsg('');
+            setinstruksimsg('Waiting For Verification');
         }
         setShowModal(false);
     }
