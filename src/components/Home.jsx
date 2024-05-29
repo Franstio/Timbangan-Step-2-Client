@@ -16,6 +16,7 @@ const Home = () => {
     const [localSocket, setLocalSocket] = useState();
     const [bottomLockEnable, setBottomLock] = useState(false);
     const [type, setType] = useState('');
+    const [processStatus,startProcess] = useState(null);
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -34,14 +35,45 @@ const Home = () => {
         localSocket.on('UpdateInstruksi', (instruksi) => {
             console.log(instruksi);
             setinstruksimsg(instruksi);
+            /*if (instruksi && instruksi != '' && instruksi != null)
+            {
+            }*/
         });
     }, [localSocket]);
+    const startObserveBottomSensor =async (target)=>{
+        await apiClient.post('http://localhost:5000/observeBottomSensor',{readTarget:target});
 
+    }
+    useEffect(()=>{
+        if (processStatus==null)
+            return;
+        if (processStatus)
+        {
+            startObserveBottomSensor(0);
+            localSocket.on('target-0',(res)=>{
+                startProcess(false);
+                setinstruksimsg("Tutup Penutup Bawah");
+                localSocket.off('target-0');
+            });
+
+        }
+        else
+        {
+            startObserveBottomSensor(0);
+            localSocket.on('target-1',(res)=>{
+                startProcess(null);
+                setinstruksimsg("Tekan Tombol Lock");
+                localSocket.off('target-1');
+            });
+        }
+    },[processStatus]);
     useEffect(() => {
         if (!localSocket)
             return;
         localSocket.on('GetType', (type) => {
             setType(type);
+            if (type=='Collection')
+                startProcess(true);
             setBottomLock(type == 'Collection');
         });
     }, [localSocket]);
@@ -77,7 +109,7 @@ const Home = () => {
 
     async function sendLockBottom() {
         try {
-            const response = await apiClient.post(`http://${hostname}.local:5000/lockBottom/`, {
+            const response = await apiClient.post(`http://localhost:5000/lockBottom`, {
                 idLockBottom: 1
             });
             new Promise(async () => {
@@ -94,7 +126,7 @@ const Home = () => {
 
     const readSensorBottom = async () => {
         try {
-            const response = await apiClient.post(`http://${hostname}.local:5000/sensorbottom`, {
+            const response = await apiClient.post(`http://localhost:5000/sensorbottom`, {
                 SensorBottomId: 1
             });
             if (response.status !== 200) {
