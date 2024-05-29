@@ -808,7 +808,7 @@ const Home = () => {
                     )}
                 </div>
 
-                <p>Instruksi : {instruksimsg} : {getScaleName()}</p>
+                <p>Instruksi : {instruksimsg} " Silakan Gunakan Timbangan: {getScaleName()}"</p>
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: 192.168.1.5 Online</p>
