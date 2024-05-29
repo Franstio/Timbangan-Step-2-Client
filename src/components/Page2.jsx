@@ -92,7 +92,6 @@ const Home = () => {
             const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/lockBottom`, {
                 idLockBottom: 1
             });
-            setinstruksimsg("Buka Penutup Bawah");
             if (response.status != 200) {
                 console.log(response);
                 return;
@@ -246,7 +245,8 @@ const Home = () => {
             new Promise(async ()=>
                 {
                     console.log({bottomLockHostData:bottomLockHostData});
-                    await sendLockBottom();
+                    await sendLockBottom();            
+                    setinstruksimsg("Buka Penutup Bawah");
                     await sendYellowOffCollection();
                     await sendGreenlampOnCollection();
                     await UpdateBinWeightCollection();
