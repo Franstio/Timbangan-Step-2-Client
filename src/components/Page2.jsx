@@ -35,6 +35,7 @@ const Home = () => {
     const [isFreeze, freezeNeto] = useState(false);
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showModalDispose, setShowModalDispose] = useState(false);
     const [finalneto, setFinalNeto] = useState(0);
     const [neto, setNeto] = useState({});
     const [neto50Kg, setNeto50kg] = useState(0);
@@ -323,6 +324,11 @@ const Home = () => {
         setShowModal(!showModal);
     };
 
+    const toggleModalDispose = () => {
+        //freezeNeto(true);
+        setShowModalDispose(!showModalDispose);
+    };
+
     const handleKeyPress = async (e) => {
         if (e.key === 'Enter') {
             if (user == null)
@@ -422,6 +428,7 @@ const Home = () => {
                     if (res.data.user) {
                         setUser(res.data.user);
                         setScanData('');
+                        setinstruksimsg("Scan Bin Machine");
                     } else {
                         alert("User not found");
                         setUser(null);
@@ -462,6 +469,8 @@ const Home = () => {
                             setUser(null);
                             setContainer(null);
                             sendType(_bin.name_hostname,'Collection');
+                            setinstruksimsg('');
+                            setinstruksimsg('Waiting For Verification');
                             return;
                         }
                         else{
@@ -796,6 +805,31 @@ const Home = () => {
                                         <div className="flex justify-center mt-5">
                                             <button type="button" onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
                                             <button type="button" onClick={handleCancel} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div className='flex justify-start'>
+                    {showModalDispose && (
+                        <div className="fixed z-10 inset-0 overflow-y-auto">
+                            <div className="flex items-center justify-center min-h-screen">
+                                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                                <div className="bg-white rounded p-8 max-w-md mx-auto z-50">
+                                    <div className="text-center mb-4">
+
+                                    </div>
+                                    <form>
+                                        <Typography variant="h4" align="center" gutterBottom>
+                                            {parseFloat(/*neto50Kg > neto4Kg ? neto50Kg : neto4Kg*/ getWeight() ).toFixed(2)}Kg
+                                        </Typography>
+                                        <p>Dispose Dialokasikan ke Bin 2B-000-01</p>
+                                        <div className="flex justify-center mt-5">
+                                            <button type="button" onClick={handleCancel} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
                                         </div>
                                     </form>
                                 </div>
