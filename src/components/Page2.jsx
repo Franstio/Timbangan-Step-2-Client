@@ -109,7 +109,7 @@ const Home = () => {
         else if (bottomLockHostData && bottomLockHostData.hostname)
             targetHostName = bottomLockHostData.hostname;
         console.log([targetHostName,binDispose,bottomLockHostData]);
-        if (targetHostName== '' || targetHostName==null ||targetHostName != undefined)
+        if (targetHostName== '' || targetHostName==null ||targetHostName == undefined)
             return;
         sendPesanTimbangan(targetHostName,instruksimsg);
     },[instruksimsg]);
