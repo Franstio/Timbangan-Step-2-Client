@@ -104,10 +104,10 @@ const Home = () => {
     }
     useEffect(()=>{
         let targetHostName='';
-        if (binDispose)
+        if (binDispose && binDispose.name_hostname)
             targetHostName = binDispose.name_hostname;
-        else if (bottomLockHostData)
-            targetHostName = binDispose.hostname;
+        else if (bottomLockHostData && bottomLockHostData.hostname)
+            targetHostName = bottomLockHostData.hostname;
         console.log([targetHostName,binDispose,bottomLockHostData]);
         if (targetHostName== '' || targetHostName==null ||targetHostName != undefined)
             return;

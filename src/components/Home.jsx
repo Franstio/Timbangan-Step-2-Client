@@ -17,6 +17,7 @@ const Home = () => {
     const [bottomLockEnable, setBottomLock] = useState(false);
     const [type, setType] = useState('');
     const [processStatus,startProcess] = useState(null);
+    const [final,setFinal] = useState(false);
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -64,8 +65,15 @@ const Home = () => {
             startObserveBottomSensor(1);
             localSocket.on('target-1',(res)=>{
                 startProcess(null);
-                setinstruksimsg("Tekan Tombol Lock");
                 localSocket.off('target-1');
+                if (final)
+                {
+                    setFinal(false);
+                    return;
+                }
+                setinstruksimsg("Tekan Tombol Lock");
+                setBottomLock(type == 'Collection');
+
             });
         }
     },[processStatus]);
@@ -77,7 +85,6 @@ const Home = () => {
             console.log(type);
             if (type=='Collection')
                 startProcess(true);
-            setBottomLock(type == 'Collection');
         });
     }, [localSocket]);
     useEffect(() => {
@@ -176,7 +183,13 @@ const Home = () => {
     const handleSubmit = () => {
         sendLockBottom();
         setBottomLock(false);
+        setinstruksimsg("Buka pintu bawah");
+        setFinal(true);
     }
+    useEffect(()=>{
+        if (final)
+            startProcess(final);
+    },[final])
 
 
     // Menghitung nilai gaugeValue sesuai dengan aturan yang ditentukan
