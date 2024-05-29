@@ -503,7 +503,7 @@ const Home = () => {
         return waste.scales == "4Kg" ? neto4Kg : neto50Kg;
     }
     const getScaleName = ()=>{
-        return waste && waste.scales ? (waste.scales=="4Kg" ? "Scale 4Kg" : "Scale 50 Kg") : "Scales Not Detected";
+        return waste && waste.scales ? (waste.scales=="4Kg" ? "Silakan Gunakan Timbangan : Scale 4Kg" : "Silakan Gunakan Timbangan :  Scale 50 Kg") : "Scales Not Detected";
     }
     const saveTransaksi = () => {
         const _finalNeto = getWeight(); //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
@@ -808,7 +808,7 @@ const Home = () => {
                     )}
                 </div>
 
-                <p>Instruksi : {instruksimsg} " Silakan Gunakan Timbangan: {getScaleName()}"</p>
+                <p>Instruksi : {instruksimsg} {getScaleName()}</p>
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: 192.168.1.5 Online</p>
