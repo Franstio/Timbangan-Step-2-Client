@@ -13,8 +13,8 @@ const Home = () => {
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
     const [Getweightbin, setGetweightbin] = useState(0);
     const [instruksimsg, setinstruksimsg] = useState("");
-    const [localSocket,setLocalSocket] = useState();
-    const [bottomLockEnable,setBottomLock] = useState(false);
+    const [localSocket, setLocalSocket] = useState();
+    const [bottomLockEnable, setBottomLock] = useState(false);
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -23,26 +23,26 @@ const Home = () => {
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
     }
-    useEffect(()=>{
+    useEffect(() => {
         setSocket(io('http://PCS.local:5000/'));
         setLocalSocket(io(`http://localhost:5000/`));
-    },[])
-    useEffect(()=>{
+    }, [])
+    useEffect(() => {
         if (!localSocket)
             return;
-        localSocket.on('UpdateInstruksi',(instruksi)=>{
+        localSocket.on('UpdateInstruksi', (instruksi) => {
             console.log(instruksi);
-                setinstruksimsg(instruksi);
+            setinstruksimsg(instruksi);
         });
-    },[localSocket]);
+    }, [localSocket]);
 
-    useEffect(()=>{
+    useEffect(() => {
         if (!localSocket)
             return;
-        localSocket.on('GetType',(type)=>{
-            setBottomLock(type=='Collection');
+        localSocket.on('GetType', (type) => {
+            setBottomLock(type == 'Collection');
         });
-    },[localSocket]);
+    }, [localSocket]);
     useEffect(() => {
         axios.get('http://localhost:5000/hostname', { withCredentials: false })
             .then(response => {
@@ -59,7 +59,7 @@ const Home = () => {
         console.log("Get Bin For " + hostname);
         if (hostname && hostname != '')
             socket.emit('getWeightBin', hostname);
-    }, [hostname,socket]);
+    }, [hostname, socket]);
     useEffect(() => {
         /*socket.on('connect', ()=>{
             console.log("LAUNCH CONNECT " + hostname);
@@ -68,7 +68,7 @@ const Home = () => {
         if (!socket)
             return;
         socket.on('getweight', (data) => {
-//            console.log(["Input", data]);
+            //            console.log(["Input", data]);
             setGetweightbin(prev => data.weight);
         });
     }, [socket]);
@@ -99,16 +99,16 @@ const Home = () => {
                 console.log(response);
                 return;
             }
-    
+
             const sensorData = response.data.sensorBottom; // Ambil data sensor dari respons
-    
+
             // Konversi nilai sensor menjadi bentuk boolean
-             return  sensorData == 1; 
-    
+            return sensorData == 1;
+
             //console.log("Sensor value:", sensorValue);
         } catch (error) {
             console.error(error);
-            return {error:error};
+            return { error: error };
         }
     };
 
@@ -141,9 +141,9 @@ const Home = () => {
         setBottomLock(false);
     }
 
-    
-      // Menghitung nilai gaugeValue sesuai dengan aturan yang ditentukan
-      const getGaugeValue = () => {
+
+    // Menghitung nilai gaugeValue sesuai dengan aturan yang ditentukan
+    const getGaugeValue = () => {
         if (Getweightbin >= 100) {
             return 100; // Jika Getweightbin mencapai atau melebihi 400 kg, set gaugeValue menjadi 100
         } else {
@@ -239,7 +239,13 @@ const Home = () => {
                         </div>
                     </div>
 
-                    <button className='flex-1 p-4 border rounded max-w-xs flex justify-center items-center bg-white font-semibold' disabled={!bottomLockEnable} onClick={handleSubmit}>Lock Bottom
+                    <button
+                        className={`flex-1 p-4 border rounded max-w-xs flex justify-center items-center font-semibold ${type === 'Collection' ? 'bg-blue-500 text-black' : 'bg-white text-black'
+                            }`}
+                        disabled={!bottomLockEnable}
+                        onClick={handleSubmit}
+                    >
+                        Lock Bottom
                     </button>
                     <p>instruksi: {instruksimsg}</p>
                 </div>
