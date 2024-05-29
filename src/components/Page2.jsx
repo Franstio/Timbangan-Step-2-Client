@@ -29,7 +29,7 @@ const Home = () => {
     const [isFinalStep, setFinalStep] = useState(false);
     const [scanData, setScanData] = useState('');
     const [container, setContainer] = useState(null);
-    const [wasteId, setWasteId] = useState(null);
+    const [waste, setWaste] = useState(null);
     const [Idbin, setIdbin] = useState(-1);
     const [containerName, setContainerName] = useState('');
     const [isFreeze, freezeNeto] = useState(false);
@@ -44,8 +44,13 @@ const Home = () => {
     const [type, setType] = useState("");
     const [weightbin, setWeightbin] = useState("");
     const [binDispose,setBinDispose] = useState({});
+    //const [ScaleName, setScaleName] = useState("");
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
+
+    //const ScaleName = getScaleName();
+    
+    
     //    const socket = null;
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -375,7 +380,7 @@ const Home = () => {
         }
     }, [toplockId]);
     const CheckBinCapacity = async () => {
-        const _finalNeto = neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
+        const _finalNeto = getWeight();// neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
         try {
             console.log(container);
             const response = await apiClient.post('http://localhost:5000/CheckBinCapacity', {
@@ -439,10 +444,10 @@ const Home = () => {
                 } else {
                     if (res.data.container) {
                         console.log(res.data.container);
-                        if (res.data.container.IdWaste != wasteId && wasteId != null) {
+                        /*if ( waste != null && res.data.container.IdWaste != waste.IdWaste ) {
                             alert("Waste Mismatch");
                             return;
-                        }
+                        }*/
                         console.log(res.data.container);
                         if (res.data.container.type == "Collection") {
                             const _bin = res.data.container.waste.bin.find(item => item.name == res.data.container.name);
@@ -467,7 +472,7 @@ const Home = () => {
                             setContainer(res.data.container);
                             setType(res.data.container.type);
                         }
-                        setWasteId(res.data.container.IdWaste);
+                        setWaste(res.data.container.waste);
                         setScanData('');
                         setIsSubmitAllowed(true);
                     } else {
@@ -494,9 +499,14 @@ const Home = () => {
             })
             .catch(err => console.error(err));
     };
-
+    const getWeight = ()=>{
+        return waste.scales == "4Kg" ? neto4Kg : neto50Kg;
+    }
+    const getScaleName = ()=>{
+        return waste && waste.scales ? (waste.scales=="4Kg" ? "Scale 4Kg" : "Scale 50 Kg") : "Scales Not Detected";
+    }
     const saveTransaksi = () => {
-        const _finalNeto = neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
+        const _finalNeto = getWeight(); //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
         apiClient.post("http://localhost:5000/SaveTransaksi", {
             payload: {
                 idContainer: container.containerId,
@@ -506,7 +516,7 @@ const Home = () => {
                 weight: _finalNeto
             }
         }).then(res => {
-            setWasteId(container.IdWaste);
+            setWaste(container.waste);
             setScanData('');
             updateBinWeight();
         });
@@ -523,14 +533,14 @@ const Home = () => {
                 weight: _container.weight
             }
         }).then(res => {
-            setWasteId(null);
+            setWaste(null);
             setScanData('');
         });
     };
 
     const updateBinWeight = async () => {
         try {
-            const _finalNeto = neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
+            const _finalNeto = getWeight();//neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
             const response = await apiClient.post('http://localhost:5000/UpdateBinWeight', {
                 binId: Idbin,
                 neto: _finalNeto
@@ -784,7 +794,7 @@ const Home = () => {
                                     </div>
                                     <form>
                                         <Typography variant="h4" align="center" gutterBottom>
-                                            {parseFloat(neto50Kg > neto4Kg ? neto50Kg : neto4Kg).toFixed(2)}Kg
+                                            {parseFloat(/*neto50Kg > neto4Kg ? neto50Kg : neto4Kg*/ getWeight() ).toFixed(2)}Kg
                                         </Typography>
                                         <p>Data Timbangan Sudah Sesuai?</p>
                                         <div className="flex justify-center mt-5">
@@ -798,7 +808,7 @@ const Home = () => {
                     )}
                 </div>
 
-                <p>Instruksi : {instruksimsg}</p>
+                <p>Instruksi : {instruksimsg} : {getScaleName()}</p>
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: 192.168.1.5 Online</p>
