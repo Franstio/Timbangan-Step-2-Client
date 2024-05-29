@@ -441,6 +441,11 @@ const Home = () => {
             })
             .catch(err => console.error(err));
     };
+    useEffect(()=>{
+        if (!waste || waste == null )
+            return;
+        setmessage(getScaleName());
+    },[waste]);
 
     const handleScan1 = () => {
         apiClient.post('http://localhost:5000/ScanContainer', { containerId: scanData })
@@ -480,7 +485,6 @@ const Home = () => {
                             setType(res.data.container.type);
                         }
                         setWaste(res.data.container.waste);
-                        setmessage(getScaleName());
                         setScanData('');
                         setIsSubmitAllowed(true);
                     } else {
@@ -525,7 +529,7 @@ const Home = () => {
                 weight: _finalNeto
             }
         }).then(res => {
-            setWaste(container.waste);
+            setWaste(null);
             setScanData('');
             updateBinWeight();
         });
