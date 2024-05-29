@@ -586,7 +586,7 @@ const Home = () => {
             CheckBinCapacity();
             setIsSubmitAllowed(false);
             setFinalStep(true);
-            getScaleName(''); 
+            //getScaleName(''); 
             setmessage('');
             setmessage('Waiting For Verification');
         }
