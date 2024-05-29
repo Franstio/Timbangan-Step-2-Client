@@ -480,6 +480,7 @@ const Home = () => {
                             setType(res.data.container.type);
                         }
                         setWaste(res.data.container.waste);
+                        setmessage(getScaleName());
                         setScanData('');
                         setIsSubmitAllowed(true);
                     } else {
@@ -843,7 +844,7 @@ const Home = () => {
                     )}
                 </div>
 
-                <p>Instruksi : {message} {getScaleName()}</p>
+                <p>Instruksi : {message} </p>
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: 192.168.1.5 Online</p>
