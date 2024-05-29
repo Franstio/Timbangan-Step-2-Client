@@ -503,7 +503,7 @@ const Home = () => {
         return waste.scales == "4Kg" ? neto4Kg : neto50Kg;
     }
     const getScaleName = ()=>{
-        return waste && waste.scales ? (waste.scales=="4Kg" ? "Silakan Gunakan Timbangan : Scale 4Kg" : "Silakan Gunakan Timbangan :  Scale 50 Kg") : "Scales Not Detected";
+        return waste && waste.scales ? (waste.scales=="4Kg" ? "Silakan Gunakan Timbangan 4Kg" : "Silakan Gunakan Timbangan 50 Kg") : "";
     }
     const saveTransaksi = () => {
         const _finalNeto = getWeight(); //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
