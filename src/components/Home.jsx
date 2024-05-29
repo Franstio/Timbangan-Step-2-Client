@@ -49,6 +49,7 @@ const Home = () => {
             return;
         if (processStatus)
         {
+            console.log("Waiting for 0");
             startObserveBottomSensor(0);
             localSocket.on('target-0',(res)=>{
                 startProcess(false);
@@ -59,7 +60,8 @@ const Home = () => {
         }
         else
         {
-            startObserveBottomSensor(0);
+            console.log("Waiting for 1");
+            startObserveBottomSensor(1);
             localSocket.on('target-1',(res)=>{
                 startProcess(null);
                 setinstruksimsg("Tekan Tombol Lock");
@@ -72,6 +74,7 @@ const Home = () => {
             return;
         localSocket.on('GetType', (type) => {
             setType(type);
+            console.log(type);
             if (type=='Collection')
                 startProcess(true);
             setBottomLock(type == 'Collection');
