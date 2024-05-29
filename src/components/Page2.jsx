@@ -432,7 +432,7 @@ const Home = () => {
                     if (res.data.user) {
                         setUser(res.data.user);
                         setScanData('');
-                        setmessage("Scan Bin Machine");
+                        setmessage("Scan Bin Machine/Bin");
                     } else {
                         alert("User not found");
                         setUser(null);
@@ -479,6 +479,7 @@ const Home = () => {
                             setContainer(null);
                             sendType(_bin.name_hostname,'Collection');
                             setBinname(_bin.name);
+                            setmessage('');
                             return;
                         }
                         else{
