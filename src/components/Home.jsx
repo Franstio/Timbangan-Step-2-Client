@@ -129,6 +129,7 @@ const Home = () => {
                 Promise.resolve();
             })
             setinstruksimsg("buka penutup bawah");
+            setFinal(true);
             console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -185,7 +186,6 @@ const Home = () => {
         sendLockBottom();
         setBottomLock(false);
  //       setinstruksimsg("Buka pintu bawah");
-        setFinal(true);
     }
     useEffect(()=>{
         if (final==true)
