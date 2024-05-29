@@ -469,8 +469,6 @@ const Home = () => {
                             setUser(null);
                             setContainer(null);
                             sendType(_bin.name_hostname,'Collection');
-                            setinstruksimsg('');
-                            setinstruksimsg('Waiting For Verification');
                             return;
                         }
                         else{
@@ -480,6 +478,8 @@ const Home = () => {
                         setWaste(res.data.container.waste);
                         setScanData('');
                         setIsSubmitAllowed(true);
+                        setinstruksimsg('');
+                        setinstruksimsg('Waiting For Verification');
                     } else {
                         alert("Countainer not found");
                         setUser(null);
