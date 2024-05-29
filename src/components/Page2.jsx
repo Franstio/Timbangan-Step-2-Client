@@ -812,7 +812,7 @@ const Home = () => {
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: 192.168.1.5 Online</p>
-                <p>Status PLC : Online</p>
+                
             </footer>
         </main>
     );
