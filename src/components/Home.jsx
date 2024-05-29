@@ -184,7 +184,7 @@ const Home = () => {
     const handleSubmit = () => {
         sendLockBottom();
         setBottomLock(false);
-        setinstruksimsg("Buka pintu bawah");
+ //       setinstruksimsg("Buka pintu bawah");
         setFinal(true);
     }
     useEffect(()=>{
