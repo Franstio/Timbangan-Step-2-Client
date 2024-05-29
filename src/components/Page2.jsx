@@ -31,6 +31,7 @@ const Home = () => {
     const [container, setContainer] = useState(null);
     const [waste, setWaste] = useState(null);
     const [Idbin, setIdbin] = useState(-1);
+    const [binname, setBinname] = useState('')
     const [containerName, setContainerName] = useState('');
     const [isFreeze, freezeNeto] = useState(false);
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
@@ -470,6 +471,7 @@ const Home = () => {
                             setUser(null);
                             setContainer(null);
                             sendType(_bin.name_hostname,'Collection');
+                            setBinname(_bin.name);
                             return;
                         }
                         else{
@@ -507,6 +509,7 @@ const Home = () => {
         return waste.scales == "4Kg" ? neto4Kg : neto50Kg;
     }
     const getScaleName = ()=>{
+        //setmessage('');
         return waste && waste.scales ? (waste.scales=="4Kg" ? "Silakan Gunakan Timbangan 4Kg" : "Silakan Gunakan Timbangan 50 Kg") : "";
     }
     const saveTransaksi = () => {
@@ -571,7 +574,7 @@ const Home = () => {
         }
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const binWeight = container?.weightbin ?? 0;
         const totalWeight = parseFloat(neto) + parseFloat(binWeight);
         console.log(binWeight);
@@ -582,11 +585,12 @@ const Home = () => {
                 alert("Berat limbah melebihi kapasitas ,sihlakan menggunakan timbangan lain.");
                 return;
             }
-            CheckBinCapacity();
+            await CheckBinCapacity();
             setIsSubmitAllowed(false);
             setFinalStep(true); 
             setmessage('');
             setmessage('Waiting For Verification');
+            setShowModalDispose(true);
         }
         setShowModal(false);
     }
@@ -827,11 +831,9 @@ const Home = () => {
                                     </div>
                                     <form>
                                         <Typography variant="h4" align="center" gutterBottom>
-                                            {parseFloat(/*neto50Kg > neto4Kg ? neto50Kg : neto4Kg*/ getWeight() ).toFixed(2)}Kg
-                                        </Typography>
-                                        <p>Dispose Dialokasikan ke Bin 2B-000-01</p>
+                                        Dispose Dialokasikan ke Bin {binname}</Typography>
                                         <div className="flex justify-center mt-5">
-                                            <button type="button" onClick={handleCancel} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
+                                            <button type="button" onClick={()=>setShowModalDispose(false)} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
                                         </div>
                                     </form>
                                 </div>
