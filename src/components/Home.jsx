@@ -15,6 +15,7 @@ const Home = () => {
     const [instruksimsg, setinstruksimsg] = useState("");
     const [localSocket, setLocalSocket] = useState();
     const [bottomLockEnable, setBottomLock] = useState(false);
+    const [type, setType] = useState('');
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -40,6 +41,7 @@ const Home = () => {
         if (!localSocket)
             return;
         localSocket.on('GetType', (type) => {
+            setType(type);
             setBottomLock(type == 'Collection');
         });
     }, [localSocket]);
