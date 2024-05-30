@@ -487,6 +487,7 @@ const Home = () => {
                             setContainer(null);
                             sendType(_bin.name_hostname,'Collection');
                             setBinname(_bin.name);
+                            setinstruksimsg('')
                             setmessage('');
                             return;
                         }
