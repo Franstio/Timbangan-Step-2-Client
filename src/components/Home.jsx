@@ -37,11 +37,7 @@ const Home = () => {
             return;
         localSocket.on('UpdateInstruksi', (instruksi) => {
             console.log(instruksi);
-            if (final)
-            {
-                setFinal(false);
-                startTopProcess(null);
-            }
+            
             setinstruksimsg(instruksi);
             /*if (instruksi && instruksi != '' && instruksi != null)
             {
