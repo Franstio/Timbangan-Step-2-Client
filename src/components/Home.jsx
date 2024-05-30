@@ -17,7 +17,7 @@ const Home = () => {
     const [bottomLockEnable, setBottomLock] = useState(false);
     const [type, setType] = useState('');
     const [processStatus,startProcess] = useState(null);
-    const [topProcessStatus,startTopProcess]= useStaet(null);
+    const [topProcessStatus,startTopProcess]= useState(null);
     const [final,setFinal] = useState(false);
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
