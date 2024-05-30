@@ -415,6 +415,7 @@ const Home = () => {
         if (!binDispose)
             return;
         setinstruksimsg("buka penutup atas");
+        sendType(binDispose.name_hostname,'Dispose');
     },[binDispose]);
     async function sendLockTop() {
         try {
