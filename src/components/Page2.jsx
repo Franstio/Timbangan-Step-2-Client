@@ -376,7 +376,6 @@ const Home = () => {
             (async () => {
                 try {
                     await sendLockTop();
-                    setinstruksimsg("buka penutup atas");
                     await sendYellowOff();
                     await sendGreenlampOn();
                 } catch (error) {
@@ -401,8 +400,8 @@ const Home = () => {
                     return;
                 }
                 console.log(res);
-                setBinDispose(res.bin,()=>
-                    settoplockId(res.bin.name_hostname));
+                setBinDispose(res.bin);
+                settoplockId(res.bin.name_hostname);
                 setBinname(res.bin.name);
 //              setIdbin(res.bin.id);
             });
@@ -412,7 +411,11 @@ const Home = () => {
             console.log(error);
         }
     };
-
+    useEffect(()=>{
+        if (!binDispose)
+            return;
+        setinstruksimsg("buka penutup atas");
+    },[binDispose]);
     async function sendLockTop() {
         try {
             console.log(toplockId);
