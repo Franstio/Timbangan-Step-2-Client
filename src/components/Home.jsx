@@ -308,7 +308,7 @@ const Home = () => {
                         </div>
                         <div className='flex justify-between'>
                             <p>Yellow</p>
-                            <FiberManualRecordIcon fontSize="small" style={{ color:  (sensor[3] == 0? 'red' : 'green') }} />
+                            <FiberManualRecordIcon fontSize="small" style={{ color:  /*(sensor[3] == 0? 'red' : 'green')*/ 'gray' }} />
                         </div>
                         <div className='flex justify-between'>
                             <p>Red</p>
