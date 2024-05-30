@@ -488,7 +488,7 @@ const Home = () => {
                             setType(res.data.container.type);
                         }
                         setWaste(res.data.container.waste);
-                        setWastename(res.data.container.waste);
+                        setWastename(res.data.container.waste.name);
                         setScanData('');
                         setIsSubmitAllowed(true);
                     } else {
