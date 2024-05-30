@@ -376,6 +376,7 @@ const Home = () => {
             (async () => {
                 try {
                     await sendLockTop();
+                    setinstruksimsg("buka penutup atas");
                     await sendYellowOff();
                     await sendGreenlampOn();
                 } catch (error) {
