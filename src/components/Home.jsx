@@ -122,7 +122,7 @@ const Home = () => {
 
             });
         }
-    },[startTopProcess]);
+    },[topProcessStatus]);
     useEffect(() => {
         if (!localSocket)
             return;
