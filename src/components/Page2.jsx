@@ -538,6 +538,7 @@ const Home = () => {
         }).then(res => {
             setWaste(null);
             setScanData('');
+            setinstruksimsg('');
             updateBinWeight();
         });
     };

@@ -17,6 +17,7 @@ const Home = () => {
     const [bottomLockEnable, setBottomLock] = useState(false);
     const [type, setType] = useState('');
     const [processStatus,startProcess] = useState(null);
+    const [topProcessStatus,startTopProcess]= useStaet(null);
     const [final,setFinal] = useState(false);
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -35,6 +36,11 @@ const Home = () => {
             return;
         localSocket.on('UpdateInstruksi', (instruksi) => {
             console.log(instruksi);
+            if (final)
+            {
+                setFinal(false);
+                startTopProcess(null);
+            }
             setinstruksimsg(instruksi);
             /*if (instruksi && instruksi != '' && instruksi != null)
             {
@@ -78,6 +84,45 @@ const Home = () => {
             });
         }
     },[processStatus]);
+
+    const startObserveTopSensor =async (target)=>{
+        await apiClient.post('http://localhost:5000/observeTopSensor',{readTargetTop:target});
+
+    }
+    useEffect(()=>{
+        if (topProcessStatus==null)
+            return;
+        if (topProcessStatus)
+        {
+            console.log("Waiting for 0");
+            startObserveTopSensor(0);
+            localSocket.on('target-top-0',(res)=>{
+                startTopProcess(false);
+                setinstruksimsg("Tutup Penutup Atas");
+                localSocket.off('target-top-0');
+            });
+
+        }
+        else
+        {
+            console.log("Waiting for 1");
+            startObserveTopSensor(1);
+            localSocket.on('target-top-1',(res)=>{
+                startTopProcess(null);
+                localSocket.off('target-top-1');
+                setinstruksimsg('Lakukan Verifikasi');
+                /* if (final)
+                {
+                    setFinal(false);
+                    setinstruksimsg('');
+                    return;
+                }
+                setinstruksimsg("Tekan Tombol Lock");
+                setBottomLock(type == 'Collection'); */
+
+            });
+        }
+    },[startTopProcess]);
     useEffect(() => {
         if (!localSocket)
             return;
@@ -86,6 +131,8 @@ const Home = () => {
             console.log(type);
             if (type=='Collection')
                 startProcess(true);
+            else
+                startTopProcess(true);
         });
     }, [localSocket]);
     useEffect(() => {
