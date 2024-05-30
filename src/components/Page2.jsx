@@ -856,7 +856,7 @@ const Home = () => {
 
                 <div className='flex justify-start'>
                     {showModalInfoScale && (
-                        <div className="fixed z-10 inset-0 overflow-y-auto" autoFocus={true} onKeyDown={()=>setShowModalInfoScales(false)}>
+                        <div className="fixed z-10 inset-0 overflow-y-auto" onKeyDown={()=>setShowModalInfoScales(false)}>
                             <div className="flex items-center justify-center min-h-screen">
                                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
 
@@ -868,7 +868,7 @@ const Home = () => {
                                         <Typography variant="h4" align="center" gutterBottom>
                                         {getScaleName()}</Typography>
                                         <div className="flex justify-center mt-5">
-                                            <button type="button"  onClick={()=>setShowModalInfoScales(false)} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
+                                            <button type="button" autoFocus={true}  onClick={()=>setShowModalInfoScales(false)} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
                                         </div>
                                     </form>
                                 </div>
