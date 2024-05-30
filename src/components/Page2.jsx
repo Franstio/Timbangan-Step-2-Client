@@ -527,10 +527,26 @@ const Home = () => {
     const getWeight = ()=>{
         return waste.scales == "4Kg" ? neto4Kg : neto50Kg;
     }
-    const getScaleName = ()=>{
+  /*   const getScaleName = ()=>{
         //setmessage('');
         return waste && waste.scales ? (waste.scales=="4Kg" ? "Silakan Gunakan Timbangan 4Kg" : "Silakan Gunakan Timbangan 50 Kg") : "";
-    }
+    } */
+
+    const getScaleName = () => {
+        let scaleMessage = "";
+        if (waste && waste.scales) {
+            scaleMessage = waste.scales === "4Kg" ? "Silakan Gunakan Timbangan 4Kg" : "Silakan Gunakan Timbangan 50 Kg";
+        }
+        
+        if (scaleMessage) {
+            setMessage(scaleMessage);
+            setTimeout(() => {
+                setmessage("");
+            }, 3000); // Menghapus pesan setelah 3 detik
+        }
+        
+        return scaleMessage;
+    };
     const saveTransaksi = () => {
         const _finalNeto = getWeight(); //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
         apiClient.post("http://localhost:5000/SaveTransaksi", {
