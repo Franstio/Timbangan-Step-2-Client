@@ -539,7 +539,7 @@ const Home = () => {
         }
         
         if (scaleMessage) {
-            setMessage(scaleMessage);
+            setmessage(scaleMessage);
             setTimeout(() => {
                 setmessage("");
             }, 3000); // Menghapus pesan setelah 3 detik
