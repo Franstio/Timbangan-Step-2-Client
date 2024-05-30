@@ -19,6 +19,7 @@ const Home = () => {
     const [processStatus,startProcess] = useState(null);
     const [topProcessStatus,startTopProcess]= useState(null);
     const [final,setFinal] = useState(false);
+    const [sensor,setSensor] = useState([0,0]);
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -133,6 +134,9 @@ const Home = () => {
                 startProcess(true);
             else
                 startTopProcess(true);
+        });
+        localSocket.on('sensorUpdate',(data)=>{
+            setSensor([data[0],data[1]]);
         });
     }, [localSocket]);
     useEffect(() => {
@@ -315,12 +319,12 @@ const Home = () => {
                         <h1 className='font-semibold text-blue-600 text-center'>Sensor Status</h1>
                         <div className='flex justify-between'>
                             <p className=''>Top</p>
-                            <FiberManualRecordIcon fontSize="small" style={{ color: 'red' }} />
+                            <FiberManualRecordIcon fontSize="small" style={{ color: (sensor[0] == 0 ? 'red' : 'green') }} />
                         </div>
 
                         <div className='flex justify-between'>
                             <p>Bottom</p>
-                            <FiberManualRecordIcon fontSize="small" style={{ color: 'green' }} />
+                            <FiberManualRecordIcon fontSize="small" style={{ color: (sensor[1]==0 ? 'red' : 'green')  }} />
                         </div>
                     </div>
                     <div className='flex-1 p-4 border rounded max-w-md bg-white'>
