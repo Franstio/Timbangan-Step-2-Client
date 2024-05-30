@@ -132,7 +132,14 @@ const Home = () => {
                 startTopProcess(true);
         });
         localSocket.on('sensorUpdate',(data)=>{
-            setSensor([data[0],data[1]]);
+            if (!data)
+                return;
+            const _data = [];
+            for (let i=0;i<data.length;i++)
+            {
+                _data.push(data[i] ?? 0);
+            }
+            setSensor(_data);
         });
     }, [localSocket]);
     useEffect(() => {
