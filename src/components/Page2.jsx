@@ -841,7 +841,7 @@ const Home = () => {
                                     </div>
                                     <form>
                                         <Typography variant="h4" align="center" gutterBottom>
-                                        Dispose Dialokasikan ke Bin {binname} Waste:{wastename}</Typography>
+                                        Dispose Dialokasikan ke Bin: {binname} Waste:{wastename}</Typography>
                                         <div className="flex justify-center mt-5">
                                             <button type="button" onClick={()=>setShowModalDispose(false)} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
                                         </div>
