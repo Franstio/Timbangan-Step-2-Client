@@ -297,15 +297,15 @@ const Home = () => {
 
                         <div className='flex justify-between'>
                             <p className=''>Green</p>
-                            <FiberManualRecordIcon fontSize="small" style={{ color: 'green' }} />
+                            <FiberManualRecordIcon fontSize="small" style={{ color:  (sensor[4] == 0? 'red' : 'green') }} />
                         </div>
                         <div className='flex justify-between'>
                             <p>Yellow</p>
-                            <FiberManualRecordIcon fontSize="small" style={{ color: 'red' }} />
+                            <FiberManualRecordIcon fontSize="small" style={{ color:  (sensor[3] == 0? 'red' : 'green') }} />
                         </div>
                         <div className='flex justify-between'>
                             <p>Red</p>
-                            <FiberManualRecordIcon fontSize="small" style={{ color: 'red' }} />
+                            <FiberManualRecordIcon fontSize="small" style={{ color:  (sensor[2] == 0? 'red' : 'green') }} />
                         </div>
                     </div>
                 </div>
@@ -328,12 +328,12 @@ const Home = () => {
 
                         <div className='flex justify-between'>
                             <p className=''>Top</p>
-                            <FiberManualRecordIcon fontSize="small" style={{ color: 'green' }} />
+                            <FiberManualRecordIcon fontSize="small" style={{ color: (sensor[5] == 0? 'red' : 'green') }} />
                         </div>
 
                         <div className='flex justify-between'>
                             <p>Bottom</p>
-                            <FiberManualRecordIcon fontSize="small" style={{ color: 'red' }} />
+                            <FiberManualRecordIcon fontSize="small" style={{ color:  (sensor[6] == 0? 'red' : 'green')}} />
                         </div>
                     </div>
 
