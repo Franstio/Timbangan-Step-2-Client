@@ -469,6 +469,7 @@ const Home = () => {
                         }*/
                         console.log(res.data.container);
                         setWaste(res.data.container.waste);
+                        setmessage('');
                         if (res.data.container.type == "Collection") {
                             const _bin = res.data.container.waste.bin.find(item => item.name == res.data.container.name);
 
