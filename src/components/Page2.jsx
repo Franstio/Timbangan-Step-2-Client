@@ -545,7 +545,7 @@ const Home = () => {
             }, 3000); // Menghapus pesan setelah 3 detik
         }
         
-        return scaleMessage;
+        return () => clearTimeout(timer);
     };
     const saveTransaksi = () => {
         const _finalNeto = getWeight(); //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
