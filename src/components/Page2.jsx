@@ -401,8 +401,8 @@ const Home = () => {
                     return;
                 }
                 console.log(res);
-                setBinDispose(res.bin);
-                settoplockId(res.bin.name_hostname);
+                setBinDispose(res.bin,
+                    settoplockId(res.bin.name_hostname));
                 setBinname(res.bin.name);
 //              setIdbin(res.bin.id);
             });
