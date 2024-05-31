@@ -375,7 +375,7 @@ const Home = () => {
 
       const handleKeyPressModal = (e) => {
         if (e.key === 'Enter') {
-          setShowModalInfoScale(false);
+          setShowModalInfoScales(false);
         }
       };
 
