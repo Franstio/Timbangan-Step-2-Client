@@ -368,14 +368,16 @@ const Home = () => {
     };
 
     useEffect(() => {
-        if (!showModalInfoScale && inputRef.current) {
+        if (!showModalInfoScale && !showModalDispose && inputRef.current) {
           inputRef.current.focus();
         }
-      }, [showModalInfoScale]);
+      }, [showModalInfoScale],[showModalDispose]);
+      
 
       const handleKeyPressModal = (e) => {
         if (e.key === 'Enter') {
           setShowModalInfoScales(false);
+          setShowModalDispose(false);
         }
       };
 
@@ -873,7 +875,7 @@ const Home = () => {
 
                 <div className='flex justify-start'>
                     {showModalDispose && (
-                        <div className="fixed z-10 inset-0 overflow-y-auto" onKeyDown={()=>setShowModalDispose(false)}>
+                        <div className="fixed z-10 inset-0 overflow-y-auto" onKeyDown={handleKeyPressModal}>
                             <div className="flex items-center justify-center min-h-screen">
                                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
 
