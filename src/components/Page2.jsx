@@ -373,6 +373,12 @@ const Home = () => {
         }
       }, [showModalInfoScale]);
 
+      const handleKeyPressModal = (e) => {
+        if (e.key === 'Enter') {
+          setShowModalInfoScale(false);
+        }
+      };
+
     useEffect(() => {
         if (Idbin != -1) {
             saveTransaksi();
@@ -890,7 +896,7 @@ const Home = () => {
 
                 <div className='flex justify-start'>
                     {showModalInfoScale && (
-                        <div className="fixed z-10 inset-0 overflow-y-auto" onKeyDown={()=>setShowModalInfoScales(false)}>
+                        <div className="fixed z-10 inset-0 overflow-y-auto"  onKeyDown={handleKeyPressModal}>
                             <div className="flex items-center justify-center min-h-screen">
                                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
 
