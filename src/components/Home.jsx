@@ -296,7 +296,7 @@ const Home = () => {
                             />
 
                         </div>
-                        <p className='flex justify-center'>{Getweightbin}Kg</p>
+                        <p className='flex justify-center text-xl'>{Getweightbin}Kg</p>
                     </div>
 
                     <div className='flex-1 p-4 border rounded max-w-md bg-white'>
@@ -353,7 +353,7 @@ const Home = () => {
                         Lock Bottom
                     </button>
                 </div>
-                <p>Instruksi: {instruksimsg}</p>
+                <p className='text-xl'>Instruksi: {instruksimsg}</p>
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: 192.168.1.5 Online</p>

@@ -639,7 +639,10 @@ const Home = () => {
 
         if (type == 'Dispose') {
             if (neto4Kg > 4) {
-                alert("Berat limbah melebihi kapasitas ,sihlakan menggunakan timbangan lain.");
+                alert("Berat limbah melebihi kapasitas maximum");
+                return;
+            } else if (neto50Kg > 50) {
+                alert("Berat limbah melebihi kapasitas maximum");
                 return;
             }
             await CheckBinCapacity();
