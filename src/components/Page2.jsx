@@ -368,10 +368,16 @@ const Home = () => {
     };
 
     useEffect(() => {
-        if (!showModalInfoScale && !showModalDispose && inputRef.current) {
+        if (!showModalInfoScale && inputRef.current) {
           inputRef.current.focus();
         }
-      }, [showModalInfoScale],[showModalDispose]);
+      }, [showModalInfoScale]);
+
+      useEffect(() => {
+        if (!showModalDispose && inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, [showModalDispose]);
       
 
       const handleKeyPressModal = (e) => {
