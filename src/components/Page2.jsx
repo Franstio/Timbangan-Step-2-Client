@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment,useRef } from "react";
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { IoSettingsOutline } from "react-icons/io5";
@@ -50,6 +50,7 @@ const Home = () => {
     const [weightbin, setWeightbin] = useState("");
     const [binDispose,setBinDispose] = useState({});
     //const [ScaleName, setScaleName] = useState("");
+    const inputRef = useRef(null);
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
 
@@ -365,6 +366,12 @@ const Home = () => {
             }
         }
     };
+
+    useEffect(() => {
+        if (!showModalInfoScale && inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, [showModalInfoScale]);
 
     useEffect(() => {
         if (Idbin != -1) {
@@ -817,6 +824,7 @@ const Home = () => {
                                 id="userId"
                                 value={scanData}
                                 onKeyDown={e => handleKeyPress(e)}
+                                ref={inputRef}
                                 onChange={e => setScanData(e.target.value)}
                                 className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 placeholder="luGGIatKmKvdMkcxpKc8SZD64ex5W0"
@@ -827,7 +835,8 @@ const Home = () => {
                                 <p>Container Id: {container?.name}</p>
                                 <p>Type Waste: {container?.waste.name}</p>
                             </div>
-                        </div></div>
+                        </div>
+                        </div>
                 </div>
 
                 <div className='flex justify-start'>
