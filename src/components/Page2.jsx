@@ -812,6 +812,7 @@ const Home = () => {
                             <p>Please Scan..</p>
                             <input
                                 type="text"
+                                autoFocus={true}
                                 name="text"
                                 id="userId"
                                 value={scanData}
