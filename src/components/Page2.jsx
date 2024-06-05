@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, Fragment,useRef } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { IoSettingsOutline } from "react-icons/io5";
@@ -43,20 +43,20 @@ const Home = () => {
     const [neto, setNeto] = useState({});
     const [neto50Kg, setNeto50kg] = useState(0);
     const [neto4Kg, setNeto4kg] = useState(0);
-    const [toplockId, settoplockId] = useState({hostname: ''});
+    const [toplockId, settoplockId] = useState({ hostname: '' });
     const [instruksimsg, setinstruksimsg] = useState("");
     const [message, setmessage] = useState("");
     const [type, setType] = useState("");
     const [weightbin, setWeightbin] = useState("");
-    const [binDispose,setBinDispose] = useState({});
+    const [binDispose, setBinDispose] = useState({});
     //const [ScaleName, setScaleName] = useState("");
     const inputRef = useRef(null);
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
 
     //const ScaleName = getScaleName();
-    
-    
+
+
     //    const socket = null;
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -104,20 +104,42 @@ const Home = () => {
             console.log(error);
         }
     }
-    useEffect(()=>{
-        let targetHostName='';
+
+    const sendDataPanasonicServer = async () => {
+        try {
+            const response = await apiClient.post(`http://192.168.1.1:80/api/pid/pidatalog`, {
+                badgeno : user.badgeId,
+                logindate :'',
+                stationname : "Coil",
+                frombinname : "1-PCL-1-WR",
+                tobinname : "PCS",
+                weight :_finalNeto,
+                activity : type
+
+            });
+            if (response.status != 200) {
+                console.log(response);
+                return;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        let targetHostName = '';
         if (binDispose && binDispose.name_hostname)
             targetHostName = binDispose.name_hostname;
         else if (bottomLockHostData && bottomLockHostData.hostname)
             targetHostName = bottomLockHostData.hostname;
-        console.log([targetHostName,binDispose,bottomLockHostData]);
-        if (targetHostName== '' || targetHostName==null ||targetHostName == undefined)
+        console.log([targetHostName, binDispose, bottomLockHostData]);
+        if (targetHostName == '' || targetHostName == null || targetHostName == undefined)
             return;
-        sendPesanTimbangan(targetHostName,instruksimsg);
-    },[instruksimsg]);
+        sendPesanTimbangan(targetHostName, instruksimsg);
+    }, [instruksimsg]);
 
 
-    const sendGreenlampOn = async() => {
+    const sendGreenlampOn = async () => {
         try {
             const response = await apiClient.post(`http://${toplockId}.local:5000/greenlampon`, {
                 idLampGreen: 1
@@ -131,7 +153,7 @@ const Home = () => {
         }
     };
 
-    const sendGreenlampOnCollection = async() => {
+    const sendGreenlampOnCollection = async () => {
         try {
             const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/greenlampon`, {
                 idLampGreen: 1
@@ -145,7 +167,7 @@ const Home = () => {
         }
     };
 
-    const sendGreenlampOff = async(targetName) => {
+    const sendGreenlampOff = async (targetName) => {
         try {
             const response = await apiClient.post(`http://${targetName}.local:5000/greenlampoff`, {
                 idLampGreen: 1
@@ -159,7 +181,7 @@ const Home = () => {
         }
     };
 
-    const sendYellowOff = async() => {
+    const sendYellowOff = async () => {
         try {
             const response = await apiClient.post(`http://${toplockId}.local:5000/yellowlampoff`, {
                 idLampYellow: 1
@@ -173,7 +195,7 @@ const Home = () => {
         }
     };
 
-    const sendYellowOffCollection = async() => {
+    const sendYellowOffCollection = async () => {
         try {
             const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/yellowlampoff`, {
                 idLampYellow: 1
@@ -187,7 +209,7 @@ const Home = () => {
         }
     };
 
-    const sendYellowOn = async(targetName) => {
+    const sendYellowOn = async (targetName) => {
         try {
             const response = await apiClient.post(`http://${targetName}.local:5000/yellowlampon`, {
                 idLampYellow: 1
@@ -201,21 +223,21 @@ const Home = () => {
         }
     };
 
-    const sendPesanTimbangan = async(target,instruksi) => {
+    const sendPesanTimbangan = async (target, instruksi) => {
         try {
-            const response = await apiClient.post('http://'+target+'.local:5000/instruksi', {
+            const response = await apiClient.post('http://' + target + '.local:5000/instruksi', {
                 instruksi: instruksi
-              });
+            });
         } catch (error) {
             console.error(error);
         }
     };
 
-    const sendType = async(target,type) => {
+    const sendType = async (target, type) => {
         try {
-            const response = await apiClient.post('http://'+target+'.local:5000/type', {
+            const response = await apiClient.post('http://' + target + '.local:5000/type', {
                 type: type
-              });
+            });
         } catch (error) {
             console.error(error);
         }
@@ -230,32 +252,32 @@ const Home = () => {
                 console.log(response);
                 return;
             }
-    
+
             const sensorData = response.data.sensorTop; // Ambil data sensor dari respons
-    
+
             // Konversi nilai sensor menjadi bentuk boolean
-             return  sensorData == 1; 
-    
+            return sensorData == 1;
+
             //console.log("Sensor value:", sensorValue);
         } catch (error) {
             console.error(error);
-            return {error:error};
+            return { error: error };
         }
     };
-    
+
     useEffect(() => {
         if (bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
-            new Promise(async ()=>
-                {
-                    console.log({bottomLockHostData:bottomLockHostData});
-                    await sendLockBottom();            
-                    setinstruksimsg("Buka Penutup Bawah");
-                    await sendYellowOffCollection();
-                    await sendGreenlampOnCollection();
-                    await UpdateBinWeightCollection();
-                    Promise.resolve();
-                }).then(()=>{
-                setBottomLockData({binId:'',hostname:''});
+            new Promise(async () => {
+                console.log({ bottomLockHostData: bottomLockHostData });
+                await sendLockBottom();
+                setinstruksimsg("Buka Penutup Bawah");
+                await sendYellowOffCollection();
+                await sendGreenlampOnCollection();
+                await UpdateBinWeightCollection();
+                await sendDataPanasonicServer();
+                Promise.resolve();
+            }).then(() => {
+                setBottomLockData({ binId: '', hostname: '' });
                 //setinstruksimsg("buka penutup bawah");
             });
         }
@@ -277,53 +299,53 @@ const Home = () => {
     useEffect(() => {
         setSocket(io('http://PCS.local:5000/'));
 
-    
+
     }, []);
-    useEffect(()=>{
+    useEffect(() => {
         if (!socket)
             return;
         socket.emit('connectScale');
-    
+
         socket.on('data1', (weight50Kg) => {
             try {
                 //console.log(weight50Kg);
                 const weight50KgValue = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
-                    setScales50Kg({ weight50Kg: weight50KgValue });
+                setScales50Kg({ weight50Kg: weight50KgValue });
             } catch (error) {
                 console.error(error);
             }
         });
-    
+
         socket.on('data', (data) => {
-           // console.log(data);
-                const weight4KgInKg = parseFloat(data?.weight ?? 0) /1000;
-                setScales4Kg({ weight4Kg: weight4KgInKg });
+            // console.log(data);
+            const weight4KgInKg = parseFloat(data?.weight ?? 0) / 1000;
+            setScales4Kg({ weight4Kg: weight4KgInKg });
         });
-    },[socket])
-    
+    }, [socket])
+
     useEffect(() => {
         const binWeight = container?.weightbin ?? 0;
         let finalWeight = 0;
-    
-        if (Scales50Kg?.weight50Kg ) { 
+
+        if (Scales50Kg?.weight50Kg) {
             finalWeight = parseFloat(Scales50Kg.weight50Kg) - parseFloat(binWeight);
         }
         if (isFreeze)
             return
         setNeto50kg(finalWeight);
-    
-    }, [Scales50Kg, , container?.weightbin]); 
-    
-    useEffect(()=> {
-        let finalWeight= 0;
+
+    }, [Scales50Kg, , container?.weightbin]);
+
+    useEffect(() => {
+        let finalWeight = 0;
         const binWeight = container?.weightbin ?? 0;
-        if (Scales4Kg?.weight4Kg ) {
+        if (Scales4Kg?.weight4Kg) {
             finalWeight = parseFloat(Scales4Kg.weight4Kg) - parseFloat(binWeight);
         }
         if (isFreeze)
             return
         setNeto4kg(finalWeight);
-    },[Scales4Kg,container?.weightbin]);
+    }, [Scales4Kg, container?.weightbin]);
 
     const toggleModal = () => {
         freezeNeto(true);
@@ -341,20 +363,18 @@ const Home = () => {
                 handleScan();
             else if (isFinalStep) {
                 const isSensorTop = await readSensorTop(binDispose.name_hostname);
-                if (isSensorTop.error)
-                {
+                if (isSensorTop.error) {
                     alert("Error Ketika Membaca Sensor");
                     return;
                 }
-                if (!isSensorTop )
-                {
+                if (!isSensorTop) {
                     alert("Tutup Penutup Atas.");
                     return;
                 }
 
                 console.log(binDispose);
-                if(binDispose.name != scanData ){
-                    alert("mismatch name" );
+                if (binDispose.name != scanData) {
+                    alert("mismatch name");
                     return;
                 }
                 //VerificationScan();
@@ -369,23 +389,23 @@ const Home = () => {
 
     useEffect(() => {
         if (!showModalInfoScale && inputRef.current) {
-          inputRef.current.focus();
+            inputRef.current.focus();
         }
-      }, [showModalInfoScale]);
+    }, [showModalInfoScale]);
 
-      useEffect(() => {
+    useEffect(() => {
         if (!showModalDispose && inputRef.current) {
-          inputRef.current.focus();
+            inputRef.current.focus();
         }
-      }, [showModalDispose]);
-      
+    }, [showModalDispose]);
 
-      const handleKeyPressModal = (e) => {
+
+    const handleKeyPressModal = (e) => {
         if (e.key === 'Enter') {
-          setShowModalInfoScales(false);
-          setShowModalDispose(false);
+            setShowModalInfoScales(false);
+            setShowModalDispose(false);
         }
-      };
+    };
 
     useEffect(() => {
         if (Idbin != -1) {
@@ -424,7 +444,7 @@ const Home = () => {
                 setBinDispose(res.bin);
                 settoplockId(res.bin.name_hostname);
                 setBinname(res.bin.name);
-//              setIdbin(res.bin.id);
+                //              setIdbin(res.bin.id);
             });
             console.log(response);
         }
@@ -432,12 +452,12 @@ const Home = () => {
             console.log(error);
         }
     };
-    useEffect(()=>{
+    useEffect(() => {
         if (!binDispose)
             return;
         setinstruksimsg("buka penutup atas");
-        sendType(binDispose.name_hostname,'Dispose');
-    },[binDispose]);
+        sendType(binDispose.name_hostname, 'Dispose');
+    }, [binDispose]);
     async function sendLockTop() {
         try {
             console.log(toplockId);
@@ -470,15 +490,15 @@ const Home = () => {
             })
             .catch(err => console.error(err));
     };
-    useEffect(()=>{
-        if (!waste || waste == null )
+    useEffect(() => {
+        if (!waste || waste == null)
             return;
         setmessage(getScaleName());
-    },[waste]);
+    }, [waste]);
 
     const handleScan1 = () => {
         apiClient.post('http://localhost:5000/ScanContainer', { containerId: scanData })
-            .then( (res) => {
+            .then((res) => {
                 if (res.data.error) {
                     alert(res.data.error);
                 } else {
@@ -499,21 +519,21 @@ const Home = () => {
                                 return;
                             }
                             console.log(_bin);
-                            const collectionPayload = {...res.data.container,weight: _bin.weight};
+                            const collectionPayload = { ...res.data.container, weight: _bin.weight };
                             saveTransaksiCollection(collectionPayload);
-//                            UpdateBinWeightCollection();
+                            //                            UpdateBinWeightCollection();
                             setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                             setShowModal(false);
                             setScanData('');
                             setUser(null);
                             setContainer(null);
-                            sendType(_bin.name_hostname,'Collection');
+                            sendType(_bin.name_hostname, 'Collection');
                             setBinname(_bin.name);
                             setinstruksimsg('')
                             setmessage('');
                             return;
                         }
-                        else{
+                        else {
                             setContainer(res.data.container);
                             setType(res.data.container.type);
                             setShowModalInfoScales(true);
@@ -536,7 +556,7 @@ const Home = () => {
 
     const VerificationScan = () => {
         apiClient.post('http://localhost:5000/VerificationScan', { binName: scanData })
-            .then( (res) => {
+            .then((res) => {
                 if (res.data.error) {
                     alert(res.data.error);
                 } else {
@@ -545,29 +565,29 @@ const Home = () => {
             })
             .catch(err => console.error(err));
     };
-    const getWeight = ()=>{
+    const getWeight = () => {
         return waste.scales == "4Kg" ? neto4Kg : neto50Kg;
     }
-    const getScaleName = ()=>{
+    const getScaleName = () => {
         //setmessage('');
-        return waste && waste.scales ? (waste.scales=="4Kg" ? "Silakan Gunakan Timbangan 4Kg" : "Silakan Gunakan Timbangan 50 Kg") : "";
-    } 
+        return waste && waste.scales ? (waste.scales == "4Kg" ? "Silakan Gunakan Timbangan 4Kg" : "Silakan Gunakan Timbangan 50 Kg") : "";
+    }
 
-/*     const getScaleName = () => {
-        let scaleMessage = "";
-        if (waste && waste.scales) {
-            scaleMessage = waste.scales === "4Kg" ? "Silakan Gunakan Timbangan 4Kg" : "Silakan Gunakan Timbangan 50 Kg";
-        }
-        
-        if (scaleMessage) {
-            setmessage(scaleMessage);
-            setTimeout(() => {
-                setmessage("");
-            }, 3000); // Menghapus pesan setelah 3 detik
-        }
-        
-        return () => clearTimeout(timer); 
-    };*/
+    /*     const getScaleName = () => {
+            let scaleMessage = "";
+            if (waste && waste.scales) {
+                scaleMessage = waste.scales === "4Kg" ? "Silakan Gunakan Timbangan 4Kg" : "Silakan Gunakan Timbangan 50 Kg";
+            }
+            
+            if (scaleMessage) {
+                setmessage(scaleMessage);
+                setTimeout(() => {
+                    setmessage("");
+                }, 3000); // Menghapus pesan setelah 3 detik
+            }
+            
+            return () => clearTimeout(timer); 
+        };*/
     const saveTransaksi = () => {
         const _finalNeto = getWeight(); //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
         apiClient.post("http://localhost:5000/SaveTransaksi", {
@@ -618,12 +638,11 @@ const Home = () => {
                 setFinalStep(false);
                 setIsSubmitAllowed(false);
                 setIdbin(-1);
-                new Promise(async ()=>
-                    {
-                       await sendGreenlampOff(binDispose.name_hostname);
-                       await sendYellowOn(binDispose.name_hostname);
-                       Promise.resolve();
-                    })
+                new Promise(async () => {
+                    await sendGreenlampOff(binDispose.name_hostname);
+                    await sendYellowOn(binDispose.name_hostname);
+                    Promise.resolve();
+                })
             });
         }
         catch (error) {
@@ -647,7 +666,7 @@ const Home = () => {
             }
             await CheckBinCapacity();
             setIsSubmitAllowed(false);
-            setFinalStep(true); 
+            setFinalStep(true);
             setmessage('');
             setmessage('Waiting For Verification');
             setShowModalDispose(true);
@@ -853,7 +872,7 @@ const Home = () => {
                                 <p>Type Waste: {container?.waste.name}</p>
                             </div>
                         </div>
-                        </div>
+                    </div>
                 </div>
 
                 <div className='flex justify-start'>
@@ -868,7 +887,7 @@ const Home = () => {
                                     </div>
                                     <form>
                                         <Typography variant="h4" align="center" gutterBottom>
-                                            {parseFloat(/*neto50Kg > neto4Kg ? neto50Kg : neto4Kg*/ getWeight() ).toFixed(2)}Kg
+                                            {parseFloat(/*neto50Kg > neto4Kg ? neto50Kg : neto4Kg*/ getWeight()).toFixed(2)}Kg
                                         </Typography>
                                         <p>Data Timbangan Sudah Sesuai?</p>
                                         <div className="flex justify-center mt-5">
@@ -894,9 +913,9 @@ const Home = () => {
                                     </div>
                                     <form>
                                         <Typography variant="h4" align="center" gutterBottom>
-                                        Dispose Dialokasikan ke Bin: {binname} Waste:{wastename}</Typography>
+                                            Dispose Dialokasikan ke Bin: {binname} Waste:{wastename}</Typography>
                                         <div className="flex justify-center mt-5">
-                                            <button type="button" autoFocus={true} onClick={()=>setShowModalDispose(false)} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
+                                            <button type="button" autoFocus={true} onClick={() => setShowModalDispose(false)} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
                                         </div>
                                     </form>
                                 </div>
@@ -907,7 +926,7 @@ const Home = () => {
 
                 <div className='flex justify-start'>
                     {showModalInfoScale && (
-                        <div className="fixed z-10 inset-0 overflow-y-auto"  onKeyDown={handleKeyPressModal}>
+                        <div className="fixed z-10 inset-0 overflow-y-auto" onKeyDown={handleKeyPressModal}>
                             <div className="flex items-center justify-center min-h-screen">
                                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
 
@@ -917,9 +936,9 @@ const Home = () => {
                                     </div>
                                     <form>
                                         <Typography variant="h4" align="center" gutterBottom>
-                                        {getScaleName()}</Typography>
+                                            {getScaleName()}</Typography>
                                         <div className="flex justify-center mt-5">
-                                            <button type="button" autoFocus={true}  onClick={()=>setShowModalInfoScales(false)} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
+                                            <button type="button" autoFocus={true} onClick={() => setShowModalInfoScales(false)} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
                                         </div>
                                     </form>
                                 </div>
@@ -932,7 +951,7 @@ const Home = () => {
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: 192.168.1.5 Online</p>
-                
+
             </footer>
         </main>
     );
