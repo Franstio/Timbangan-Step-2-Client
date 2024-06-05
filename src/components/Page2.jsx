@@ -275,7 +275,7 @@ const Home = () => {
                 await sendYellowOffCollection();
                 await sendGreenlampOnCollection();
                 await UpdateBinWeightCollection();
-                await sendDataPanasonicServer();
+                //await sendDataPanasonicServer();
                 Promise.resolve();
             }).then(() => {
                 setBottomLockData({ binId: '', hostname: '' });
@@ -604,6 +604,7 @@ const Home = () => {
             setScanData('');
             setinstruksimsg('');
             updateBinWeight();
+            sendDataPanasonicServer();
         });
     };
 
