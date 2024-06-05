@@ -106,6 +106,7 @@ const Home = () => {
     }
 
     const sendDataPanasonicServer = async () => {
+        const _finalNeto = getWeight();
         try {
             const response = await apiClient.post(`http://192.168.205.128:80/api/pid/pidatalog`, {
                 badgeno : user.badgeId,
