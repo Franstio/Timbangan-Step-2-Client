@@ -314,6 +314,7 @@ const Home = () => {
                             <p>Red</p>
                             <FiberManualRecordIcon fontSize="small" style={{ color:  (sensor[2] == 0? 'gray' : 'green') }} />
                         </div>
+                        <p className='flex justify-center text-xl'>{Getweightbin}Kg</p>
                     </div>
                 </div>
 
