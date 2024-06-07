@@ -137,7 +137,7 @@ const Home = () => {
                 stationname: "2-PCL",
                 frombinname: "2-PCL-1-TM",
                 tobinname: "2-PCL-1-TM",
-                weight: _finalNeto,
+                weight: 0,
                 activity: type
 
             });
