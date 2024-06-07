@@ -47,6 +47,7 @@ const Home = () => {
     const [instruksimsg, setinstruksimsg] = useState("");
     const [message, setmessage] = useState("");
     const [type, setType] = useState("");
+    const [typecollection, setTypeCollection] = useState("");
     const [weightbin, setWeightbin] = useState("");
     const [binDispose, setBinDispose] = useState({});
     //const [ScaleName, setScaleName] = useState("");
@@ -138,7 +139,7 @@ const Home = () => {
                 frombinname: "2-PCL-1-TM",
                 tobinname: "2-PCL-1-TM",
                 weight: 0,
-                activity: type
+                activity: typecollection
 
             });
             if (response.status != 200) {
@@ -554,6 +555,7 @@ const Home = () => {
                             sendType(_bin.name_hostname, 'Collection');
                             setBinname(_bin.name);
                             setinstruksimsg('')
+                            setTypeCollection(res.data.container.type);
                             setmessage('');
                             return;
                         }
