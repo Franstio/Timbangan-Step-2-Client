@@ -315,7 +315,7 @@ const Home = () => {
                             <FiberManualRecordIcon fontSize="small" style={{ color:  (sensor[2] == 0? 'gray' : 'green') }} />
                         </div>
                         <div className='mt-10'>
-                        <p className='flex justify-center text-xl'>Instruksi</p>
+                        <p className='flex justify-center text-xl font-semibold text-blue-600'>Instruksi</p>
                         <p className='flex justify-center text-xl'>{instruksimsg}</p>
                         </div>
                     </div>
@@ -357,7 +357,7 @@ const Home = () => {
                         Lock Bottom
                     </button>
                 </div>
-                <p className='text-xl'>Instruksi: {instruksimsg}</p>
+            
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: 192.168.1.5 Online</p>
