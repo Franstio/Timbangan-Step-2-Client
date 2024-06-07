@@ -536,6 +536,7 @@ const Home = () => {
                         console.log(res.data.container);
                         setWaste(res.data.container.waste);
                         setmessage('');
+                        setTypeCollection(res.data.container.type);
                         if (res.data.container.type == "Collection") {
                             const _bin = res.data.container.waste.bin.find(item => item.name == res.data.container.name);
 
@@ -555,7 +556,7 @@ const Home = () => {
                             sendType(_bin.name_hostname, 'Collection');
                             setBinname(_bin.name);
                             setinstruksimsg('')
-                            setTypeCollection(res.data.container.type);
+                            
                             setmessage('');
                             return;
                         }
