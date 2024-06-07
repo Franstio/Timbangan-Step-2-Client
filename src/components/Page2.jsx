@@ -556,7 +556,7 @@ const Home = () => {
                             sendType(_bin.name_hostname, 'Collection');
                             setBinname(_bin.name);
                             setinstruksimsg('')
-                            
+                            setTypeCollection(res.data.container.type);
                             setmessage('');
                             return;
                         }
