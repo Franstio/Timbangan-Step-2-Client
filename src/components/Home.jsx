@@ -314,8 +314,10 @@ const Home = () => {
                             <p>Red</p>
                             <FiberManualRecordIcon fontSize="small" style={{ color:  (sensor[2] == 0? 'gray' : 'green') }} />
                         </div>
+                        <div className='mt-10'>
                         <p className='flex justify-center text-xl'>Instruksi</p>
                         <p className='flex justify-center text-xl'>{instruksimsg}</p>
+                        </div>
                     </div>
                 </div>
 
