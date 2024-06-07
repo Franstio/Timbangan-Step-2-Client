@@ -296,7 +296,7 @@ const Home = () => {
                             />
 
                         </div>
-                        <p className='flex justify-center text-xl'>{Getweightbin}Kg</p>
+                       
                     </div>
 
                     <div className='flex-1 p-4 border rounded max-w-md bg-white'>
@@ -314,7 +314,7 @@ const Home = () => {
                             <p>Red</p>
                             <FiberManualRecordIcon fontSize="small" style={{ color:  (sensor[2] == 0? 'gray' : 'green') }} />
                         </div>
-                        <p className='flex justify-center text-xl'>{Getweightbin}Kg</p>
+                        <p className='text-xl mt-10'>Instruksi: {instruksimsg}</p>
                     </div>
                 </div>
 
