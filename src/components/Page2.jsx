@@ -127,6 +127,29 @@ const Home = () => {
             console.log(error);
         }
     }
+
+    const sendDataPanasonicServerCollection = async () => {
+        const _finalNeto = getWeight();
+        try {
+            const response = await apiClient.post(`http://192.168.205.128/api/pid/pidatalog`, {
+                badgeno: user.badgeId,
+                logindate: '',
+                stationname: "2-PCL",
+                frombinname: "2-PCL-1-TM",
+                tobinname: "2-PCL-1-TM",
+                weight: _finalNeto,
+                activity: type
+
+            });
+            if (response.status != 200) {
+                console.log(response);
+                return;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
     useEffect(() => {
         let targetHostName = '';
         if (binDispose && binDispose.name_hostname)
@@ -621,6 +644,7 @@ const Home = () => {
         }).then(res => {
             setWaste(null);
             setScanData('');
+            sendDataPanasonicServerCollection();
         });
     };
 
