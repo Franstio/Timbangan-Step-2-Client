@@ -139,7 +139,7 @@ const Home = () => {
                 frombinname: "2-PCL-1-TM",
                 tobinname: "2-PCL-1-TM",
                 weight: 0,
-                activity: typecollection
+                activity: container.type
 
             });
             if (response.status != 200) {
@@ -634,6 +634,24 @@ const Home = () => {
         });
     };
 
+    const updateContainerstatus = async () => {
+        //const _finalNeto = getWeight();
+        try {
+            const response = await apiClient.post(`http://localhost:5000/UpdateContainerStatus`, {
+                containerName: containerName,
+                status: ""
+
+            });
+            if (response.status != 200) {
+                console.log(response);
+                return;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
     const saveTransaksiCollection = (_container) => {
         console.log(_container);
         apiClient.post("http://PCS.local:5000/SaveTransaksiCollection", {
@@ -648,6 +666,7 @@ const Home = () => {
             setWaste(null);
             setScanData('');
             sendDataPanasonicServerCollection();
+            updateContainerstatus();
         });
     };
 
@@ -892,7 +911,7 @@ const Home = () => {
                                 ref={inputRef}
                                 onChange={e => setScanData(e.target.value)}
                                 className="block w-full rounded-md border-0 py-2 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                placeholder="luGGIatKmKvdMkcxpKc8SZD64ex5W0"
+                                placeholder=""
                             />
                             <button className='block w-full border rounded py-2 flex justify-center items-center font-bold mt-5 bg-sky-400 text-white text-lg' disabled={!isSubmitAllowed} onClick={toggleModal}>Submit</button>
                             <div className='text-lg mt-5'>
