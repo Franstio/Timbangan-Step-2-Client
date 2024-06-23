@@ -638,7 +638,7 @@ const Home = () => {
             badgeId: user.badgeId,
             idContainer: _container.containerId,
             badgeId: user.badgeId,
-            wasteId: _container.IdWaste,
+            IdWaste: _container.IdWaste,
             type: type,
             idqrmachine: binName,
             weight: _finalNeto
@@ -650,7 +650,7 @@ const Home = () => {
                 payload: {
                     idContainer: data.containerId,
                     badgeId: data.badgeId,
-                    IdWaste: data.wasteId,
+                    IdWaste: data.IdWaste,
                     type: data.type,
                     weight: data.weight
                 }
