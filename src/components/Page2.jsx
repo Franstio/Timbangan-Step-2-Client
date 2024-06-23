@@ -436,6 +436,16 @@ const Home = () => {
     }
     useEffect(() => {
         if (Idbin != -1) {
+            work();
+            setScanData('');
+            setUser(null);
+            setContainer(null);
+            setmessage('');
+            setNeto(0);
+            freezeNeto(false);
+            setFinalStep(false);
+            setIsSubmitAllowed(false);
+            setIdbin(-1);
         }
     }, [Idbin])
     useEffect(() => {
