@@ -398,9 +398,9 @@ const Home = () => {
                     alert("mismatch name");
                     return;
                 }
+                setIdbin(binDispose.id);
                 await saveTransaksiRack(container,binDispose.name,'Dispose');
                 //VerificationScan();
-                setIdbin(binDispose.id);
                 
                 setScanData('');
             }
