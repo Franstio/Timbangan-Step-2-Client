@@ -648,9 +648,9 @@ const Home = () => {
             const data = res.data.msg;
             await apiClient.post("http://localhost:5000/SaveTransaksi", {
                 payload: {
-                    idContainer: data.containerId,
-                    badgeId: data.badgeId,
-                    IdWaste: data.IdWaste,
+                    idContainer: _container.containerId,
+                    badgeId: user.badgeId,
+                    IdWaste: _container.IdWaste,
                     type: data.type,
                     weight: data.weight
                 }
