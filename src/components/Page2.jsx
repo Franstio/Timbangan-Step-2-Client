@@ -570,7 +570,7 @@ const Home = () => {
                         }
                         console.log(_bin);
                         const collectionPayload = { ...res.data.container, weight: _bin.weight };
-                        if (res.data.container.handletype=='Rack')
+                        if (res.data.container.waste.handletype=='Rack')
                         {
                             await saveTransaksiRack(collectionPayload,'','Collection');
                         }
