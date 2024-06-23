@@ -429,11 +429,13 @@ const Home = () => {
             setShowModalDispose(false);
         }
     };
+    const work =  async()=>{
 
+        await updateBinWeight();
+        await saveTransaksi();
+    }
     useEffect(() => {
         if (Idbin != -1) {
-            updateBinWeight();
-            saveTransaksi();
         }
     }, [Idbin])
     useEffect(() => {
@@ -739,22 +741,19 @@ const Home = () => {
             const response = await apiClient.post('http://localhost:5000/UpdateBinWeight', {
                 binId: Idbin,
                 neto: _finalNeto
-            }).then(x => {
-                setScanData('');
-                setUser(null);
-                setContainer(null);
-                setmessage('');
-                setNeto(0);
-                freezeNeto(false);
-                setFinalStep(false);
-                setIsSubmitAllowed(false);
-                setIdbin(-1);
-                new Promise(async () => {
-                    await sendGreenlampOff(binDispose.name_hostname);
-                    await sendYellowOn(binDispose.name_hostname);
-                    Promise.resolve();
-                })
             });
+            
+            /*setScanData('');
+            setUser(null);
+            setContainer(null);
+            setmessage('');
+            setNeto(0);
+            freezeNeto(false);
+            setFinalStep(false);
+            setIsSubmitAllowed(false);
+            setIdbin(-1);*/
+            await sendGreenlampOff(binDispose.name_hostname);
+            await sendYellowOn(binDispose.name_hostname);
         }
         catch (error) {
             console.error(error);
