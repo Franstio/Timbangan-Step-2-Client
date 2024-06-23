@@ -477,7 +477,7 @@ const Home = () => {
         }
     };
     const CheckBinCapacityRack = async ()=>{
-        const lines = scanData.trim().split('-');
+        const lines = container.name.trim().split('-');
         const line = lines[lines.length-1];
         const res = await apiClient.post(`http://${rackTarget}/CheckBinCapacity`,{
             line:line
