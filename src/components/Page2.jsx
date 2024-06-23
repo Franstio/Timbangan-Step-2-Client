@@ -714,7 +714,7 @@ const Home = () => {
         //const _finalNeto = getWeight();
         try {
             const response = await apiClient.post(`http://localhost:5000/UpdateContainerStatus`, {
-                containerName: containerName,
+                containerName: container.name,
                 status: ""
 
             });
@@ -739,10 +739,10 @@ const Home = () => {
                 weight: _container.weight
             }
         }).then(res => {
+            updateContainerstatus();
             sendDataPanasonicServer(_container.station, _container.name, '', _container.weight, 'Collection');
             setWaste(null);
             setScanData('');
-            updateContainerstatus();
         });
     };
 
