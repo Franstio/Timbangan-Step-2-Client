@@ -54,7 +54,8 @@ const Home = () => {
     const inputRef = useRef(null);
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
-
+    const [rackTarget, setRackTarget] = useState('localhost:5001');
+    const [apiTarget, setApiTarget] = useState('localhost');
     //const ScaleName = getScaleName();
 
 
@@ -91,6 +92,19 @@ const Home = () => {
         );
     };
 
+    /*const getRackLastTransaction = async (containerName)=>{
+        const res  = await apiClient.get(`http://${rackTarget}/Transaksi/${containerName}`);
+        const weight = res.data.weight;
+        const weightlist = {...lastRackWeight};
+        if (!weightlist[containerName])
+            weightlist[containerName].weight = 0;
+        if (weight ==0 )
+            weightlist[containerName].weight = 0;
+        else
+            weightlist[containerName].weight = parseFloat(weightlist[containerName].weight)+ parseFloat(weight);
+        setLastRackWeight({...weightlist});
+        return weightlist;
+    }*/
     const sendLockBottom = async () => {
         try {
             const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/lockBottom`, {
@@ -106,16 +120,16 @@ const Home = () => {
         }
     }
 
-    const sendDataPanasonicServer = async () => {
-        const _finalNeto = getWeight();
+    const sendDataPanasonicServer = async (stationName, frombinname, tobinname, weight, type) => {
+//        const _finalNeto = getWeight();
         try {
-            const response = await apiClient.post(`http://192.168.205.128/api/pid/pidatalog`, {
+            const response = await apiClient.post(`http://${apiTarget}/api/pid/pidatalog`, {
                 badgeno: user.badgeId,
                 logindate: '',
-                stationname: "2-PCL",
-                frombinname: "1-PCL-3-2-7-TM",
-                tobinname: "2-PCL-1-TM",
-                weight: _finalNeto,
+                stationname: stationName,
+                frombinname: frombinname,
+                tobinname: tobinname,
+                weight: weight,
                 activity: type
 
             });
@@ -123,34 +137,14 @@ const Home = () => {
                 console.log(response);
                 return;
             }
+            await sendWeight(frombinname,weight);
         }
         catch (error) {
             console.log(error);
         }
     }
 
-    const sendDataPanasonicServerCollection = async () => {
-        //const _finalNeto = getWeight();
-        try {
-            const response = await apiClient.post(`http://192.168.205.128/api/pid/pidatalog`, {
-                badgeno: user.badgeId,
-                logindate: '',
-                stationname: "2-PCL",
-                frombinname: "2-PCL-1-TM",
-                tobinname: "2-PCL-1-TM",
-                weight: 0,
-                activity: container.type
 
-            });
-            if (response.status != 200) {
-                console.log(response);
-                return;
-            }
-        }
-        catch (error) {
-            console.log(error);
-        }
-    }
     useEffect(() => {
         let targetHostName = '';
         if (binDispose && binDispose.name_hostname)
@@ -387,23 +381,27 @@ const Home = () => {
             if (user == null)
                 handleScan();
             else if (isFinalStep) {
-                const isSensorTop = await readSensorTop(binDispose.name_hostname);
-                if (isSensorTop.error) {
-                    alert("Error Ketika Membaca Sensor");
-                    return;
+                if (container.waste.handletype != 'Rack')
+                {
+                    const isSensorTop = await readSensorTop(binDispose.name_hostname);
+                    if (isSensorTop.error) {
+                        alert("Error Ketika Membaca Sensor");
+                        return;
+                    }
+                    if (!isSensorTop) {
+                        alert("Tutup Penutup Atas.");
+                        return;
+                    }
                 }
-                if (!isSensorTop) {
-                    alert("Tutup Penutup Atas.");
-                    return;
-                }
-
                 console.log(binDispose);
                 if (binDispose.name != scanData) {
                     alert("mismatch name");
                     return;
                 }
+                await saveTransaksiRack(container,binDispose.name,'Dispose');
                 //VerificationScan();
                 setIdbin(binDispose.id);
+                
                 setScanData('');
             }
             else {
@@ -456,7 +454,8 @@ const Home = () => {
         const _finalNeto = getWeight();// neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
         try {
             console.log(container);
-            const response = await apiClient.post('http://localhost:5000/CheckBinCapacity', {
+            const url = container.waste.handletype=='Rack' ? rackTarget : "localhost:5000";
+            const response = await apiClient.post(`http://${url}/CheckBinCapacity`, {
                 IdWaste: container.IdWaste,
                 neto: _finalNeto
             }).then(x => {
@@ -477,8 +476,18 @@ const Home = () => {
             console.log(error);
         }
     };
+    const CheckBinCapacityRack = async ()=>{
+        const lines = scanData.trim().split('-');
+        const line = lines[lines.length-1];
+        const res = await apiClient.post(`http://${rackTarget}/CheckBinCapacity`,{
+            line:line
+        });
+        const bin = res.data.bins[0];
+        setBinDispose(bin);
+        return bin;
+    }
     useEffect(() => {
-        if (!binDispose)
+        if (!binDispose || !binDispose.name_hostname)
             return;
         setinstruksimsg("buka penutup atas");
         sendType(binDispose.name_hostname, 'Dispose');
@@ -521,64 +530,72 @@ const Home = () => {
         setmessage(getScaleName());
     }, [waste]);
 
-    const handleScan1 = () => {
-        apiClient.post('http://localhost:5000/ScanContainer', { containerId: scanData })
-            .then((res) => {
-                if (res.data.error) {
-                    alert(res.data.error);
-                } else {
-                    if (res.data.container) {
-                        console.log(res.data.container);
-                        /*if ( waste != null && res.data.container.IdWaste != waste.IdWaste ) {
-                            alert("Waste Mismatch");
-                            return;
-                        }*/
-                        console.log(res.data.container);
-                        setWaste(res.data.container.waste);
-                        setmessage('');
-                        setTypeCollection(res.data.container.type);
-                        if (res.data.container.type == "Collection") {
-                            const _bin = res.data.container.waste.bin.find(item => item.name == res.data.container.name);
+    const handleScan1 = async () => {
+        try {
+            const res = await apiClient.post('http://localhost:5000/ScanContainer', { containerId: scanData });
+            if (res.data.error) {
+                alert(res.data.error);
+            } else {
+                if (res.data.container) {
+                    console.log(res.data.container);
+                    /*if ( waste != null && res.data.container.IdWaste != waste.IdWaste ) {
+                        alert("Waste Mismatch");
+                        return;
+                    }*/
+                    console.log(res.data.container);
+                    setWaste(res.data.container.waste);
+                    setmessage('');
+                    setTypeCollection(res.data.container.type);
+                    if (res.data.container.type == "Collection") {
+                        const _bin = res.data.container.waste.bin.find(item => item.name == res.data.container.name);
 
-                            if (!_bin) {
-                                alert("Bin Collection error");
-                                return;
-                            }
-                            console.log(_bin);
-                            const collectionPayload = { ...res.data.container, weight: _bin.weight };
-                            saveTransaksiCollection(collectionPayload);
-                            //                            UpdateBinWeightCollection();
-                            setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
-                            setShowModal(false);
-                            setScanData('');
-                            setUser(null);
-                            setContainer(null);
-                            sendType(_bin.name_hostname, 'Collection');
-                            setBinname(_bin.name);
-                            setinstruksimsg('')
-                            setTypeCollection(res.data.container.type);
-                            setmessage('');
+                        if (!_bin) {
+                            alert("Bin Collection error");
                             return;
                         }
-                        else {
-                            setContainer(res.data.container);
-                            setType(res.data.container.type);
-                            setShowModalInfoScales(true);
+                        console.log(_bin);
+                        const collectionPayload = { ...res.data.container, weight: _bin.weight };
+                        if (res.data.container.type=='Rack')
+                        {
+                            await saveTransaksiRack(collectionPayload,'','Collection');
                         }
-                        setWastename(res.data.container.waste.name);
+                        else
+                            saveTransaksiCollection(collectionPayload);
+                        //                            UpdateBinWeightCollection();
+                        setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
+                        setShowModal(false);
                         setScanData('');
-                        setIsSubmitAllowed(true);
-                    } else {
-                        alert("Countainer not found");
                         setUser(null);
                         setContainer(null);
-                        setContainerName(res.data.name || '');
-                        setScanData('');
-                        setIsSubmitAllowed(false);
+                        sendType(_bin.name_hostname, 'Collection');
+                        setBinname(_bin.name);
+                        setinstruksimsg('')
+                        setTypeCollection(res.data.container.type);
+                        setmessage('');
+                        return;
                     }
+                    else {
+                        setContainer(res.data.container);
+                        setType(res.data.container.type);
+                        setShowModalInfoScales(true);
+                    }
+                    setWastename(res.data.container.waste.name);
+                    setScanData('');
+                    setIsSubmitAllowed(true);
+                } else {
+                    alert("Countainer not found");
+                    setUser(null);
+                    setContainer(null);
+                    setContainerName(res.data.name || '');
+                    setScanData('');
+                    setIsSubmitAllowed(false);
                 }
-            })
-            .catch(err => console.error(err));
+            }
+
+        }
+        catch (err) {
+            console.error(err)
+        };
     };
 
     const VerificationScan = () => {
@@ -615,6 +632,52 @@ const Home = () => {
             
             return () => clearTimeout(timer); 
         };*/
+    const saveTransaksiRack = async (_container, binName, type) => {
+        const _finalNeto = getWeight();
+        const res = await apiClient.post(`http://${rackTarget}/Transaksi`, { name: _container.name,payload: {
+            badgeId: user.badgeId,
+            idContainer: _container.containerId,
+            badgeId: user.badgeId,
+            IdWaste: _container.IdWaste,
+            type: type,
+            idqrmachine: binName,
+            weight: _finalNeto
+        }
+        });
+        if (res.data && res.data.msg) {
+            const data = res.data.msg;
+            await apiClient.post("http://localhost:5000/SaveTransaksi", {
+                payload: {
+                    idContainer: data.containerId,
+                    badgeId: data.badgeId,
+                    IdWaste: data.IdWaste,
+                    type: data.type,
+                    weight: data.weight
+                }
+            });
+
+            setWaste(null);
+            setScanData('');
+            setinstruksimsg('');
+            updateBinWeight();
+            await sendDataPanasonicServer(_container.station, _container.name, binName, data.weight, type);
+        }
+    }
+    const sendWeight = async (name,weight)=>{
+        try {
+            const response = await apiClient.post(`http://${apiTarget}/api/pid/sendWeight`, {
+                binname: name,
+                weight: weight,
+            });
+            if (response.status != 200) {
+                console.log(response);
+                return;
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
     const saveTransaksi = () => {
         const _finalNeto = getWeight(); //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
         apiClient.post("http://localhost:5000/SaveTransaksi", {
@@ -630,7 +693,7 @@ const Home = () => {
             setScanData('');
             setinstruksimsg('');
             updateBinWeight();
-            sendDataPanasonicServer();
+            sendDataPanasonicServer(container.station, container.name, binDispose.name, _finalNeto, type);
         });
     };
 
@@ -665,7 +728,7 @@ const Home = () => {
         }).then(res => {
             setWaste(null);
             setScanData('');
-            sendDataPanasonicServerCollection();
+            sendDataPanasonicServer(_container.station, _container.name, '', _container.weight, 'Collection');
             updateContainerstatus();
         });
     };
@@ -712,7 +775,10 @@ const Home = () => {
                 alert("Berat limbah melebihi kapasitas maximum");
                 return;
             }
-            await CheckBinCapacity();
+            if (container.waste.handletype=='Rack')
+                await CheckBinCapacityRack();
+            else
+                await CheckBinCapacity();
             setIsSubmitAllowed(false);
             setFinalStep(true);
             setmessage('');
