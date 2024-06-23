@@ -398,6 +398,7 @@ const Home = () => {
                     alert("mismatch name");
                     return;
                 }
+                
                 setIdbin(binDispose.id);
                 await saveTransaksiRack(container,binDispose.name,'Dispose');
                 //VerificationScan();
@@ -431,12 +432,12 @@ const Home = () => {
     };
     const work =  async()=>{
 
-        await updateBinWeight();
+//        await updateBinWeight();
         await saveTransaksi();
     }
     useEffect(() => {
         if (Idbin != -1) {
-            work();
+            //work();
             setScanData('');
             setUser(null);
             setContainer(null);
@@ -690,9 +691,9 @@ const Home = () => {
             console.log(error);
         }
     }
-    const saveTransaksi = () => {
+    const saveTransaksi = async () => {
         const _finalNeto = getWeight(); //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
-        apiClient.post("http://localhost:5000/SaveTransaksi", {
+        await apiClient.post("http://localhost:5000/SaveTransaksi", {
             payload: {
                 idContainer: container.containerId,
                 badgeId: user.badgeId,
@@ -700,13 +701,12 @@ const Home = () => {
                 type: type,
                 weight: _finalNeto
             }
-        }).then(res => {
-//            updateBinWeight();
-            sendDataPanasonicServer(container.station, container.name, binDispose.name, _finalNeto, type);
-            setWaste(null);
-            setScanData('');
-            setinstruksimsg('');
         });
+        
+        sendDataPanasonicServer(container.station, container.name, binDispose.name, _finalNeto, type);
+        setWaste(null);
+        setScanData('');
+        setinstruksimsg('');
     };
 
     const updateContainerstatus = async () => {
