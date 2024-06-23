@@ -648,7 +648,7 @@ const Home = () => {
             return () => clearTimeout(timer); 
         };*/
     const saveTransaksiRack = async (_container, binName, type) => {
-        const _finalNeto = getWeight();
+        const _finalNeto = _container.waste.scales == "4Kg" ? neto4Kg : neto50Kg;
         const res = await apiClient.post(`http://${rackTarget}/Transaksi`, { name: binName,containerName:_container.name,waste:_container.waste.name,payload: {
             badgeId: user.badgeId,
 //            idContainer: _container.containerId,
