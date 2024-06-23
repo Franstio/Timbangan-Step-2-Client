@@ -437,7 +437,8 @@ const Home = () => {
     }
     useEffect(() => {
         if (Idbin != -1) {
-            //work();
+            if (Idbin != undefined)
+                work();
             setScanData('');
             setUser(null);
             setContainer(null);
