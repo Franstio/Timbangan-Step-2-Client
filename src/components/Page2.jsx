@@ -433,6 +433,7 @@ const Home = () => {
     useEffect(() => {
         if (Idbin != -1) {
             saveTransaksi();
+            updateBinWeight();
         }
     }, [Idbin])
     useEffect(() => {
@@ -656,10 +657,10 @@ const Home = () => {
                 }
             });
             await sendDataPanasonicServer(_container.station, _container.name, binName, data.weight, type);
+//            updateBinWeight();
             setWaste(null);
             setScanData('');
             setinstruksimsg('');
-            updateBinWeight();
         }
     }
     const sendWeight = async (name,weight)=>{
@@ -688,11 +689,11 @@ const Home = () => {
                 weight: _finalNeto
             }
         }).then(res => {
+//            updateBinWeight();
             sendDataPanasonicServer(container.station, container.name, binDispose.name, _finalNeto, type);
             setWaste(null);
             setScanData('');
             setinstruksimsg('');
-            updateBinWeight();
         });
     };
 
