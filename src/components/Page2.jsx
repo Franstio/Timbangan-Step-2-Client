@@ -432,8 +432,8 @@ const Home = () => {
 
     useEffect(() => {
         if (Idbin != -1) {
-            saveTransaksi();
             updateBinWeight();
+            saveTransaksi();
         }
     }, [Idbin])
     useEffect(() => {
