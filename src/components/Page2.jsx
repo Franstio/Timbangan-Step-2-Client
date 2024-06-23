@@ -655,12 +655,11 @@ const Home = () => {
                     weight: data.weight
                 }
             });
-
+            await sendDataPanasonicServer(_container.station, _container.name, binName, data.weight, type);
             setWaste(null);
             setScanData('');
             setinstruksimsg('');
             updateBinWeight();
-            await sendDataPanasonicServer(_container.station, _container.name, binName, data.weight, type);
         }
     }
     const sendWeight = async (name,weight)=>{
@@ -689,11 +688,11 @@ const Home = () => {
                 weight: _finalNeto
             }
         }).then(res => {
+            sendDataPanasonicServer(container.station, container.name, binDispose.name, _finalNeto, type);
             setWaste(null);
             setScanData('');
             setinstruksimsg('');
             updateBinWeight();
-            sendDataPanasonicServer(container.station, container.name, binDispose.name, _finalNeto, type);
         });
     };
 
@@ -726,9 +725,9 @@ const Home = () => {
                 weight: _container.weight
             }
         }).then(res => {
+            sendDataPanasonicServer(_container.station, _container.name, '', _container.weight, 'Collection');
             setWaste(null);
             setScanData('');
-            sendDataPanasonicServer(_container.station, _container.name, '', _container.weight, 'Collection');
             updateContainerstatus();
         });
     };
