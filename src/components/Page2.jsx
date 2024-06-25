@@ -56,6 +56,7 @@ const Home = () => {
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
     const [rackTarget, setRackTarget] = useState('pcs-02.local:5001');
     const [apiTarget, setApiTarget] = useState('192.168.22.128');
+    const [idscraplog,setIdscraplog] = useState('');
     //const ScaleName = getScaleName();
 
 
@@ -400,6 +401,8 @@ const Home = () => {
                 }
                 
                 setIdbin(binDispose.id);
+                if (idscraplog != '')
+                    await updateTransaksi('Dispose');
                 await saveTransaksiRack(container,binDispose.name,'Dispose');
                 //VerificationScan();
                 
@@ -433,6 +436,8 @@ const Home = () => {
     const work =  async()=>{
 
 //        await updateBinWeight();
+        if (idscraplog != '')
+            updateTransaksi("Dispose");
         await saveTransaksi();
     }
     useEffect(() => {
@@ -558,9 +563,29 @@ const Home = () => {
                         return;
                     }*/
                     console.log(res.data.container);
-                    setWaste(res.data.container.waste);
-                    setmessage('');
+                    const _waste = res.data.container.waste;
                     setTypeCollection(res.data.container.type);
+                    const _idscraplog = '';
+                    if (_waste.step1)
+                    {
+                        try
+                        {
+                            const checkTr = await apiClient.get("http://localhost:500/Transaksi/"+scanData);
+                            const tr = checkTr.data;
+                            _idscraplog = tr.idscraplog;
+                            setIdscraplog(tr);
+                        }
+                        catch (err)
+                        {
+                            alert("Error Fetching Transaction");
+                            console.log(err);
+                            return;
+                        }
+                    }
+                    else
+                        setIdscraplog('');
+                    setWaste(_waste);
+                    setmessage('');
                     if (res.data.container.type == "Collection") {
                         const _bin = res.data.container.waste.bin.find(item => item.name == res.data.container.name);
 
@@ -570,6 +595,7 @@ const Home = () => {
                         }
                         console.log(_bin);
                         const collectionPayload = { ...res.data.container, weight: _bin.weight };
+                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
                         if (res.data.container.waste.handletype=='Rack')
                         {
                             await saveTransaksiRack(collectionPayload,'','Collection');
@@ -703,13 +729,24 @@ const Home = () => {
                 weight: _finalNeto
             }
         });
-        
         sendDataPanasonicServer(container.station, container.name, binDispose.name, _finalNeto, type);
         setWaste(null);
         setScanData('');
         setinstruksimsg('');
     };
-
+    const updateTransaksi = async (type)=>{
+        await  updateTransaksiManual(idscraplog,type,waste);
+    }
+    const updateTransaksiManual = async (_idscraplog,_type,_waste)=>
+    {
+        const _finalNeto = waste  ? getWeight() : (_waste.scales == '4Kg' ? neto4Kg : neto50Kg);
+        const res = await apiClient.put("http://localhost:500/Transaksi/"+_idscraplog,{
+            type : _type,
+        });
+        setWaste(null);
+        setScanData('');
+        setinstruksimsg('');
+    }
     const updateContainerstatus = async () => {
         //const _finalNeto = getWeight();
         try {
