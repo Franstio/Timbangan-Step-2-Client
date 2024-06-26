@@ -742,9 +742,12 @@ const Home = () => {
         const _finalNeto = waste  ? getWeight() : (_waste.scales == '4Kg' ? neto4Kg : neto50Kg);
         const res = await apiClient.put("http://localhost:5000/Transaksi/"+_idscraplog,{
             type : _type,
+            status: "Done",
+            weight: _finalNeto
         });
         setWaste(null);
         setScanData('');
+        setTransactionData({});
         setinstruksimsg('');
     }
     const updateContainerstatus = async () => {
