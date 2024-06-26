@@ -56,7 +56,7 @@ const Home = () => {
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
     const [rackTarget, setRackTarget] = useState('pcs-02.local:5001');
     const [apiTarget, setApiTarget] = useState('192.168.22.128');
-    const [idscraplog,setIdscraplog] = useState('');
+    const [transactionData,setTransactionData] = useState({});
     //const ScaleName = getScaleName();
 
 
@@ -401,7 +401,7 @@ const Home = () => {
                 }
                 
                 setIdbin(binDispose.id);
-                if (idscraplog != '')
+                if (transactionData.idscraplog)
                     await updateTransaksi('Dispose');
                 await saveTransaksiRack(container,binDispose.name,'Dispose');
                 //VerificationScan();
@@ -436,7 +436,7 @@ const Home = () => {
     const work =  async()=>{
 
 //        await updateBinWeight();
-        if (idscraplog != '')
+        if (transactionData.idscraplog)
             updateTransaksi("Dispose");
         await saveTransaksi();
     }
@@ -496,8 +496,8 @@ const Home = () => {
             console.log(error);
         }
     };
-    const CheckBinCapacityRack = async ()=>{
-        const lines = container.name.trim().split('-');
+    const CheckBinCapacityRack = async (data)=>{
+        const lines = data.trim().split('-');
         const line = lines[lines.length-2];
         const res = await apiClient.post(`http://${rackTarget}/CheckBinCapacity`,{
             line:line
@@ -573,7 +573,7 @@ const Home = () => {
                             const checkTr = await apiClient.get("http://localhost:500/Transaksi/"+scanData);
                             const tr = checkTr.data;
                             _idscraplog = tr.idscraplog;
-                            setIdscraplog(tr);
+                            setTransactionData(tr);
                         }
                         catch (err)
                         {
@@ -583,7 +583,7 @@ const Home = () => {
                         }
                     }
                     else
-                        setIdscraplog('');
+                        setTransactionData({});
                     setWaste(_waste);
                     setmessage('');
                     if (res.data.container.type == "Collection") {
@@ -735,7 +735,7 @@ const Home = () => {
         setinstruksimsg('');
     };
     const updateTransaksi = async (type)=>{
-        await  updateTransaksiManual(idscraplog,type,waste);
+        await  updateTransaksiManual(transactionData.idscraplog,type,waste);
     }
     const updateTransaksiManual = async (_idscraplog,_type,_waste)=>
     {
@@ -823,7 +823,14 @@ const Home = () => {
                 return;
             }
             if (container.waste.handletype=='Rack')
-                await CheckBinCapacityRack();
+            {
+                let checkName = container.name;
+                if (transactionData.idscraplog)
+                {
+                    checkName = transactionData.toBin;
+                }
+                await CheckBinCapacityRack(checkName);
+            }
             else
                 await CheckBinCapacity();
             setIsSubmitAllowed(false);
