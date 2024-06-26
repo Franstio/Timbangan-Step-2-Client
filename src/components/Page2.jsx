@@ -437,6 +437,7 @@ const Home = () => {
 
 //        await updateBinWeight();
         await saveTransaksi();
+        setTransactionData({});
     }
     useEffect(() => {
         if (Idbin != -1) {
@@ -741,7 +742,7 @@ const Home = () => {
         if (transactionData.idscraplog)
             _p.idscraplog = transactionData.idscraplog;
         await apiClient.post("http://localhost:5000/SaveTransaksi", {
-            _p
+            ..._p
         });
         sendDataPanasonicServer(container.station, container.name, binDispose.name, _finalNeto, type);
         setWaste(null);
@@ -761,7 +762,6 @@ const Home = () => {
         });
 //        setWaste(null);
         setScanData('');
-        setTransactionData({});
         setinstruksimsg('');
     }
     const updateContainerstatus = async () => {
