@@ -708,7 +708,7 @@ const Home = () => {
             await sendDataPanasonicServer(data.station ? data.station :  _container.station ,transactionData.toBin ? transactionData?.toBin :  _container.name, binName, data.weight, type);
 //            updateBinWeight();
 //            setWaste(null);
-
+            setTransactionData({});
             setScanData('');
             setUser(null);
             setContainer(null);
