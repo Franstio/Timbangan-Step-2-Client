@@ -400,9 +400,9 @@ const Home = () => {
                     return;
                 }
                 
-                setIdbin(binDispose.id);
                 if (transactionData.idscraplog)
                     await updateTransaksi('Dispose');
+                setIdbin(binDispose.id);
                 await saveTransaksiRack(container,binDispose.name,'Dispose');
                 //VerificationScan();
                 
@@ -436,8 +436,6 @@ const Home = () => {
     const work =  async()=>{
 
 //        await updateBinWeight();
-        if (transactionData.idscraplog)
-            updateTransaksi("Dispose");
         await saveTransaksi();
     }
     useEffect(() => {
@@ -503,8 +501,19 @@ const Home = () => {
             line:line
         });
         const bin = res.data.bins[0];
-        setBinDispose(bin);
-        return bin;
+        try
+        {
+            const _res = await apiClient.get(`http://localhost:5000/bin/`+bin.name);
+            bin.id= _res.data.id;
+            setBinDispose(bin);
+            return bin;
+        }
+        catch (err)
+        {
+            console.log(err.response ? err.response.data : err);
+            alert("Bin From Rack not found");
+            return null;
+        }
     }
     useEffect(() => {
         if (!binDispose || !binDispose.name_hostname)
