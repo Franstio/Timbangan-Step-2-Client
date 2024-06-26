@@ -402,8 +402,8 @@ const Home = () => {
                 
                 if (transactionData.idscraplog)
                     await updateTransaksi('Dispose');
-                setIdbin(binDispose.id);
-                await saveTransaksiRack(transactionData.toBin ? transactionData?.toBin : container,binDispose.name,'Dispose');
+//                setIdbin(binDispose.id);
+                await saveTransaksiRack( container,binDispose.name,'Dispose');
                 //VerificationScan();
                 
                 setScanData('');
@@ -685,10 +685,9 @@ const Home = () => {
         };*/
     const saveTransaksiRack = async (_container, binName, type) => {
         const _finalNeto = _container.waste.scales == "4Kg" ? neto4Kg : neto50Kg;
-        const res = await apiClient.post(`http://${rackTarget}/Transaksi`, { name: binName,containerName:_container.name,waste:_container.waste.name,payload: {
+        const res = await apiClient.post(`http://${rackTarget}/Transaksi`, { name: binName,containerName: transactionData.toBin ? transactionData?.toBin : _container.name,waste:_container.waste.name,payload: {
             badgeId: user.badgeId,
 //            idContainer: _container.containerId,
-            badgeId: user.badgeId,
 //            IdWaste: _container.IdWaste,
             type: type,
             idqrmachine: binName,
@@ -706,9 +705,19 @@ const Home = () => {
                     weight: data.weight
                 }
             });
-            await sendDataPanasonicServer(_container.station, _container.name, binName, data.weight, type);
+            await sendDataPanasonicServer(_container.station ,transactionData.toBin ? transactionData?.toBin :  _container.name, binName, data.weight, type);
 //            updateBinWeight();
 //            setWaste(null);
+
+            setScanData('');
+            setUser(null);
+            setContainer(null);
+            setmessage('');
+            setNeto(0);
+            freezeNeto(false);
+            setFinalStep(false);
+            setIsSubmitAllowed(false);
+            setIdbin(-1);
             setScanData('');
             setinstruksimsg('');
         }
@@ -744,7 +753,7 @@ const Home = () => {
         await apiClient.post("http://localhost:5000/SaveTransaksi", {
             ..._p
         });
-        sendDataPanasonicServer(container.station, container.name, binDispose.name, _finalNeto, type);
+        await sendDataPanasonicServer(container.station, container.name, binDispose.name, _finalNeto, type);
         setWaste(null);
         setScanData('');
         setinstruksimsg('');
