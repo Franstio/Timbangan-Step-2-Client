@@ -570,7 +570,7 @@ const Home = () => {
                     {
                         try
                         {
-                            const checkTr = await apiClient.get("http://localhost:500/Transaksi/"+scanData);
+                            const checkTr = await apiClient.get("http://localhost:5000/Transaksi/"+scanData);
                             const tr = checkTr.data;
                             _idscraplog = tr.idscraplog;
                             setTransactionData(tr);
@@ -740,7 +740,7 @@ const Home = () => {
     const updateTransaksiManual = async (_idscraplog,_type,_waste)=>
     {
         const _finalNeto = waste  ? getWeight() : (_waste.scales == '4Kg' ? neto4Kg : neto50Kg);
-        const res = await apiClient.put("http://localhost:500/Transaksi/"+_idscraplog,{
+        const res = await apiClient.put("http://localhost:5000/Transaksi/"+_idscraplog,{
             type : _type,
         });
         setWaste(null);
