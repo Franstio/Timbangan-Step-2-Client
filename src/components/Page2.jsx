@@ -705,7 +705,7 @@ const Home = () => {
                     weight: data.weight
                 }
             });
-            await sendDataPanasonicServer(_container.station ,transactionData.toBin ? transactionData?.toBin :  _container.name, binName, data.weight, type);
+            await sendDataPanasonicServer(data.station ? data.station :  _container.station ,transactionData.toBin ? transactionData?.toBin :  _container.name, binName, data.weight, type);
 //            updateBinWeight();
 //            setWaste(null);
 
