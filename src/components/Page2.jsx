@@ -565,7 +565,7 @@ const Home = () => {
                     console.log(res.data.container);
                     const _waste = res.data.container.waste;
                     setTypeCollection(res.data.container.type);
-                    const _idscraplog = '';
+                    let _idscraplog = '';
                     if (_waste.step1)
                     {
                         try
