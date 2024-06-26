@@ -707,7 +707,7 @@ const Home = () => {
             });
             await sendDataPanasonicServer(_container.station, _container.name, binName, data.weight, type);
 //            updateBinWeight();
-            setWaste(null);
+//            setWaste(null);
             setScanData('');
             setinstruksimsg('');
         }
