@@ -729,7 +729,7 @@ const Home = () => {
     }
     const saveTransaksi = async () => {
         const _finalNeto = getWeight(); //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
-        await apiClient.post("http://localhost:5000/SaveTransaksi", {
+        const _p = {
             payload: {
                 idContainer: container.containerId,
                 badgeId: user.badgeId,
@@ -737,6 +737,11 @@ const Home = () => {
                 type: type,
                 weight: _finalNeto
             }
+        };
+        if (transactionData.idscraplog)
+            _p.idscraplog = transactionData.idscraplog;
+        await apiClient.post("http://localhost:5000/SaveTransaksi", {
+            _p
         });
         sendDataPanasonicServer(container.station, container.name, binDispose.name, _finalNeto, type);
         setWaste(null);
@@ -785,7 +790,7 @@ const Home = () => {
                 badgeId: user.badgeId,
                 IdWaste: _container.IdWaste,
                 type: _container.type,
-                weight: _container.weight
+                weight: _container.weight,
             }
         }).then(res => {
             updateContainerstatus();
