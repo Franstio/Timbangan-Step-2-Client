@@ -305,7 +305,7 @@ const Home = () => {
 
     const UpdateBinWeightCollection = async () => {
         try {
-            const response = await apiClient.post('http://PCS.local:5000/UpdateBinWeightCollection', {
+            const response = await apiClient.post('http://2-PCL.local:5000/UpdateBinWeightCollection', {
                 binId: bottomLockHostData.binId
             }).then(x => {
                 const res = x.data;
@@ -317,7 +317,7 @@ const Home = () => {
         }
     }
     useEffect(() => {
-        setSocket(io('http://PCS.local:5000/'));
+        setSocket(io('http://2-PCL.local:5000/'));
 
 
     }, []);
@@ -767,7 +767,7 @@ const Home = () => {
 
     const saveTransaksiCollection = (_container) => {
         console.log(_container);
-        apiClient.post("http://PCS.local:5000/SaveTransaksiCollection", {
+        apiClient.post("http://2-PCL.local:5000/SaveTransaksiCollection", {
             payload: {
                 idContainer: _container.containerId,
                 badgeId: user.badgeId,

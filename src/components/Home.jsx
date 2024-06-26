@@ -29,7 +29,7 @@ const Home = () => {
         return classes.filter(Boolean).join(' ')
     }
     useEffect(() => {
-        setSocket(io('http://PCS.local:5000/'));
+        setSocket(io('http://2-PCL.local:5000/'));
         setLocalSocket(io(`http://localhost:5000/`));
     }, [])
     useEffect(() => {
