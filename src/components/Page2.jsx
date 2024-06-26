@@ -575,25 +575,6 @@ const Home = () => {
                     console.log(res.data.container);
                     const _waste = res.data.container.waste;
                     setTypeCollection(res.data.container.type);
-                    let _idscraplog = '';
-                    if (_waste.step1)
-                    {
-                        try
-                        {
-                            const checkTr = await apiClient.get("http://localhost:5000/Transaksi/"+scanData);
-                            const tr = checkTr.data;
-                            _idscraplog = tr.idscraplog;
-                            setTransactionData(tr);
-                        }
-                        catch (err)
-                        {
-                            alert("Error Fetching Transaction");
-                            console.log(err);
-                            return;
-                        }
-                    }
-                    else
-                        setTransactionData({});
                     setWaste(_waste);
                     setmessage('');
                     if (res.data.container.type == "Collection") {
@@ -605,7 +586,7 @@ const Home = () => {
                         }
                         console.log(_bin);
                         const collectionPayload = { ...res.data.container, weight: _bin.weight };
-                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
+//                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
                         if (res.data.container.waste.handletype=='Rack')
                         {
                             await saveTransaksiRack(collectionPayload,'','Collection');
@@ -626,6 +607,25 @@ const Home = () => {
                         return;
                     }
                     else {
+                        let _idscraplog = '';
+                        if (_waste.step1)
+                        {
+                            try
+                            {
+                                const checkTr = await apiClient.get("http://localhost:5000/Transaksi/"+scanData);
+                                const tr = checkTr.data;
+                                _idscraplog = tr.idscraplog;
+                                setTransactionData(tr);
+                            }
+                            catch (err)
+                            {
+                                alert("Error Fetching Transaction");
+                                console.log(err);
+                                return;
+                            }
+                        }
+                        else
+                            setTransactionData({});
                         setContainer(res.data.container);
                         setType(res.data.container.type);
                         setShowModalInfoScales(true);
@@ -705,7 +705,7 @@ const Home = () => {
                     weight: data.weight
                 }
             });
-            await sendDataPanasonicServer(data.station ? data.station :  _container.station ,transactionData.toBin ? transactionData?.toBin :  _container.name, binName, data.weight, type);
+            await sendDataPanasonicServer(data.station && type!='Collection' ? data.station :  _container.station ,transactionData.toBin ? transactionData?.toBin :  _container.name, binName, data.weight, type);
 //            updateBinWeight();
 //            setWaste(null);
             setTransactionData({});
