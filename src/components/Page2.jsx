@@ -1036,7 +1036,7 @@ const Home = () => {
                             <button className='block w-full border rounded py-2 flex justify-center items-center font-bold mt-5 bg-sky-400 text-white text-lg' disabled={!isSubmitAllowed} onClick={toggleModal}>Submit</button>
                             <div className='text-lg mt-5'>
                                 <p>Username: {user?.username} </p>
-                                <p>Container Id: {container?.name}</p>
+                                <p>Container Id: {transactionData.toBin ? transactionData?.toBin : container?.name}</p>
                                 <p>Type Waste: {container?.waste.name}</p>
                             </div>
                         </div>
