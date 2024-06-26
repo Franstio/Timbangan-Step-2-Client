@@ -754,7 +754,7 @@ const Home = () => {
             status: "Done",
             weight: _finalNeto
         });
-        setWaste(null);
+//        setWaste(null);
         setScanData('');
         setTransactionData({});
         setinstruksimsg('');
