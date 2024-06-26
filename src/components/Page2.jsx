@@ -403,7 +403,7 @@ const Home = () => {
                 if (transactionData.idscraplog)
                     await updateTransaksi('Dispose');
                 setIdbin(binDispose.id);
-                await saveTransaksiRack(container,binDispose.name,'Dispose');
+                await saveTransaksiRack(transactionData.toBin ? transactionData?.toBin : container,binDispose.name,'Dispose');
                 //VerificationScan();
                 
                 setScanData('');
