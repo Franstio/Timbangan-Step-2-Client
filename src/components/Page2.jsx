@@ -399,14 +399,17 @@ const Home = () => {
                     alert("mismatch name");
                     return;
                 }
-                
+                console.log(waste)
                 if (transactionData.idscraplog)
                     await updateTransaksi('Dispose');
-//                setIdbin(binDispose.id);
-                await saveTransaksiRack( container,binDispose.name,'Dispose');
+                if (container.waste.handletype=="Rack" || waste.handletype =='Rack')
+                    await saveTransaksiRack( container,binDispose.name,'Dispose');
+                else
+                    setIdbin(binDispose.id);
+
                 //VerificationScan();
                 
-                setScanData('');
+//                setScanData('');
             }
             else {
                 handleScan1();
