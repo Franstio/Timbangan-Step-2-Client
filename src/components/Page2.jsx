@@ -438,7 +438,7 @@ const Home = () => {
     };
     const work =  async()=>{
 
-//        await updateBinWeight();
+        await updateBinWeight();
         await saveTransaksi();
         setTransactionData({});
     }
@@ -816,7 +816,7 @@ const Home = () => {
         try {
             const _finalNeto = getWeight();//neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
             const response = await apiClient.post('http://localhost:5000/UpdateBinWeight', {
-                binId: Idbin,
+                binId: binDispose.id,
                 neto: _finalNeto
             });
             
