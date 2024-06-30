@@ -54,7 +54,7 @@ const Home = () => {
     const inputRef = useRef(null);
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
-    const [rackTarget, setRackTarget] = useState('pcs-02.local:5001');
+    const [rackTarget, setRackTarget] = useState('PCL-10.local:5001');
     const [apiTarget, setApiTarget] = useState('192.168.54.128');
     const [transactionData,setTransactionData] = useState({});
     //const ScaleName = getScaleName();
