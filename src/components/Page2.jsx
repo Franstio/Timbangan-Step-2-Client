@@ -55,7 +55,7 @@ const Home = () => {
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
     const [rackTarget, setRackTarget] = useState('PCL-10.local:5001');
-    const [apiTarget, setApiTarget] = useState('192.168.54.128');
+    const [apiTarget, setApiTarget] = useState(process.env.REACT_APP_PIDSG);
     const [transactionData,setTransactionData] = useState({});
     //const ScaleName = getScaleName();
 
