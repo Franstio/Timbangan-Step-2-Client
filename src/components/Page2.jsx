@@ -286,7 +286,7 @@ const Home = () => {
     };
 
     useEffect(() => {
-        if (bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
+        if (bottomLockHostData.binId && bottomLockHostData.hostname && bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
             new Promise(async () => {
                 console.log({ bottomLockHostData: bottomLockHostData });
                 await sendLockBottom();
@@ -805,7 +805,7 @@ const Home = () => {
                 weight: _container.weight,
             }
         }).then(res => {
-            updateContainerstatus();
+            updateContainersstatus();
             sendDataPanasonicServer(_container.station, _container.name, '', _container.weight, 'Collection');
             setWaste(null);
             setScanData('');

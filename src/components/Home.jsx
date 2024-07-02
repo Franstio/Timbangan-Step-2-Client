@@ -255,8 +255,7 @@ const Home = () => {
             return (Getweightbin / 1); // Jika tidak, hitung 25% dari Getweightbin
         }
     };
-
-    const gaugeValue = getGaugeValue(); // Dapatkan nilai GaugeComponent yang sesuai
+ // Dapatkan nilai GaugeComponent yang sesuai
     return (
         <main>
 
@@ -291,7 +290,7 @@ const Home = () => {
                                         },
                                     ]
                                 }}
-                                value={gaugeValue}
+                                value={getGaugeValue()}
                                 style={{ width: '100%', height: '20%' }} // Ensure the gauge fits the container
                             />
 
