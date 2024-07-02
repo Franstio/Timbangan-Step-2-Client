@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, Fragment, useRef } from "react";
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
@@ -805,7 +804,7 @@ const Home = () => {
                 weight: _container.weight,
             }
         }).then(res => {
-            updateContainersstatus();
+            updateContainerstatus();
             sendDataPanasonicServer(_container.station, _container.name, '', _container.weight, 'Collection');
             setWaste(null);
             setScanData('');
