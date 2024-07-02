@@ -1012,7 +1012,7 @@ const Home = () => {
                 <div className="grid grid-cols-3 grid-flow-col gap-5">
                     <div className="col-span-1 ...">
                         <div className='flex-1 p-4 border rounded bg-white'>
-                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Bruto</h1>
+                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Brutto</h1>
                             <div className=''>
                                 <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{((Scales4Kg?.weight4Kg ?? 0) * 1000).toFixed(2) ?? 0}<FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Gram</p>
@@ -1021,7 +1021,7 @@ const Home = () => {
                     </div>
                     <div className="row-span-1">
                         <div className='flex-1 p-4 border rounded bg-white'>
-                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
+                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Netto</h1>
                             <div className=''>
                                 <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{(neto4Kg * 1000).toFixed(2)} <FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Gram</p>
@@ -1030,7 +1030,7 @@ const Home = () => {
                     </div>
                     <div className="col-span-1 ...">
                         <div className='flex-1 p-4 border rounded bg-white'>
-                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Bruto</h1>
+                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Brutto</h1>
                             <div className=''>
                                 <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales50Kg?.weight50Kg?.toFixed(2) ?? 0}<FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
@@ -1039,7 +1039,7 @@ const Home = () => {
                     </div>
                     <div className="col-span-1 ...">
                         <div className='flex-1 p-4 border rounded bg-white'>
-                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Neto</h1>
+                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Netto</h1>
                             <div className=''>
                                 <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto50Kg.toFixed(2)} <FiRefreshCcw size={20} /></div>
                                 <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
