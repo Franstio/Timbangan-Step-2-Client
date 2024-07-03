@@ -20,6 +20,7 @@ const Home = () => {
     const [topProcessStatus,startTopProcess]= useState(null);
     const [final,setFinal] = useState(false);
     const [sensor,setSensor] = useState([0,0]);
+    const [maxWeight,setMaxWeight] = useState(0);
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
         { name: 'Calculation', href: '#', current: false }
@@ -169,6 +170,7 @@ const Home = () => {
         socket.on('getweight', (data) => {
             //            console.log(["Input", data]);
             setGetweightbin(prev => data.weight);
+            setMaxWeight(data.max_weight);
         });
     }, [socket]);
 
@@ -249,11 +251,8 @@ const Home = () => {
 
     // Menghitung nilai gaugeValue sesuai dengan aturan yang ditentukan
     const getGaugeValue = () => {
-        if (Getweightbin >= 100) {
-            return 100; // Jika Getweightbin mencapai atau melebihi 400 kg, set gaugeValue menjadi 100
-        } else {
-            return (Getweightbin / 1); // Jika tidak, hitung 25% dari Getweightbin
-        }
+        const _final = (Getweightbin / maxWeight) * 100;
+        return (_final  >= 100) ? 100 : _final;
     };
  // Dapatkan nilai GaugeComponent yang sesuai
     return (
