@@ -50,7 +50,7 @@ const Home = () => {
 
     }
     useEffect(()=>{
-        if (processStatus==null)
+        if (processStatus == undefined ||  processStatus==null)
             return;
         if (processStatus)
         {
@@ -88,7 +88,7 @@ const Home = () => {
 
     }
     useEffect(()=>{
-        if (topProcessStatus==null)
+        if (topProcessStatus == undefined || topProcessStatus==null)
             return;
         if (topProcessStatus)
         {
