@@ -288,11 +288,11 @@ const Home = () => {
         if (bottomLockHostData.binId && bottomLockHostData.hostname && bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
             new Promise(async () => {
                 console.log({ bottomLockHostData: bottomLockHostData });
-                await sendLockBottom();
                 setinstruksimsg("Buka Penutup Bawah");
                 await sendYellowOffCollection();
                 await sendGreenlampOnCollection();
                 await UpdateBinWeightCollection();
+                await sendLockBottom();
                 //await sendDataPanasonicServer();
                 Promise.resolve();
             }).then(() => {
@@ -386,16 +386,19 @@ const Home = () => {
                     const isSensorTop = await readSensorTop(binDispose.name_hostname);
                     if (isSensorTop.error) {
                         alert("Error Ketika Membaca Sensor");
+                        setScanData('');
                         return;
                     }
                     if (!isSensorTop) {
                         alert("Tutup Penutup Atas.");
+                        setScanData('');
                         return;
                     }
                 }
                 console.log(binDispose);
                 if (binDispose.name != scanData) {
                     alert("mismatch name");
+                    setScanData('');
                     return;
                 }
                 console.log(waste)
@@ -460,9 +463,9 @@ const Home = () => {
         if (toplockId !== '') {
             (async () => {
                 try {
-                    await sendLockTop();
                     await sendYellowOff();
                     await sendGreenlampOn();
+                    await sendLockTop();
                 } catch (error) {
                     console.error('Error executing actions:', error);
                 } finally {
