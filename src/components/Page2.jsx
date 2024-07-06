@@ -539,7 +539,10 @@ const Home = () => {
             console.error(error);
         }
     };
-
+    useEffect(()=>{
+        if (user==null)
+            scanData('');
+    },[user])
     const handleScan = () => {
         apiClient.post('http://localhost:5000/ScanBadgeid', { badgeId: scanData })
             .then(res => {
