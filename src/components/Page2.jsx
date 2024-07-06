@@ -540,9 +540,9 @@ const Home = () => {
         }
     };
     useEffect(()=>{
-        if (user==null)
-            scanData('');
-    },[user])
+        if (user==null || container == null)
+            setScanData('');
+    },[user,container])
     const handleScan = () => {
         apiClient.post('http://localhost:5000/ScanBadgeid', { badgeId: scanData })
             .then(res => {
