@@ -53,7 +53,7 @@ const Home = () => {
     const inputRef = useRef(null);
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
-    const [rackTarget, setRackTarget] = useState('PCL-10.local:5001');
+    const [rackTarget, setRackTarget] = useState(process.env.REACT_APP_RACK);
     const [apiTarget, setApiTarget] = useState(process.env.REACT_APP_PIDSG);
     const [transactionData,setTransactionData] = useState({});
     //const ScaleName = getScaleName();
@@ -304,7 +304,7 @@ const Home = () => {
 
     const UpdateBinWeightCollection = async () => {
         try {
-            const response = await apiClient.post('http://2-PCL.local:5000/UpdateBinWeightCollection', {
+            const response = await apiClient.post(`http://${process.env.TIMBANGAN}/UpdateBinWeightCollection`, {
                 binId: bottomLockHostData.binId
             }).then(x => {
                 const res = x.data;
@@ -316,7 +316,7 @@ const Home = () => {
         }
     }
     useEffect(() => {
-        setSocket(io('http://2-PCL.local:5000/'));
+        setSocket(io(`http://${process.env.TIMBANGAN}/`));
 
 
     }, []);
@@ -801,7 +801,7 @@ const Home = () => {
 
     const saveTransaksiCollection = (_container) => {
         console.log(_container);
-        apiClient.post("http://2-PCL.local:5000/SaveTransaksiCollection", {
+        apiClient.post(`http://${process.env.TIMBANGAN}/SaveTransaksiCollection`, {
             payload: {
                 idContainer: _container.containerId,
                 badgeId: user.badgeId,
