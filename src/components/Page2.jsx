@@ -304,7 +304,7 @@ const Home = () => {
 
     const UpdateBinWeightCollection = async () => {
         try {
-            const response = await apiClient.post(`http://${process.env.TIMBANGAN}/UpdateBinWeightCollection`, {
+            const response = await apiClient.post(`http://${process.env.REACT_APP_TIMBANGAN}/UpdateBinWeightCollection`, {
                 binId: bottomLockHostData.binId
             }).then(x => {
                 const res = x.data;
@@ -316,7 +316,7 @@ const Home = () => {
         }
     }
     useEffect(() => {
-        setSocket(io(`http://${process.env.TIMBANGAN}/`));
+        setSocket(io(`http://${process.env.REACT_APP_TIMBANGAN}/`));
 
 
     }, []);
@@ -801,7 +801,7 @@ const Home = () => {
 
     const saveTransaksiCollection = (_container) => {
         console.log(_container);
-        apiClient.post(`http://${process.env.TIMBANGAN}/SaveTransaksiCollection`, {
+        apiClient.post(`http://${process.env.REACT_APP_TIMBANGAN}/SaveTransaksiCollection`, {
             payload: {
                 idContainer: _container.containerId,
                 badgeId: user.badgeId,
