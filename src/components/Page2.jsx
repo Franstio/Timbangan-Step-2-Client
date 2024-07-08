@@ -548,6 +548,8 @@ const Home = () => {
         apiClient.post('http://localhost:5000/ScanBadgeid', { badgeId: scanData })
             .then(res => {
                 if (res.data.error) {
+                    setScanData('');
+                    setUser(null);
                     alert(res.data.error);
                 } else {
                     if (res.data.user) {
@@ -573,6 +575,8 @@ const Home = () => {
         try {
             const res = await apiClient.post('http://localhost:5000/ScanContainer', { containerId: scanData });
             if (res.data.error) {
+                setScanData('');
+                setContainer(null);
                 alert(res.data.error);
             } else {
                 if (res.data.container) {
@@ -643,7 +647,7 @@ const Home = () => {
                     setScanData('');
                     setIsSubmitAllowed(true);
                 } else {
-                    alert("Countainer not found");
+                    alert("Container not found");
                     setUser(null);
                     setContainer(null);
                     setContainerName(res.data.name || '');
