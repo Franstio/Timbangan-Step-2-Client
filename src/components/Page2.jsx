@@ -512,6 +512,7 @@ const Home = () => {
             const _res = await apiClient.get(`http://localhost:5000/bin/`+bin.name);
             bin.id= _res.data.bin.id;
             setBinDispose(bin);
+            setBinname(res.bin.name);
             return bin;
         }
         catch (err)
