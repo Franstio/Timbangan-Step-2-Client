@@ -158,7 +158,12 @@ const Home = () => {
             return;
         console.log("Get Bin For " + hostname);
         if (hostname && hostname != '')
-            socket.emit('getWeightBin', hostname);
+        {
+            setInterval(()=>{
+                console.log("Request weight");
+                socket.emit('getWeightBin', hostname);
+            },30*1000);
+        }
     }, [hostname, socket]);
     useEffect(() => {
         /*socket.on('connect', ()=>{
