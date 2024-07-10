@@ -1020,44 +1020,55 @@ const Home = () => {
             </Disclosure>
             <div className='bg-[#f4f6f9] p-5'>
                 <div className="grid grid-cols-3 grid-flow-col gap-5">
-                    <div className="col-span-1 ...">
-                        <div className='flex-1 p-4 border rounded bg-white'>
-                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Brutto</h1>
-                            <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{((Scales4Kg?.weight4Kg ?? 0) * 1000).toFixed(2) ?? 0}<FiRefreshCcw size={20} /></div>
-                                <p className='flex justify-center text-2xl font-bold'>Gram</p>
+                    {
+                        (process.env.REACT_APP_4Kg== '1') &&
+                        <div className={`grid grid-cols-1 grid-flow-row gap-3 col-span-${process.env.REACT_APP_50Kg ? '2' : '1'}  `}>
+                            <div className="col-span-1 ...">
+                                <div className='flex-1 p-4 border rounded bg-white'>
+                                    <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Brutto</h1>
+                                    <div className=''>
+                                        <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{((Scales4Kg?.weight4Kg ?? 0) * 1000).toFixed(2) ?? 0}<FiRefreshCcw size={20} /></div>
+                                        <p className='flex justify-center text-2xl font-bold'>Gram</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row-span-1 col-span-1">
+                                <div className='flex-1 p-4 border rounded bg-white'>
+                                    <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Netto</h1>
+                                    <div className=''>
+                                        <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{(neto4Kg * 1000).toFixed(2)} <FiRefreshCcw size={20} /></div>
+                                        <p className='flex justify-center text-2xl font-bold'>Gram</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="row-span-1">
-                        <div className='flex-1 p-4 border rounded bg-white'>
-                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Netto</h1>
-                            <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{(neto4Kg * 1000).toFixed(2)} <FiRefreshCcw size={20} /></div>
-                                <p className='flex justify-center text-2xl font-bold'>Gram</p>
+                    }
+
+                    {
+                        (process.env.REACT_APP_50Kg == '1') &&
+                        <div className={`grid grid-cols-1 grid-flow-row gap-3 col-span-${process.env.REACT_APP_4Kg ? '2' : '1'} `}>
+                            <div className="col-span-1 ...">
+                                <div className='flex-1 p-4 border rounded bg-white'>
+                                    <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Brutto</h1>
+                                    <div className=''>
+                                        <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales50Kg?.weight50Kg?.toFixed(2) ?? 0}<FiRefreshCcw size={20} /></div>
+                                        <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-span- row-span-1">
+                                <div className='flex-1 p-4 border rounded bg-white'>
+                                    <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Netto</h1>
+                                    <div className=''>
+                                        <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto50Kg.toFixed(2)} <FiRefreshCcw size={20} /></div>
+                                        <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-span-1 ...">
-                        <div className='flex-1 p-4 border rounded bg-white'>
-                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Brutto</h1>
-                            <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{Scales50Kg?.weight50Kg?.toFixed(2) ?? 0}<FiRefreshCcw size={20} /></div>
-                                <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-span-1 ...">
-                        <div className='flex-1 p-4 border rounded bg-white'>
-                            <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Netto</h1>
-                            <div className=''>
-                                <div className='flex-1 flex justify-center p-4 border rounded bg-gray-200 text-5xl font-semibold'>{neto50Kg.toFixed(2)} <FiRefreshCcw size={20} /></div>
-                                <p className='flex justify-center text-2xl font-bold'>Kilogram</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row-span-2 col-span-2">
-                        <div className='flex-1 p-4 border rounded bg-white h-full'>
+                    }
+                    <div className={`row-span-1 col-span-1`}>
+                        <div className=' p-4 border rounded bg-white h-full'>
                             <h1 className='text-blue-600 font-semibold text-xl mb-3'>Scanner Result</h1>
                             <p>Please Scan..</p>
                             <input
