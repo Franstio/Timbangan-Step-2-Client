@@ -848,6 +848,7 @@ const Home = () => {
     }
 
     const handleSubmit = async () => {
+        setShowModal(false);
         const binWeight = container?.weightbin ?? 0;
         const totalWeight = parseFloat(neto) + parseFloat(binWeight);
         console.log(binWeight);
@@ -878,7 +879,6 @@ const Home = () => {
             setmessage('Waiting For Verification');
             setShowModalDispose(true);
         }
-        setShowModal(false);
     }
 
     const handleCancel = () => {
