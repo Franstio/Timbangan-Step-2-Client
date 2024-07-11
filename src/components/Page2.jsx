@@ -1143,7 +1143,7 @@ const Home = () => {
                 </div>
 
                 <div className='flex justify-start'>
-                    {showModalInfoScale && (
+                    {(showModalInfoScale && process.env.REACT_APP_50Kg=='1' && process.env.REACT_APP_4Kg == '1') && (
                         <div className="fixed z-10 inset-0 overflow-y-auto" onKeyDown={handleKeyPressModal}>
                             <div className="flex items-center justify-center min-h-screen">
                                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
