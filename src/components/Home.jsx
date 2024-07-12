@@ -288,7 +288,7 @@ const Home = () => {
                                             showTick: true
                                         },
                                         {
-                                            limit: 81,
+                                            limit: 90,
                                             color: 'RED',
                                             showTick: true
                                         },
