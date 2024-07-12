@@ -140,6 +140,7 @@ const Home = () => {
             {
                 _data.push(data[i] ?? 0);
             }
+            console.log({dataPLC: _data});
             setSensor(_data);
         });
     }, [localSocket]);
@@ -311,7 +312,7 @@ const Home = () => {
                         </div>
                         <div className='flex justify-between'>
                             <p>Yellow</p>
-                            <FiberManualRecordIcon fontSize="small" style={{ color:  /*(sensor[3] == 0? 'red' : 'green')*/ 'gray' }} />
+                            <FiberManualRecordIcon fontSize="small" style={{ color:  (sensor[3] == 0? 'gray' : 'green')  }} />
                         </div>
                         <div className='flex justify-between'>
                             <p>Red</p>
