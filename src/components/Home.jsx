@@ -135,13 +135,11 @@ const Home = () => {
         localSocket.on('sensorUpdate',(data)=>{
             if (!data)
                 return;
-            console.log({rawDataPLC: data});
             const _data = [];
             for (let i=0;i<data.length;i++)
             {
                 _data.push(data[i] ?? 0);
             }
-            console.log({dataPLC: _data});
             setSensor(_data);
         });
     }, [localSocket]);
