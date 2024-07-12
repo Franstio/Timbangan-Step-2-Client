@@ -135,6 +135,7 @@ const Home = () => {
         localSocket.on('sensorUpdate',(data)=>{
             if (!data)
                 return;
+            console.log({rawDataPLC: data});
             const _data = [];
             for (let i=0;i<data.length;i++)
             {
