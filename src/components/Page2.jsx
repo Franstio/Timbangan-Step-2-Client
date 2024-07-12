@@ -1022,7 +1022,7 @@ const Home = () => {
                 <div className="grid grid-cols-3 grid-flow-col gap-5">
                     {
                         (process.env.REACT_APP_4Kg== '1') &&
-                        <div className={`grid grid-cols-1 grid-flow-row gap-3 col-span-${process.env.REACT_APP_50Kg ? '2' : '1'}  `}>
+                        <div className={`grid grid-cols-1 grid-flow-row gap-3 col-span-${process.env.REACT_APP_50Kg ? '1' : '1'}  `}>
                             <div className="col-span-1 ...">
                                 <div className='flex-1 p-4 border rounded bg-white'>
                                     <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Brutto</h1>
@@ -1046,7 +1046,7 @@ const Home = () => {
 
                     {
                         (process.env.REACT_APP_50Kg == '1') &&
-                        <div className={`grid grid-cols-1 grid-flow-row gap-3 col-span-${process.env.REACT_APP_4Kg ? '2' : '1'} `}>
+                        <div className={`grid grid-cols-1 grid-flow-row gap-3 col-span-${process.env.REACT_APP_4Kg ? '1' : '1'} `}>
                             <div className="col-span-1 ...">
                                 <div className='flex-1 p-4 border rounded bg-white'>
                                     <h1 className='text-blue-600 font-semibold mb-2 text-xl'>Brutto</h1>
