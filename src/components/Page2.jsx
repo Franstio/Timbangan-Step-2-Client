@@ -111,12 +111,10 @@ const Home = () => {
                 idLockBottom: 1
             });
             if (response.status != 200) {
-                console.log(response);
                 return;
             }
         }
         catch (error) {
-            console.log(error);
         }
     }
 
@@ -134,13 +132,11 @@ const Home = () => {
 
             });
             if (response.status != 200) {
-                console.log(response);
                 return;
             }
             await sendWeight(frombinname,weight);
         }
         catch (error) {
-            console.log(error);
         }
     }
 
@@ -151,7 +147,6 @@ const Home = () => {
             targetHostName = binDispose.name_hostname;
         else if (bottomLockHostData && bottomLockHostData.hostname)
             targetHostName = bottomLockHostData.hostname;
-        console.log([targetHostName, binDispose, bottomLockHostData]);
         if (targetHostName == '' || targetHostName == null || targetHostName == undefined)
             return;
         sendPesanTimbangan(targetHostName, instruksimsg);
@@ -164,7 +159,6 @@ const Home = () => {
                 idLampGreen: 1
             });
             if (response.status != 200) {
-                console.log(response);
                 return;
             }
         } catch (error) {
@@ -178,7 +172,6 @@ const Home = () => {
                 idLampGreen: 1
             });
             if (response.status != 200) {
-                console.log(response);
                 return;
             }
         } catch (error) {
@@ -192,7 +185,6 @@ const Home = () => {
                 idLampGreen: 1
             });
             if (response.status != 200) {
-                console.log(response);
                 return;
             }
         } catch (error) {
@@ -206,7 +198,6 @@ const Home = () => {
                 idLampYellow: 1
             });
             if (response.status != 200) {
-                console.log(response);
                 return;
             }
         } catch (error) {
@@ -220,7 +211,6 @@ const Home = () => {
                 idLampYellow: 1
             });
             if (response.status != 200) {
-                console.log(response);
                 return;
             }
         } catch (error) {
@@ -234,7 +224,6 @@ const Home = () => {
                 idLampYellow: 1
             });
             if (response.status != 200) {
-                console.log(response);
                 return;
             }
         } catch (error) {
@@ -268,7 +257,6 @@ const Home = () => {
                 SensorTopId: 1
             });
             if (response.status !== 200) {
-                console.log(response);
                 return;
             }
 
@@ -277,7 +265,6 @@ const Home = () => {
             // Konversi nilai sensor menjadi bentuk boolean
             return sensorData == 1;
 
-            //console.log("Sensor value:", sensorValue);
         } catch (error) {
             console.error(error);
             return { error: error };
@@ -287,7 +274,6 @@ const Home = () => {
     useEffect(() => {
         if (bottomLockHostData.binId && bottomLockHostData.hostname && bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
             new Promise(async () => {
-                console.log({ bottomLockHostData: bottomLockHostData });
                 setinstruksimsg("Buka Penutup Bawah");
                 await sendYellowOffCollection();
                 await sendGreenlampOnCollection();
@@ -308,11 +294,9 @@ const Home = () => {
                 binId: bottomLockHostData.binId
             }).then(x => {
                 const res = x.data;
-                console.log(res);
             });
         }
         catch (error) {
-            console.log(error);
         }
     }
     useEffect(() => {
@@ -327,7 +311,6 @@ const Home = () => {
 
         socket.on('data1', (weight50Kg) => {
             try {
-                //console.log(weight50Kg);
                 const weight50KgValue = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
                 setScales50Kg({ weight50Kg: weight50KgValue });
             } catch (error) {
@@ -336,7 +319,6 @@ const Home = () => {
         });
 
         socket.on('data', (data) => {
-            // console.log(data);
             const weight4KgInKg = parseFloat(data?.weight ?? 0) / 1000;
             setScales4Kg({ weight4Kg: weight4KgInKg });
         });
@@ -395,13 +377,11 @@ const Home = () => {
                         return;
                     }
                 }
-                console.log(binDispose);
                 if (binDispose.name != scanData) {
                     alert("mismatch name");
                     setScanData('');
                     return;
                 }
-                console.log(waste)
                 if (transactionData.idscraplog)
                     await updateTransaksi('Dispose');
                 if (container.waste.handletype=="Rack" || waste.handletype =='Rack')
@@ -477,7 +457,6 @@ const Home = () => {
     const CheckBinCapacity = async () => {
         const _finalNeto = getWeight();// neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
         try {
-            console.log(container);
             const url = container.waste.handletype=='Rack' ? rackTarget : "localhost:5000";
             const response = await apiClient.post(`http://${url}/CheckBinCapacity`, {
                 IdWaste: container.IdWaste,
@@ -488,16 +467,13 @@ const Home = () => {
                     alert(res.message);
                     return;
                 }
-                console.log(res);
                 setBinDispose(res.bin);
                 settoplockId(res.bin.name_hostname);
                 setBinname(res.bin.name);
                 //              setIdbin(res.bin.id);
             });
-            console.log(response);
         }
         catch (error) {
-            console.log(error);
         }
     };
     const CheckBinCapacityRack = async (data)=>{
@@ -517,7 +493,6 @@ const Home = () => {
         }
         catch (err)
         {
-            console.log(err.response ? err.response.data : err);
             alert("Bin From Rack not found");
             return null;
         }
@@ -530,12 +505,10 @@ const Home = () => {
     }, [binDispose]);
     async function sendLockTop() {
         try {
-            console.log(toplockId);
             const response = await apiClient.post(`http://${toplockId}.local:5000/locktop/`, {
                 idLockTop: 1
             });
             setinstruksimsg("Buka Penutup Atas");
-            console.log(response.data);
         } catch (error) {
             console.error(error);
         }
@@ -580,12 +553,10 @@ const Home = () => {
                 alert(res.data.error);
             } else {
                 if (res.data.container) {
-                    console.log(res.data.container);
                     /*if ( waste != null && res.data.container.IdWaste != waste.IdWaste ) {
                         alert("Waste Mismatch");
                         return;
                     }*/
-                    console.log(res.data.container);
                     const _waste = res.data.container.waste;
                     setTypeCollection(res.data.container.type);
                     setWaste(_waste);
@@ -597,7 +568,6 @@ const Home = () => {
                             alert("Bin Collection error");
                             return;
                         }
-                        console.log(_bin);
                         const collectionPayload = { ...res.data.container, weight: _bin.weight };
 //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
                         if (res.data.container.waste.handletype=='Rack')
@@ -633,7 +603,6 @@ const Home = () => {
                             catch (err)
                             {
                                 alert("Error Fetching Transaction");
-                                console.log(err);
                                 return;
                             }
                         }
@@ -668,7 +637,6 @@ const Home = () => {
                 if (res.data.error) {
                     alert(res.data.error);
                 } else {
-                    console.log(res.data.bin);
                 }
             })
             .catch(err => console.error(err));
@@ -742,12 +710,10 @@ const Home = () => {
                 weight: weight,
             });
             if (response.status != 200) {
-                console.log(response);
                 return;
             }
         }
         catch (error) {
-            console.log(error);
         }
     }
     const saveTransaksi = async () => {
@@ -795,17 +761,14 @@ const Home = () => {
 
             });
             if (response.status != 200) {
-                console.log(response);
                 return;
             }
         }
         catch (error) {
-            console.log(error);
         }
     }
 
     const saveTransaksiCollection = (_container) => {
-        console.log(_container);
         apiClient.post(`http://${process.env.REACT_APP_TIMBANGAN}/SaveTransaksiCollection`, {
             payload: {
                 idContainer: _container.containerId,
@@ -851,8 +814,6 @@ const Home = () => {
         setShowModal(false);
         const binWeight = container?.weightbin ?? 0;
         const totalWeight = parseFloat(neto) + parseFloat(binWeight);
-        console.log(binWeight);
-        console.log(type);
 
         if (type == 'Dispose') {
             if (neto4Kg > 4) {

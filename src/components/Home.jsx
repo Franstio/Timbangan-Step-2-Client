@@ -37,7 +37,6 @@ const Home = () => {
         if (!localSocket)
             return;
         localSocket.on('UpdateInstruksi', (instruksi) => {
-            console.log(instruksi);
             
             setinstruksimsg(instruksi);
             /*if (instruksi && instruksi != '' && instruksi != null)
@@ -54,7 +53,6 @@ const Home = () => {
             return;
         if (processStatus)
         {
-            console.log("Waiting for 0");
             startObserveBottomSensor(0);
             localSocket.on('target-0',(res)=>{
                 startProcess(false);
@@ -65,7 +63,6 @@ const Home = () => {
         }
         else
         {
-            console.log("Waiting for 1");
             startObserveBottomSensor(1);
             localSocket.on('target-1',(res)=>{
                 startProcess(null);
@@ -92,7 +89,6 @@ const Home = () => {
             return;
         if (topProcessStatus)
         {
-            console.log("Waiting for 0");
             startObserveTopSensor(0);
             localSocket.on('target-top-0',(res)=>{
                 startTopProcess(false);
@@ -103,7 +99,6 @@ const Home = () => {
         }
         else
         {
-            console.log("Waiting for 1");
             startObserveTopSensor(1);
             localSocket.on('target-top-1',(res)=>{
                 startTopProcess(null);
@@ -126,7 +121,6 @@ const Home = () => {
             return;
         localSocket.on('GetType', (type) => {
             setType(type);
-            console.log(type);
             if (type=='Collection')
                 startProcess(true);
             else
@@ -156,24 +150,20 @@ const Home = () => {
     useEffect(() => {
         if (!socket)
             return;
-        console.log("Get Bin For " + hostname);
         if (hostname && hostname != '')
         {
             setInterval(()=>{
-                console.log("Request weight");
                 socket.emit('getWeightBin', hostname);
             },30*1000);
         }
     }, [hostname, socket]);
     useEffect(() => {
         /*socket.on('connect', ()=>{
-            console.log("LAUNCH CONNECT " + hostname);
             socket.emit('getWeightBin',hostname);
         });*/
         if (!socket)
             return;
         socket.on('getweight', (data) => {
-            //            console.log(["Input", data]);
             setGetweightbin(prev => data.weight);
             setMaxWeight(data.max_weight);
         });
@@ -191,7 +181,6 @@ const Home = () => {
             })
             setinstruksimsg("buka penutup bawah");
             setFinal(true);
-            console.log(response.data);
         } catch (error) {
             console.error(error);
         }
@@ -203,7 +192,6 @@ const Home = () => {
                 SensorBottomId: 1
             });
             if (response.status !== 200) {
-                console.log(response);
                 return;
             }
 
@@ -212,7 +200,6 @@ const Home = () => {
             // Konversi nilai sensor menjadi bentuk boolean
             return sensorData == 1;
 
-            //console.log("Sensor value:", sensorValue);
         } catch (error) {
             console.error(error);
             return { error: error };
@@ -225,7 +212,6 @@ const Home = () => {
                 idLampGreen: 1
             });
             //setinstruksimsg("buka pintu atas");
-            console.log(response.data);
         } catch (error) {
             console.error(error);
         }
@@ -237,7 +223,6 @@ const Home = () => {
                 idLampYellow: 1
             });
             //setinstruksimsg("buka pintu atas");
-            console.log(response.data);
         } catch (error) {
             console.error(error);
         }
