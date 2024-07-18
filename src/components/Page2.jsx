@@ -1028,7 +1028,7 @@ const Home = () => {
                             </div>
                         </div>
                     }
-                    <div className={`row-span-1 col-span-1`}>
+                    <div className={`row-span-1 col-span-2`}>
                         <div className=' p-4 border rounded bg-white h-full'>
                             <h1 className='text-blue-600 font-semibold text-xl mb-3'>Scanner Result</h1>
                             <p>Please Scan..</p>
