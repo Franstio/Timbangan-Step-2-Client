@@ -732,7 +732,7 @@ const Home = () => {
         await apiClient.post("http://localhost:5000/SaveTransaksi", {
             ..._p
         });
-        await sendDataPanasonicServer(container.station, container.name, binDispose.name, _finalNeto, type);
+        await sendDataPanasonicServer(container.station, transactionData.toBin ? transactionData?.toBin : container?.name, binDispose.name, _finalNeto, type);
         setWaste(null);
         setScanData('');
         setinstruksimsg('');
