@@ -543,7 +543,21 @@ const Home = () => {
             return;
         setmessage(getScaleName());
     }, [waste]);
-
+    const verifyBadge = async (station)=>{
+        if (!user || !user.badgeId )
+            return false;
+        try
+        {
+            const res = await apiClient.get(`http://${apiTarget}/api/pid/pibadgeverify?f1=${station}&f2=${user.badgeId}`);
+            console.log(res);
+            return true;
+        }
+        catch (err)
+        {
+            console.log(err);
+            return false;
+        }
+    }
     const handleScan1 = async () => {
         try {
             const res = await apiClient.post('http://localhost:5000/ScanContainer', { containerId: scanData });
@@ -553,6 +567,12 @@ const Home = () => {
                 alert(res.data.error);
             } else {
                 if (res.data.container) {
+                    const badgeCheck = await verifyBadge(res.data.container.station)
+                    if (!badgeCheck)
+                    {
+                        alert("Badge Check Failed");
+                        return;
+                    }
                     /*if ( waste != null && res.data.container.IdWaste != waste.IdWaste ) {
                         alert("Waste Mismatch");
                         return;
