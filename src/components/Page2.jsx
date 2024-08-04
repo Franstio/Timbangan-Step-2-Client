@@ -56,6 +56,7 @@ const Home = () => {
     const [rackTarget, setRackTarget] = useState(process.env.REACT_APP_RACK);
     const [apiTarget, setApiTarget] = useState(process.env.REACT_APP_PIDSG);
     const [transactionData,setTransactionData] = useState({});
+    const [logindate,setLoginDate] = useState('');
     //const ScaleName = getScaleName();
 
 
@@ -116,6 +117,19 @@ const Home = () => {
         }
         catch (error) {
         }
+    }
+    const formatDate = (date)=> {
+        let d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+    
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+    
+        return [year, month, day].join('-');
     }
 
     const sendDataPanasonicServer = async (stationName, frombinname, tobinname, weight, type) => {
@@ -526,6 +540,7 @@ const Home = () => {
                     alert(res.data.error);
                 } else {
                     if (res.data.user) {
+                        setLoginDate(formatDate(new Date().toISOString()));
                         setUser(res.data.user);
                         setScanData('');
                         setmessage("Scan Bin Machine/Bin");
@@ -766,7 +781,8 @@ const Home = () => {
         const res = await apiClient.put("http://localhost:5000/Transaksi/"+_idscraplog,{
             type : _type,
             status: "Done",
-            weight: _finalNeto
+            weight: _finalNeto,
+            logindate: logindate
         });
 //        setWaste(null);
         setScanData('');
