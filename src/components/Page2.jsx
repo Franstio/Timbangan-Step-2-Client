@@ -25,6 +25,7 @@ const Home = () => {
     const [user, setUser] = useState(null);
     const [Scales4Kg, setScales4Kg] = useState({});
     const [Scales50Kg, setScales50Kg] = useState({});
+    const [continueState,setContinueState] = useState(false);
     const [isFinalStep, setFinalStep] = useState(false);
     const [scanData, setScanData] = useState('');
     const [container, setContainer] = useState(null);
@@ -36,6 +37,7 @@ const Home = () => {
     const [isFreeze, freezeNeto] = useState(false);
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showContinueModal,toggleContinueModal] = useState(false);
     const [showModalDispose, setShowModalDispose] = useState(false);
     const [showModalInfoScale, setShowModalInfoScales] = useState(false);
     const [finalneto, setFinalNeto] = useState(0);
@@ -592,11 +594,17 @@ const Home = () => {
                         alert("Waste Mismatch");
                         return;
                     }*/
+                    const prevWaste = waste?.name;
                     const _waste = res.data.container.waste;
                     setTypeCollection(res.data.container.type);
                     setWaste(_waste);
                     setmessage('');
-                    if (res.data.container.type == "Collection") {
+                    if (res.data.container.type == "Collection" ) {
+                        if (continueState)
+                        {
+                            alert("Collection Transaction is not allowed");
+                            return;
+                        }
                         const _bin = res.data.container.waste.bin.find(item => item.name == res.data.container.name);
 
                         if (!_bin) {
@@ -626,6 +634,12 @@ const Home = () => {
                     }
                     else {
                         let _idscraplog = '';
+                        if (continueState && _waste.name != prevWaste)
+                        {
+                            alert("Waste name mismath");
+                            setScanData('');
+                            return;
+                        }
                         if (_waste.step1)
                         {
                             try
@@ -871,6 +885,7 @@ const Home = () => {
             else
                 await CheckBinCapacity();
             setIsSubmitAllowed(false);
+            toggleContinueModal(true);
             setFinalStep(true);
             setmessage('');
             setmessage('Waiting For Verification');
@@ -882,6 +897,22 @@ const Home = () => {
         toggleModal();
         freezeNeto(false);
     };
+    const handleFormContinue = (response)=>{
+        toggleContinueModal(false);
+        setScanData('');
+        setContinueState(response);
+        if (response)
+        {
+            setContainer(null);
+            setTransactionData({});
+            setFinalStep(false);
+        }
+        else
+        {
+            setFinalStep(true);
+        }
+
+    }
 
     return (
         <main>
@@ -1108,6 +1139,32 @@ const Home = () => {
                                         <div className="flex justify-center mt-5">
                                             <button type="button" onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
                                             <button type="button" onClick={handleCancel} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div className='flex justify-start'>
+                    {showContinueModal && (
+                        <div className="fixed z-10 inset-0 overflow-y-auto">
+                            <div className="flex items-center justify-center min-h-screen">
+                                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                                <div className="bg-white rounded p-8 max-w-md mx-auto z-50">
+                                    <div className="text-center mb-4">
+
+                                    </div>
+                                    <form>
+                                        <Typography variant="h6" align="center" gutterBottom>
+                                            <p>Data Timbangan Telah DiSave!</p>
+                                            <p>Rolling Door {rollingDoorId} Telah Dibuka!</p>
+                                        </Typography>
+                                        <p>Lakukan Proses Timbang Kembali?</p>
+                                        <div className="flex justify-center mt-5">
+                                            <button type="button" onClick={()=>handleFormContinue(true)} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
+                                            <button type="button" onClick={()=>handleFormContinue(false)} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
                                         </div>
                                     </form>
                                 </div>
