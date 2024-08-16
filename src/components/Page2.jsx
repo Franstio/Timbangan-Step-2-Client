@@ -167,6 +167,7 @@ const Home = () => {
         if (targetHostName == '' || targetHostName == null || targetHostName == undefined)
             return;
         sendPesanTimbangan(targetHostName, instruksimsg);
+        
     }, [instruksimsg]);
 
 
@@ -926,7 +927,7 @@ const Home = () => {
             setmessage('');
             setNeto(0);
             setScanData('');
-            setinstruksimsg('');
+            setinstruksimsg('-');
             setContainer(null);
             setTransactionData({});
             setFinalStep(false);
