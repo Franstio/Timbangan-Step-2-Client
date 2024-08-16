@@ -443,7 +443,7 @@ const Home = () => {
         setWaste(null);
         setUser(null);
         setmessage('');
-
+        setinstruksimsg('');
     }
     useEffect(() => {
         if (Idbin != -1) {
