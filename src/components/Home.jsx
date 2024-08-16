@@ -144,7 +144,7 @@ const Home = () => {
                 setHostname(response.data.hostname);
             })
             .catch(error => {
-                console.error('Error fetching the hostname:', error);
+                console.log('Error fetching the hostname:', error);
             });
     }, []);
     useEffect(() => {
@@ -182,7 +182,7 @@ const Home = () => {
             setinstruksimsg("buka penutup bawah");
             setFinal(true);
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
@@ -201,7 +201,7 @@ const Home = () => {
             return sensorData == 1;
 
         } catch (error) {
-            console.error(error);
+            console.log(error);
             return { error: error };
         }
     };
@@ -213,7 +213,7 @@ const Home = () => {
             });
             //setinstruksimsg("buka pintu atas");
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     }
 
@@ -224,7 +224,7 @@ const Home = () => {
             });
             //setinstruksimsg("buka pintu atas");
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     }
 

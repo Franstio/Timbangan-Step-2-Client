@@ -178,7 +178,7 @@ const Home = () => {
                 return;
             }
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
@@ -191,7 +191,7 @@ const Home = () => {
                 return;
             }
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
@@ -204,7 +204,7 @@ const Home = () => {
                 return;
             }
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
@@ -217,7 +217,7 @@ const Home = () => {
                 return;
             }
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
@@ -230,7 +230,7 @@ const Home = () => {
                 return;
             }
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
@@ -243,7 +243,7 @@ const Home = () => {
                 return;
             }
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
@@ -253,7 +253,7 @@ const Home = () => {
                 instruksi: instruksi
             });
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
@@ -263,7 +263,7 @@ const Home = () => {
                 type: type
             });
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
 
@@ -282,7 +282,7 @@ const Home = () => {
             return sensorData == 1;
 
         } catch (error) {
-            console.error(error);
+            console.log(error);
             return { error: error };
         }
     };
@@ -330,7 +330,7 @@ const Home = () => {
                 const weight50KgValue = weight50Kg && weight50Kg.weight50Kg ? parseFloat(weight50Kg.weight50Kg.replace("=", "") ?? '0') : 0;
                 setScales50Kg({ weight50Kg: weight50KgValue });
             } catch (error) {
-                console.error(error);
+                console.log(error);
             }
         });
 
@@ -463,7 +463,7 @@ const Home = () => {
                     await sendGreenlampOn();
                     await sendLockTop();
                 } catch (error) {
-                    console.error('Error executing actions:', error);
+                    console.log('Error executing actions:', error);
                 } finally {
                     settoplockId(''); // Clear the toplockId after all actions are done
                 }
@@ -526,7 +526,7 @@ const Home = () => {
             });
             setinstruksimsg("Buka Penutup Atas");
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     };
     useEffect(()=>{
@@ -553,7 +553,7 @@ const Home = () => {
                     }
                 }
             })
-            .catch(err => console.error(err));
+            .catch(err => console.log(err));
     };
     useEffect(() => {
         if (!waste || waste == null)
@@ -676,7 +676,7 @@ const Home = () => {
 
         }
         catch (err) {
-            console.error(err)
+            console.log(err)
         };
     };
 
@@ -688,7 +688,7 @@ const Home = () => {
                 } else {
                 }
             })
-            .catch(err => console.error(err));
+            .catch(err => console.log(err));
     };
     const getWeight = () => {
         return waste.scales == "4Kg" ? neto4Kg : neto50Kg;
@@ -856,7 +856,7 @@ const Home = () => {
             await sendYellowOn(binDispose.name_hostname);
         }
         catch (error) {
-            console.error(error);
+            console.log(error);
         }
     }
 
@@ -885,7 +885,6 @@ const Home = () => {
             else
                 await CheckBinCapacity();
             setIsSubmitAllowed(false);
-            toggleContinueModal(true);
             setFinalStep(true);
             setmessage('');
             setmessage('Waiting For Verification');
@@ -1187,7 +1186,7 @@ const Home = () => {
                                         <Typography variant="h4" align="center" gutterBottom>
                                             Dispose Dialokasikan ke Bin: {binname} Waste:{wastename}</Typography>
                                         <div className="flex justify-center mt-5">
-                                            <button type="button" autoFocus={true} onClick={() => setShowModalDispose(false)} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
+                                            <button type="button" autoFocus={true} onClick={() => {setShowModalDispose(false);toggleContinueModal(true);}} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
                                         </div>
                                     </form>
                                 </div>
