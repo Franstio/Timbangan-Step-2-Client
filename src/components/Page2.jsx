@@ -873,17 +873,20 @@ const Home = () => {
                 alert("Berat limbah melebihi kapasitas maximum");
                 return;
             }
-            if (container.waste.handletype=='Rack')
+            if (!continueState)
             {
-                let checkName = container.name;
-                if (transactionData.idscraplog)
+                if (container.waste.handletype=='Rack')
                 {
-                    checkName = transactionData.toBin;
+                    let checkName = container.name;
+                    if (transactionData.idscraplog)
+                    {
+                        checkName = transactionData.toBin;
+                    }
+                    await CheckBinCapacityRack(checkName);
                 }
-                await CheckBinCapacityRack(checkName);
+                else
+                    await CheckBinCapacity();
             }
-            else
-                await CheckBinCapacity();
             setIsSubmitAllowed(false);
             setFinalStep(true);
             setmessage('');
@@ -901,7 +904,6 @@ const Home = () => {
         setScanData('');
         if (response)
         {
-            
             if (transactionData.idscraplog)
                 await updateTransaksi('Dispose');
             if (container.waste.handletype=="Rack" || waste.handletype =='Rack')
@@ -916,7 +918,6 @@ const Home = () => {
         {
             setFinalStep(true);
         }
-
         setContinueState(response);
     }
 
