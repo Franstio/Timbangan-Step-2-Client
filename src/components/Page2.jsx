@@ -404,7 +404,8 @@ const Home = () => {
                     await saveTransaksiRack( container,binDispose.name,'Dispose');
                 else
                     setIdbin(binDispose.id);
-
+                
+                setUser(null);
                 //VerificationScan();
                 
 //                setScanData('');
@@ -445,7 +446,6 @@ const Home = () => {
             if (Idbin != undefined)
                 work();
             setScanData('');
-            setUser(null);
             setContainer(null);
             setmessage('');
             setNeto(0);
