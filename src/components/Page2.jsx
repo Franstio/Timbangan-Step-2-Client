@@ -921,7 +921,7 @@ const Home = () => {
             freezeNeto(false);
             setmessage('');
             setNeto(0);
-            scanData('');
+            setScanData('');
             setinstruksimsg('');
             setContainer(null);
             setTransactionData({});
