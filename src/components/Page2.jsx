@@ -163,6 +163,7 @@ const Home = () => {
             targetHostName = binDispose.name_hostname;
         else if (bottomLockHostData && bottomLockHostData.hostname)
             targetHostName = bottomLockHostData.hostname;
+        console.log([targetHostName,binDispose,bottomLockHostData]);
         if (targetHostName == '' || targetHostName == null || targetHostName == undefined)
             return;
         sendPesanTimbangan(targetHostName, instruksimsg);
@@ -440,6 +441,8 @@ const Home = () => {
         await updateBinWeight();
         await saveTransaksi();
         setTransactionData({});
+        setWaste(null);
+        
     }
     useEffect(() => {
         if (Idbin != -1) {
@@ -636,7 +639,7 @@ const Home = () => {
                         let _idscraplog = '';
                         if (continueState && _waste.name != prevWaste)
                         {
-                            alert("Waste name mismath");
+                            alert("Waste name mismatch");
                             setScanData('');
                             return;
                         }
@@ -782,7 +785,7 @@ const Home = () => {
             ..._p
         });
         await sendDataPanasonicServer(container.station, transactionData.toBin ? transactionData?.toBin : container?.name, binDispose.name, _finalNeto, type);
-        setWaste(null);
+//        setWaste(null);
         setScanData('');
         setinstruksimsg('');
     };
