@@ -909,7 +909,20 @@ const Home = () => {
             if (container.waste.handletype=="Rack" || waste.handletype =='Rack')
                 await saveTransaksiRack( container,binDispose.name,'Dispose');
             else
-                setIdbin(binDispose.id);
+            {
+                const _finalNeto = getWeight();//neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
+                const response = await apiClient.post('http://localhost:5000/UpdateBinWeight', {
+                    binId: binDispose.id,
+                    neto: _finalNeto
+                });
+                await saveTransaksi();
+
+            }
+            freezeNeto(false);
+            setmessage('');
+            setNeto(0);
+            scanData('');
+            setinstruksimsg('');
             setContainer(null);
             setTransactionData({});
             setFinalStep(false);
@@ -918,6 +931,7 @@ const Home = () => {
         {
             setFinalStep(true);
         }
+        inputRef.current.focus();
         setContinueState(response);
     }
 
