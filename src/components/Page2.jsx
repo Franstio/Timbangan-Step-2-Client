@@ -896,12 +896,32 @@ const Home = () => {
         toggleModal();
         freezeNeto(false);
     };
-    const handleFormContinue = (response)=>{
+    const handleFormContinue = async (response)=>{
         toggleContinueModal(false);
         setScanData('');
-        setContinueState(response);
         if (response)
         {
+            if (container.waste.handletype != 'Rack')
+            {
+                const isSensorTop = await readSensorTop(binDispose.name_hostname);
+                if (isSensorTop.error) {
+                    alert("Error Ketika Membaca Sensor");
+                    setScanData('');
+                    return;
+                }
+                if (!isSensorTop) {
+                    alert("Tutup Penutup Atas.");
+                    setScanData('');
+                    return;
+                }
+            }
+            
+            if (transactionData.idscraplog)
+                await updateTransaksi('Dispose');
+            if (container.waste.handletype=="Rack" || waste.handletype =='Rack')
+                await saveTransaksiRack( container,binDispose.name,'Dispose');
+            else
+                setIdbin(binDispose.id);
             setContainer(null);
             setTransactionData({});
             setFinalStep(false);
@@ -911,6 +931,7 @@ const Home = () => {
             setFinalStep(true);
         }
 
+        setContinueState(response);
     }
 
     return (
