@@ -901,20 +901,6 @@ const Home = () => {
         setScanData('');
         if (response)
         {
-            if (container.waste.handletype != 'Rack')
-            {
-                const isSensorTop = await readSensorTop(binDispose.name_hostname);
-                if (isSensorTop.error) {
-                    alert("Error Ketika Membaca Sensor");
-                    setScanData('');
-                    return;
-                }
-                if (!isSensorTop) {
-                    alert("Tutup Penutup Atas.");
-                    setScanData('');
-                    return;
-                }
-            }
             
             if (transactionData.idscraplog)
                 await updateTransaksi('Dispose');
