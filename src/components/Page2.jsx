@@ -406,7 +406,6 @@ const Home = () => {
                 else
                     setIdbin(binDispose.id);
                 
-                setUser(null);
                 //VerificationScan();
                 
 //                setScanData('');
@@ -442,7 +441,8 @@ const Home = () => {
         await saveTransaksi();
         setTransactionData({});
         setWaste(null);
-        
+        setUser(null);
+
     }
     useEffect(() => {
         if (Idbin != -1) {
