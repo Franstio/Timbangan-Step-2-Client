@@ -442,6 +442,7 @@ const Home = () => {
         setTransactionData({});
         setWaste(null);
         setUser(null);
+        setmessage('');
 
     }
     useEffect(() => {
