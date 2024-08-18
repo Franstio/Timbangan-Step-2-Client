@@ -580,7 +580,7 @@ const Home = () => {
         catch (err)
         {
             console.log(err);
-            return false;
+            return true;
         }
     }
     const handleScan1 = async () => {
