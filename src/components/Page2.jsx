@@ -581,7 +581,7 @@ const Home = () => {
         catch (err)
         {
             console.log(err);
-            return err.message.includes("Network Error");
+            return err.message.includes("Network Error") || err.code == "ECONNABORTED";
         }
     }
     const handleScan1 = async () => {
