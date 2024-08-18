@@ -742,7 +742,7 @@ const Home = () => {
                     IdWaste: _container.IdWaste,
                     type: data.type,
                     weight: data.weight,
-                    status : isSuccess
+                    success : isSuccess
                 }
             });
 //            updateBinWeight();
@@ -787,9 +787,9 @@ const Home = () => {
         };
 
         const isSuccess = await sendDataPanasonicServer(container.station, transactionData.toBin ? transactionData?.toBin : container?.name, binDispose.name, _finalNeto, type);
-        _p.status = isSuccess;
         if (transactionData.idscraplog)
             _p.idscraplog = transactionData.idscraplog;
+        _p.success = isSuccess;
         await apiClient.post("http://localhost:5000/SaveTransaksi", {
             ..._p
         });
@@ -839,7 +839,7 @@ const Home = () => {
                 IdWaste: _container.IdWaste,
                 type: _container.type,
                 weight: _container.weight,
-                status: resAPI
+                success: resAPI
             }
         });
         setWaste(null);
