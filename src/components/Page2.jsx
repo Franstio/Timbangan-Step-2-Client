@@ -19,7 +19,8 @@ import {
 } from '@mui/material';
 
 const apiClient = axios.create({
-    withCredentials: false
+    withCredentials: false,
+    timeout: 3000
 });
 const Home = () => {
     const [user, setUser] = useState(null);
@@ -580,7 +581,7 @@ const Home = () => {
         catch (err)
         {
             console.log(err);
-            return true;
+            return err.message.includes("Network Error");
         }
     }
     const handleScan1 = async () => {
