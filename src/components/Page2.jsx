@@ -60,6 +60,7 @@ const Home = () => {
     const [apiTarget, setApiTarget] = useState(process.env.REACT_APP_PIDSG);
     const [transactionData,setTransactionData] = useState({});
     const [logindate,setLoginDate] = useState('');
+    const [containers,setContainers] = useState([]);
     //const ScaleName = getScaleName();
 
 
@@ -404,12 +405,17 @@ const Home = () => {
                     setScanData('');
                     return;
                 }
-                if (transactionData.idscraplog)
-                    await updateTransaksi('Dispose');
-                if (container.waste.handletype=="Rack" || waste.handletype =='Rack')
-                    await saveTransaksiRack( container,binDispose.name,'Dispose');
-                else
-                    setIdbin(binDispose.id);
+                for (let i=0;i<containers.length;i++)
+                {
+                    if (container[i].dataTransaction.idscraplog)
+                        await updateTransaksi(transactionData,'Dispose');
+                    if (containers[i].dataContainer.waste.handletype=="Rack" || waste.handletype =='Rack')
+                        await saveTransaksiRack( containers[i].dataContainer,binDispose.name,'Dispose');
+                    await saveTransaksi(containers[i].dataContainer,containers[i].dataWeight,containers[i].dataTransaction);
+                }
+                
+                setContainers([]);
+                setIdbin(binDispose.id);
                 
                 //VerificationScan();
                 
@@ -420,7 +426,9 @@ const Home = () => {
             }
         }
     };
-
+    useEffect(()=>{
+        console.log({currentContainer: containers});
+    },[containers]);
     useEffect(() => {
         if (!showModalInfoScale && inputRef.current) {
             inputRef.current.focus();
@@ -441,9 +449,6 @@ const Home = () => {
         }
     };
     const work =  async()=>{
-
-        await updateBinWeight();
-        await saveTransaksi();
         setTransactionData({});
         setWaste(null);
         setUser(null);
@@ -774,31 +779,28 @@ const Home = () => {
         catch (error) {
         }
     }
-    const saveTransaksi = async () => {
-        const _finalNeto = getWeight(); //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
+    const saveTransaksi = async (dataContainer,dataWeight,dataTransaction) => {
+        const _finalNeto = dataWeight; //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
         const _p = {
             payload: {
-                idContainer: container.containerId,
+                idContainer: dataContainer.containerId,
                 badgeId: user.badgeId,
-                IdWaste: container.IdWaste,
+                IdWaste: dataContainer.IdWaste,
                 type: type,
                 weight: _finalNeto
             }
         };
 
-        const isSuccess = await sendDataPanasonicServer(container.station, transactionData.toBin ? transactionData?.toBin : container?.name, binDispose.name, _finalNeto, type);
-        if (transactionData.idscraplog)
-            _p.idscraplog = transactionData.idscraplog;
+        const isSuccess = await sendDataPanasonicServer(dataContainer.station, dataTransaction?.toBin ? dataTransaction?.toBin : dataContainer?.name, binDispose.name, _finalNeto, type);
+        if (dataTransaction.idscraplog)
+            _p.idscraplog = dataTransaction.idscraplog;
         _p.success = isSuccess;
         await apiClient.post("http://localhost:5000/SaveTransaksi", {
             ..._p
         });
-//        setWaste(null);
-        setScanData('');
-        setinstruksimsg('');
     };
-    const updateTransaksi = async (type)=>{
-        await  updateTransaksiManual(transactionData.idscraplog,type,waste);
+    const updateTransaksi = async (trdata,type)=>{
+        await  updateTransaksiManual(trdata.idscraplog,type,waste);
     }
     const updateTransaksiManual = async (_idscraplog,_type,_waste)=>
     {
@@ -846,14 +848,13 @@ const Home = () => {
         setScanData('');
     };
 
-    const updateBinWeight = async () => {
+    const updateBinWeight = async (dataWeight) => {
         try {
-            const _finalNeto = getWeight();//neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
-            const response = await apiClient.post('http://localhost:5000/UpdateBinWeight', {
-                binId: binDispose.id,
-                neto: _finalNeto
-            });
-            
+                const _finalNeto = dataWeight;//neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
+                const response = await apiClient.post('http://localhost:5000/UpdateBinWeight', {
+                    binId: binDispose.id,
+                    neto: _finalNeto
+                });
             /*setScanData('');
             setUser(null);
             setContainer(null);
@@ -913,9 +914,10 @@ const Home = () => {
     const handleFormContinue = async (response)=>{
         toggleContinueModal(false);
         setScanData('');
+        setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
         if (response)
         {
-            if (transactionData.idscraplog)
+            /*if (transactionData.idscraplog)
                 await updateTransaksi('Dispose');
             if (container.waste.handletype=="Rack" || waste.handletype =='Rack')
                 await saveTransaksiRack( container,binDispose.name,'Dispose');
@@ -928,7 +930,7 @@ const Home = () => {
                 });
                 await saveTransaksi();
 
-            }
+            }*/
             freezeNeto(false);
             setmessage('');
             setNeto(0);
