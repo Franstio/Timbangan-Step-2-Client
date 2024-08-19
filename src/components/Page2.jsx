@@ -919,7 +919,7 @@ const Home = () => {
     const handleFormContinue = async (response)=>{
         toggleContinueModal(false);
         setScanData('');
-        const curWeight = getTotalWeight() + getWeight() + binDispose.weight;
+        const curWeight = getTotalWeight() + getWeight() + parseFloat(binDispose.weight);
         console.log([curWeight,binDispose.max_weight,binDispose.weight]);
         if (curWeight > binDispose.max_weight )
         {
