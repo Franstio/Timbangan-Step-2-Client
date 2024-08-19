@@ -17,7 +17,6 @@ import {
     CircularProgress,
     Grid,
 } from '@mui/material';
-import bin from "../../../Api/models/BinModel";
 
 const apiClient = axios.create({
     withCredentials: false,
