@@ -41,6 +41,7 @@ const Home = () => {
     const [showContinueModal,toggleContinueModal] = useState(false);
     const [showModalDispose, setShowModalDispose] = useState(false);
     const [showModalInfoScale, setShowModalInfoScales] = useState(false);
+    const [showErrorDispose,setShowErrorDispose] = useState(false);
     const [finalneto, setFinalNeto] = useState(0);
     const [neto, setNeto] = useState({});
     const [neto50Kg, setNeto50kg] = useState(0);
@@ -96,7 +97,7 @@ const Home = () => {
             />
         );
     };
-
+    const getTotalWeight = ()=> containers.reduce((a,b)=>a+b.dataWeight, 0);
     /*const getRackLastTransaction = async (containerName)=>{
         const res  = await apiClient.get(`http://${rackTarget}/Transaksi/${containerName}`);
         const weight = res.data.weight;
@@ -914,6 +915,12 @@ const Home = () => {
     const handleFormContinue = async (response)=>{
         toggleContinueModal(false);
         setScanData('');
+        const curWeight = getTotalWeight() + getWeight();
+        if (curWeight > binDispose.max_weight )
+        {
+            setShowErrorDispose(true);
+            return;
+        }
         setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
         if (response)
         {
@@ -1196,6 +1203,27 @@ const Home = () => {
                                         <div className="flex justify-center mt-5">
                                             <button type="button" onClick={()=>handleFormContinue(true)} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
                                             <button type="button" onClick={()=>handleFormContinue(false)} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div className='flex justify-start'>
+                    {showErrorDispose && (
+                        <div className="fixed z-10 inset-0 overflow-y-auto">
+                            <div className="flex items-center justify-center min-h-screen">
+                                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                                <div className="bg-white rounded p-8 max-w-md mx-auto z-50">
+                                    <div className="text-center mb-4">
+
+                                    </div>
+                                    <form>
+                                        <p>Berat Timbangan Melebihi Kapasitas Maksimum</p>
+                                        <div className="flex justify-center mt-5">
+                                            <button type="button" onClick ={()=>{setShowErrorDispose(false); toggleContinueModal(true);}} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
                                         </div>
                                     </form>
                                 </div>
