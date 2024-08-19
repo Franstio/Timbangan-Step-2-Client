@@ -921,12 +921,13 @@ const Home = () => {
         setScanData('');
         const curWeight = getTotalWeight() + getWeight() + parseFloat(binDispose.weight);
         console.log([curWeight,binDispose.max_weight,binDispose.weight]);
-        if (curWeight > binDispose.max_weight )
+        if (curWeight > parseFloat(binDispose.max_weight) && response )
         {
             setShowErrorDispose(true);
             return;
         }
-        setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
+        if (curWeight <= parseFloat(binDispose.max_weight))
+            setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
         if (response)
         {
             /*if (transactionData.idscraplog)
