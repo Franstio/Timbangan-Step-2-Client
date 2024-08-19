@@ -17,6 +17,7 @@ import {
     CircularProgress,
     Grid,
 } from '@mui/material';
+import bin from "../../../Api/models/BinModel";
 
 const apiClient = axios.create({
     withCredentials: false,
@@ -493,7 +494,6 @@ const Home = () => {
                     return;
                 }
                 setBinDispose(res.bin);
-                settoplockId(res.bin.name_hostname);
                 setBinname(res.bin.name);
                 //              setIdbin(res.bin.id);
             });
@@ -942,6 +942,7 @@ const Home = () => {
         else
         {
             setFinalStep(true);
+            settoplockId(binDispose.name_hostname);
         }
         inputRef.current.focus();
         setContinueState(response);
