@@ -408,7 +408,7 @@ const Home = () => {
                 }
                 for (let i=0;i<containers.length;i++)
                 {
-                    if (container[i].dataTransaction.idscraplog)
+                    if (containers[i].dataTransaction.idscraplog)
                         await updateTransaksi(containers[i].dataTransaction,'Dispose');
                     if (containers[i].dataContainer.waste.handletype=="Rack" || waste.handletype =='Rack')
                         await saveTransaksiRack( containers[i].dataContainer,binDispose.name,'Dispose');
