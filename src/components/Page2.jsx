@@ -409,10 +409,14 @@ const Home = () => {
                 for (let i=0;i<containers.length;i++)
                 {
                     if (container[i].dataTransaction.idscraplog)
-                        await updateTransaksi(transactionData,'Dispose');
+                        await updateTransaksi(containers[i].dataTransaction,'Dispose');
                     if (containers[i].dataContainer.waste.handletype=="Rack" || waste.handletype =='Rack')
                         await saveTransaksiRack( containers[i].dataContainer,binDispose.name,'Dispose');
-                    await saveTransaksi(containers[i].dataContainer,containers[i].dataWeight,containers[i].dataTransaction);
+                    else
+                    {
+                        await saveTransaksi(containers[i].dataContainer,containers[i].dataWeight,containers[i].dataTransaction);
+                        await updateBinWeight(containers[i].dataWeight);
+                    }
                 }
                 
                 setContainers([]);
