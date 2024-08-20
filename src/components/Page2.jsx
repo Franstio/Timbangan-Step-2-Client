@@ -939,8 +939,8 @@ const Home = () => {
                 setShowErrorDispose(true);
     },[errDisposeMessage])
     useEffect(()=>{
-        if (!showErrorDispose);
-            setErrDisposeMessage('')
+        if (!showErrorDispose)
+            setErrDisposeMessage('');
     },[showErrorDispose]);
     const handleCancel = () => {
         toggleModal();
