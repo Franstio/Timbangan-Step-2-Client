@@ -42,6 +42,7 @@ const Home = () => {
     const [showModalDispose, setShowModalDispose] = useState(false);
     const [showModalInfoScale, setShowModalInfoScales] = useState(false);
     const [showErrorDispose,setShowErrorDispose] = useState(false);
+    const [errDisposeMessage,setErrDisposeMessage] = useState('');
     const [finalneto, setFinalNeto] = useState(0);
     const [neto, setNeto] = useState({});
     const [neto50Kg, setNeto50kg] = useState(0);
@@ -595,6 +596,15 @@ const Home = () => {
     }
     const handleScan1 = async () => {
         try {
+            if (containers.length > 0)
+            {
+                const checkIndex = containers.findIndex(x=>x.dataContainer?.name == scanData);
+                if (checkIndex != -1)
+                {
+                    setErrDisposeMessage('Scan Gagal, ID Yang digunakan terdeteksi sudah digunakan');
+                    return;
+                }
+            }
             const res = await apiClient.post('http://localhost:5000/ScanContainer', { containerId: scanData });
             if (res.data.error) {
                 setScanData('');
@@ -911,7 +921,9 @@ const Home = () => {
             setShowModalDispose(true);
         }
     }
-
+    useEffect(()=>{
+            setShowErrorDispose(errDisposeMessage != '');
+    },[errDisposeMessage])
     const handleCancel = () => {
         toggleModal();
         freezeNeto(false);
@@ -923,7 +935,7 @@ const Home = () => {
         console.log([curWeight,binDispose.max_weight,binDispose.weight]);
         if (curWeight > parseFloat(binDispose.max_weight) && response )
         {
-            setShowErrorDispose(true);
+            setErrDisposeMessage('Berat Timbangan Melebihi Kapasitas Maksimum');
             return;
         }
         if (curWeight <= parseFloat(binDispose.max_weight))
@@ -1227,7 +1239,7 @@ const Home = () => {
 
                                     </div>
                                     <form>
-                                        <p>Berat Timbangan Melebihi Kapasitas Maksimum</p>
+                                        <p>{{errDisposeMessage}}</p>
                                         <div className="flex justify-center mt-5">
                                             <button type="button" onClick ={()=>{setShowErrorDispose(false); toggleContinueModal(true);}} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
                                         </div>
