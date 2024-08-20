@@ -926,8 +926,13 @@ const Home = () => {
         }
     }
     useEffect(()=>{
-            setShowErrorDispose(errDisposeMessage != '');
+            if (errDisposeMessage)
+                setShowErrorDispose(true);
     },[errDisposeMessage])
+    useEffect(()=>{
+        if (showErrorDispose==false);
+            setErrDisposeMessage('')
+    },[showErrorDispose]);
     const handleCancel = () => {
         toggleModal();
         freezeNeto(false);
