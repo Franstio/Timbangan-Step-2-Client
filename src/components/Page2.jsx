@@ -613,6 +613,7 @@ const Home = () => {
                 setScanData('');
                 setContainer(null);
                 alert(res.data.error);
+                return;
             } else {
                 if (res.data.container) {
                     const badgeCheck = await verifyBadge(res.data.container.station)
@@ -941,7 +942,7 @@ const Home = () => {
             setErrDisposeMessage('Berat Timbangan Melebihi Kapasitas Maksimum');
             return;
         }
-        if (curWeight <= parseFloat(binDispose.max_weight))
+        if (curWeight <= parseFloat(binDispose.max_weight) && container != null)
             setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
         if (response)
         {
