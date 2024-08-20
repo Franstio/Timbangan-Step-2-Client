@@ -926,11 +926,11 @@ const Home = () => {
         }
     }
     useEffect(()=>{
-            if (errDisposeMessage)
+            if (errDisposeMessage != '')
                 setShowErrorDispose(true);
     },[errDisposeMessage])
     useEffect(()=>{
-        if (showErrorDispose==false);
+        if (!showErrorDispose);
             setErrDisposeMessage('')
     },[showErrorDispose]);
     const handleCancel = () => {
