@@ -388,27 +388,30 @@ const Home = () => {
             if (user == null)
                 handleScan();
             else if (isFinalStep) {
-                if (container.waste.handletype != 'Rack')
-                {
-                    const isSensorTop = await readSensorTop(binDispose.name_hostname);
-                    if (isSensorTop.error) {
-                        alert("Error Ketika Membaca Sensor");
-                        setScanData('');
-                        return;
-                    }
-                    if (!isSensorTop) {
-                        alert("Tutup Penutup Atas.");
-                        setScanData('');
-                        return;
-                    }
-                }
+
                 if (binDispose.name != scanData) {
                     alert("mismatch name");
                     setScanData('');
                     return;
                 }
+                let check = false;
                 for (let i=0;i<containers.length;i++)
                 {
+                    if (containers[i].dataContainer.waste.handletype != 'Rack' && !check)
+                    {
+                        const isSensorTop = await readSensorTop(binDispose.name_hostname);
+                        check = isSensorTop;
+                        if (isSensorTop.error) {
+                            alert("Error Ketika Membaca Sensor");
+                            setScanData('');
+                            return;
+                        }
+                        if (!isSensorTop) {
+                            alert("Tutup Penutup Atas.");
+                            setScanData('');
+                            return;
+                        }
+                    }
                     if (containers[i].dataTransaction.idscraplog)
                         await updateTransaksi(containers[i].dataTransaction,'Dispose');
                     if (containers[i].dataContainer.waste.handletype=="Rack" || waste.handletype =='Rack')
