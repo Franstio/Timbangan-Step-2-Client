@@ -1239,7 +1239,7 @@ const Home = () => {
 
                                     </div>
                                     <form>
-                                        <p>{{errDisposeMessage}}</p>
+                                        <p>{errDisposeMessage}</p>
                                         <div className="flex justify-center mt-5">
                                             <button type="button" onClick ={()=>{setShowErrorDispose(false); toggleContinueModal(true);}} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
                                         </div>
