@@ -904,6 +904,15 @@ const Home = () => {
                 alert("Berat limbah melebihi kapasitas maximum");
                 return;
             }
+            const curWeight = getTotalWeight() + getWeight() + parseFloat(binDispose.weight);
+            console.log([curWeight,binDispose.max_weight,binDispose.weight]);
+            if (curWeight > parseFloat(binDispose.max_weight)  )
+            {
+                setErrDisposeMessage('Berat Timbangan Melebihi Kapasitas Maksimum');
+                return;
+            }
+            if (curWeight <= parseFloat(binDispose.max_weight) && container != null)
+                setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
             if (!continueState)
             {
                 if (container.waste.handletype=='Rack')
@@ -940,15 +949,6 @@ const Home = () => {
     const handleFormContinue = async (response)=>{
         toggleContinueModal(false);
         setScanData('');
-        const curWeight = getTotalWeight() + getWeight() + parseFloat(binDispose.weight);
-        console.log([curWeight,binDispose.max_weight,binDispose.weight]);
-        if (curWeight > parseFloat(binDispose.max_weight) && response )
-        {
-            setErrDisposeMessage('Berat Timbangan Melebihi Kapasitas Maksimum');
-            return;
-        }
-        if (curWeight <= parseFloat(binDispose.max_weight) && container != null)
-            setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
         if (response)
         {
             /*if (transactionData.idscraplog)
