@@ -949,7 +949,7 @@ const Home = () => {
     const handleFormContinue = async (response)=>{
         toggleContinueModal(false);
         setScanData('');
-        if (response)
+        if (response || containers.length < 1)
         {
             /*if (transactionData.idscraplog)
                 await updateTransaksi('Dispose');
@@ -965,6 +965,8 @@ const Home = () => {
                 await saveTransaksi();
 
             }*/
+            setIsSubmitAllowed(false);
+            setIdbin(-1);
             freezeNeto(false);
             setmessage('');
             setNeto(0);
@@ -973,6 +975,8 @@ const Home = () => {
             setContainer(null);
             setTransactionData({});
             setFinalStep(false);
+            setContainer(null);
+            
         }
         else
         {
