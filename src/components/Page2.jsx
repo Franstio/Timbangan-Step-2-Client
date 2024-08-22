@@ -906,7 +906,7 @@ const Home = () => {
             }
             const curWeight = getTotalWeight() + getWeight() + parseFloat(binDispose.weight);
             console.log([curWeight,binDispose.max_weight,binDispose.weight]);
-            if (curWeight > parseFloat(binDispose.max_weight)  )
+            if (curWeight >= parseInt(binDispose.max_weight)  )
             {
                 setErrDisposeMessage('Berat Timbangan Melebihi Kapasitas Maksimum');
                 return;
