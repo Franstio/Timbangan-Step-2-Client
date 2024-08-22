@@ -500,18 +500,20 @@ const Home = () => {
             const response = await apiClient.post(`http://${url}/CheckBinCapacity`, {
                 IdWaste: container.IdWaste,
                 neto: _finalNeto
-            }).then(x => {
-                const res = x.data;
-                if (!res.success) {
-                    alert(res.message);
-                    return;
-                }
-                setBinDispose(res.bin);
-                setBinname(res.bin.name);
-                //              setIdbin(res.bin.id);
             });
+            
+            const res = response.data;
+            if (!res.success) {
+                alert(res.message);
+                return false;
+            }
+            setBinDispose(res.bin);
+            setBinname(res.bin.name);
+            return true;
         }
         catch (error) {
+            console.log(error);
+            return false;
         }
     };
     const CheckBinCapacityRack = async (data)=>{
@@ -527,12 +529,12 @@ const Home = () => {
             bin.id= _res.data.bin.id;
             setBinDispose(bin);
             setBinname(bin.name);
-            return bin;
+            return true;
         }
         catch (err)
         {
             alert("Bin From Rack not found");
-            return null;
+            return false;
         }
     }
     useEffect(() => {
@@ -911,8 +913,7 @@ const Home = () => {
                 setErrDisposeMessage('Berat Timbangan Melebihi Kapasitas Maksimum');
                 return;
             }
-            if (curWeight <= parseFloat(binDispose.max_weight) && container != null)
-                setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
+            let checkBinAvailable = true;
             if (!continueState)
             {
                 if (container.waste.handletype=='Rack')
@@ -922,10 +923,18 @@ const Home = () => {
                     {
                         checkName = transactionData.toBin;
                     }
-                    await CheckBinCapacityRack(checkName);
+                    checkBinAvailable = await CheckBinCapacityRack(checkName);
                 }
                 else
-                    await CheckBinCapacity();
+                    checkBinAvailable = await CheckBinCapacity();
+            }
+            
+            if (curWeight <= parseFloat(binDispose.max_weight) && container != null && checkBinAvailable)
+                setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
+            if (!checkBinAvailable)
+            {
+                setContainer(null);
+                return;
             }
             setIsSubmitAllowed(false);
             setFinalStep(true);
