@@ -898,7 +898,7 @@ const Home = () => {
         setShowModal(false);
         const binWeight = container?.weightbin ?? 0;
         const totalWeight = parseFloat(neto) + parseFloat(binWeight);
-
+        console.log(container);
         if (type == 'Dispose') {
             if (neto4Kg > 4) {
                 alert("Berat limbah melebihi kapasitas maximum");
