@@ -615,6 +615,7 @@ const Home = () => {
                 setScanData('');
                 setContainer(null);
                 setIsSubmitAllowed(false);
+                freezeNeto(false);
                 alert(res.data.error);
                 return;
             } else {
