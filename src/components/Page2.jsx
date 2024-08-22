@@ -965,6 +965,9 @@ const Home = () => {
                 await saveTransaksi();
 
             }*/
+            
+            if (containers.length < 1 && !response)
+                setUser(null);
             setIsSubmitAllowed(false);
             setIdbin(-1);
             freezeNeto(false);
@@ -976,8 +979,6 @@ const Home = () => {
             setTransactionData({});
             setFinalStep(false);
             setContainer(null);
-            if (containers.length < 1)
-                setUser(null);
         }
         else
         {
