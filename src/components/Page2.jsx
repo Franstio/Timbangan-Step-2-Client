@@ -976,7 +976,8 @@ const Home = () => {
             setTransactionData({});
             setFinalStep(false);
             setContainer(null);
-            
+            if (containers.length < 1)
+                setUser(null);
         }
         else
         {
