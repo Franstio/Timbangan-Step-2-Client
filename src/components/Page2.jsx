@@ -614,6 +614,7 @@ const Home = () => {
             if (res.data.error) {
                 setScanData('');
                 setContainer(null);
+                setIsSubmitAllowed(false);
                 alert(res.data.error);
                 return;
             } else {
@@ -987,7 +988,6 @@ const Home = () => {
             setContainer(null);
             setTransactionData({});
             setFinalStep(false);
-            setContainer(null);
         }
         else
         {
