@@ -53,7 +53,7 @@ const Home = () => {
     const [type, setType] = useState("");
     const [typecollection, setTypeCollection] = useState("");
     const [weightbin, setWeightbin] = useState("");
-    const [binDispose, setBinDispose] = useState({});
+    const [binDispose, setBinDispose] = useState(null);
     //const [ScaleName, setScaleName] = useState("");
     const inputRef = useRef(null);
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
@@ -538,7 +538,7 @@ const Home = () => {
         }
     }
     useEffect(() => {
-        if (!binDispose || !binDispose.name_hostname)
+        if (!binDispose || binDispose ==null || !binDispose.name_hostname)
             return;
         setinstruksimsg("buka penutup atas");
         sendType(binDispose.name_hostname, 'Dispose');
@@ -908,15 +908,8 @@ const Home = () => {
                 alert("Berat limbah melebihi kapasitas maximum");
                 return;
             }
-            const curWeight = getTotalWeight() + getWeight() + parseFloat(binDispose.weight);
-            console.log([curWeight,binDispose.max_weight,binDispose.weight]);
-            if (curWeight >= parseInt(binDispose.max_weight)  )
-            {
-                setErrDisposeMessage('Berat Timbangan Melebihi Kapasitas Maksimum');
-                return;
-            }
-            let checkBinAvailable = null;
-            if (!continueState)
+            let checkBinAvailable = binDispose;
+            if (!continueState || binDispose == null)
             {
                 if (container.waste.handletype=='Rack')
                 {
@@ -926,18 +919,26 @@ const Home = () => {
                         checkName = transactionData.toBin;
                     }
                     checkBinAvailable = await CheckBinCapacityRack(checkName);
+                    checkBinAvailable.max_weight = 100;
                 }
                 else
                     checkBinAvailable = await CheckBinCapacity();
             }
-            
-            if (curWeight <= parseFloat(checkBinAvailable?.max_weight ?? 100)  && container != null && checkBinAvailable != null)
-                setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
-            if (!checkBinAvailable)
+            if (checkBinAvailable == null)
             {
+                setErrDisposeMessage("Invalid Bin Detected");
                 setContainer(null);
                 return;
             }
+            const curWeight = getTotalWeight() + getWeight() + parseFloat(checkBinAvailable.weight);
+            console.log([curWeight,checkBinAvailable.max_weight,checkBinAvailable.weight]);
+            if (curWeight >= parseInt(checkBinAvailable.max_weight)  )
+            {
+                setErrDisposeMessage('Berat Timbangan Melebihi Kapasitas Maksimum');
+                return;
+            }
+            if (curWeight <= parseFloat(checkBinAvailable?.max_weight ?? 100)  && container != null && checkBinAvailable != null)
+                setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
             setIsSubmitAllowed(false);
             setFinalStep(true);
             setmessage('');
