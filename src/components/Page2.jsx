@@ -509,11 +509,11 @@ const Home = () => {
             }
             setBinDispose(res.bin);
             setBinname(res.bin.name);
-            return true;
+            return res.bin;
         }
         catch (error) {
             console.log(error);
-            return false;
+            return null;
         }
     };
     const CheckBinCapacityRack = async (data)=>{
@@ -529,12 +529,12 @@ const Home = () => {
             bin.id= _res.data.bin.id;
             setBinDispose(bin);
             setBinname(bin.name);
-            return true;
+            return bin;
         }
         catch (err)
         {
             alert("Bin From Rack not found");
-            return false;
+            return null;
         }
     }
     useEffect(() => {
@@ -915,7 +915,7 @@ const Home = () => {
                 setErrDisposeMessage('Berat Timbangan Melebihi Kapasitas Maksimum');
                 return;
             }
-            let checkBinAvailable = true;
+            let checkBinAvailable = null;
             if (!continueState)
             {
                 if (container.waste.handletype=='Rack')
@@ -931,7 +931,7 @@ const Home = () => {
                     checkBinAvailable = await CheckBinCapacity();
             }
             
-            if (curWeight <= parseFloat(binDispose.max_weight) && container != null && checkBinAvailable)
+            if (curWeight <= parseFloat(checkBinAvailable?.max_weight ?? 100)  && container != null && checkBinAvailable != null)
                 setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
             if (!checkBinAvailable)
             {
