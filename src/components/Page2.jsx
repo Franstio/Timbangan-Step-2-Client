@@ -1204,9 +1204,9 @@ const Home = () => {
                                 <p>Type Waste: {container?.waste.name}</p>
                                 <p>Waste Item:</p>
                                 {
-                                    containers.map((item,index)=>{(<>
+                                    containers.map((item,index)=><>
                                         <p>{index+1}. {item.dataContainer.name}</p>
-                                    </>)})
+                                    </>)
                                 }
                             </div>
                         </div>
