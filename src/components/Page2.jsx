@@ -1202,6 +1202,12 @@ const Home = () => {
                                 <p>Username: {user?.username} </p>
                                 <p>Container Id: {transactionData.toBin ? transactionData?.toBin : container?.name}</p>
                                 <p>Type Waste: {container?.waste.name}</p>
+                                <p>Waste Item:</p>
+                                {
+                                    containers.map((item,index)=>{(<>
+                                        <p>{index+1}. {item.dataContainer.name}</p>
+                                    </>)})
+                                }
                             </div>
                         </div>
                     </div>
