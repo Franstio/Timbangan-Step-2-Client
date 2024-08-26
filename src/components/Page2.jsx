@@ -1205,7 +1205,7 @@ const Home = () => {
                                 <p>Waste Item:</p>
                                 {
                                     containers.map((item,index)=><>
-                                        <p>{index+1}. {item.dataContainer.name}</p>
+                                        <p>{index+1}. {item.dataContainer.name} {parseFloat(item.datWeight).toFixed(2)} Kg</p>
                                     </>)
                                 }
                             </div>
