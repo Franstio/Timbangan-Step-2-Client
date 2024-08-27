@@ -606,7 +606,7 @@ const Home = () => {
                 const checkIndex = containers.findIndex(x=>x.dataContainer?.name == scanData);
                 if (checkIndex != -1)
                 {
-                    setErrDisposeMessage('Scan Gagal, ID Yang digunakan terdeteksi sudah digunakan');
+                    setErrDisposeMessage('Bin telah di scan mohon scan bin yang lain');
                     return;
                 }
             }
@@ -1273,7 +1273,7 @@ const Home = () => {
                                     <form>
                                         <p>{errDisposeMessage}</p>
                                         <div className="flex justify-center mt-5">
-                                            <button type="button" onClick ={()=>{setShowErrorDispose(false); toggleContinueModal(true);}} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
+                                            <button type="button" onClick ={()=>{setShowErrorDispose(false); toggleContinueModal(true);}} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mr-2 rounded">Continue</button>
                                         </div>
                                     </form>
                                 </div>
