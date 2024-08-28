@@ -1244,15 +1244,15 @@ const Home = () => {
                             <div className="flex items-center justify-center min-h-screen">
                                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
 
-                                <div className="bg-white rounded p-8 max-w-md mx-auto z-50">
+                                <div className="bg-white rounded p-10 max-w-md mx-auto z-50">
                                     <div className="text-center mb-4">
 
                                     </div>
                                     <form>
-                                        <p>Lakukan Proses Timbang Kembali?</p>
-                                        <div className="flex justify-center mt-5">
-                                            <button type="button" onClick={()=>handleFormContinue(true)} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
-                                            <button type="button" onClick={()=>handleFormContinue(false)} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
+                                        <span className="text-2xl">Apakah anda ingin menimbang lagi? (Item sejenis)</span>
+                                        <div className="flex justify-center gap-5 mt-5">
+                                            <button type="button" onClick={()=>handleFormContinue(true)} className="bg-blue-500 hover:bg-blue-600 text-2xl text-white font-bold py-2 px-4 mr-2 rounded">Iya</button>
+                                            <button type="button" onClick={()=>handleFormContinue(false)} className="bg-gray-500 hover:bg-red-600 text-2xl text-white font-bold py-2 px-4 rounded">Tidak</button>
                                         </div>
                                     </form>
                                 </div>
