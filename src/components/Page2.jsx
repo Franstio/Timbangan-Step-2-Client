@@ -1250,9 +1250,9 @@ const Home = () => {
                                     </div>
                                     <form>
                                         <span className="text-2xl">Apakah anda ingin menimbang lagi? (Item sejenis)</span>
-                                        <div className="flex justify-center gap-5 mt-5">
-                                            <button type="button" onClick={()=>handleFormContinue(true)} className="bg-blue-500 hover:bg-blue-600 text-2xl text-white font-bold py-2 px-4 mr-2 rounded">Iya</button>
-                                            <button type="button" onClick={()=>handleFormContinue(false)} className="bg-gray-500 hover:bg-red-600 text-2xl text-white font-bold py-2 px-4 rounded">Tidak</button>
+                                        <div className="flex justify-center gap-8 mt-5">
+                                            <button type="button" onClick={()=>handleFormContinue(true)} className="bg-blue-500 hover:bg-blue-600 text-2xl text-white font-bold py-3 px-5 mr-2 rounded">Iya</button>
+                                            <button type="button" onClick={()=>handleFormContinue(false)} className="bg-gray-500 hover:bg-red-600 text-2xl text-white font-bold py-3 px-5 rounded">Tidak</button>
                                         </div>
                                     </form>
                                 </div>
