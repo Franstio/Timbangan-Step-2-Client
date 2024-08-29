@@ -418,8 +418,8 @@ const Home = () => {
                         await saveTransaksiRack( containers[i].dataContainer,binDispose.name,'Dispose');
                     else
                     {
-                        await saveTransaksi(containers[i].dataContainer,containers[i].dataWeight,containers[i].dataTransaction);
                         await updateBinWeight(containers[i].dataWeight);
+                        await saveTransaksi(containers[i].dataContainer,containers[i].dataWeight,containers[i].dataTransaction);
                     }
                 }
                 
@@ -892,6 +892,7 @@ const Home = () => {
         }
         catch (error) {
             console.log(error);
+            alert(error.response.data.error)
         }
     }
 
