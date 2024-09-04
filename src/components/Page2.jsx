@@ -418,8 +418,9 @@ const Home = () => {
                         await saveTransaksiRack( containers[i].dataContainer,binDispose.name,'Dispose');
                     else
                     {
-                        await updateBinWeight(containers[i].dataWeight);
-                        await saveTransaksi(containers[i].dataContainer,containers[i].dataWeight,containers[i].dataTransaction);
+                        const success = await updateBinWeight(containers[i].dataWeight);
+                        if (success)
+                            await saveTransaksi(containers[i].dataContainer,containers[i].dataWeight,containers[i].dataTransaction);
                     }
                 }
                 
@@ -889,10 +890,12 @@ const Home = () => {
             setIdbin(-1);*/
             await sendGreenlampOff(binDispose.name_hostname);
             await sendYellowOn(binDispose.name_hostname);
+            return true;
         }
         catch (error) {
             console.log(error);
             alert(error.response.data.error)
+            return false;
         }
     }
 
