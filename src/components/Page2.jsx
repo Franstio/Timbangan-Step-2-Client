@@ -934,6 +934,8 @@ const Home = () => {
                 setContainer(null);
                 return;
             }
+            if (!checkBinAvailable)
+                return;
             const curWeight = getTotalWeight() + getWeight() + parseFloat(checkBinAvailable.weight);
             console.log([curWeight,checkBinAvailable.max_weight,checkBinAvailable.weight]);
             if (curWeight >= parseInt(checkBinAvailable.max_weight)  )
