@@ -390,7 +390,7 @@ const Home = () => {
             else if (isFinalStep) {
 
                 if (binDispose.name != scanData) {
-                    alert("mismatch name");
+                    setErrDisposeMessage("mismatch name");
                     setScanData('');
                     return;
                 }
@@ -402,12 +402,12 @@ const Home = () => {
                         const isSensorTop = await readSensorTop(binDispose.name_hostname);
                         check = isSensorTop;
                         if (isSensorTop.error) {
-                            alert("Error Ketika Membaca Sensor");
+                            setErrDisposeMessage("Error Ketika Membaca Sensor");
                             setScanData('');
                             return;
                         }
                         if (!isSensorTop) {
-                            alert("Tutup Penutup Atas.");
+                            setErrDisposeMessage("Tutup Penutup Atas.");
                             setScanData('');
                             return;
                         }
@@ -505,7 +505,7 @@ const Home = () => {
             
             const res = response.data;
             if (!res.success) {
-                alert(res.message);
+                setErrDisposeMessage(res.message);
                 return false;
             }
             setBinDispose(res.bin);
@@ -534,7 +534,7 @@ const Home = () => {
         }
         catch (err)
         {
-            alert("Bin From Rack not found");
+            setErrDisposeMessage("Bin From Rack not found");
             return null;
         }
     }
@@ -564,7 +564,7 @@ const Home = () => {
                 if (res.data.error) {
                     setScanData('');
                     setUser(null);
-                    alert(res.data.error);
+                    setErrDisposeMessage(res.data.error);
                 } else {
                     if (res.data.user) {
                         setLoginDate(formatDate(new Date().toISOString()));
@@ -572,7 +572,7 @@ const Home = () => {
                         setScanData('');
                         setmessage("Scan Bin Machine/Bin");
                     } else {
-                        alert("User not found");
+                        setErrDisposeMessage("User not found");
                         setUser(null);
                         setScanData('');
                     }
@@ -617,14 +617,14 @@ const Home = () => {
                 setContainer(null);
                 setIsSubmitAllowed(false);
                 freezeNeto(false);
-                alert(res.data.error);
+                setErrDisposeMessage(res.data.error);
                 return;
             } else {
                 if (res.data.container) {
                     const badgeCheck = await verifyBadge(res.data.container.station)
                     if (!badgeCheck)
                     {
-                        alert("Badge Check Failed");
+                        setErrDisposeMessage("Badge Check Failed");
                         return;
                     }
                     /*if ( waste != null && res.data.container.IdWaste != waste.IdWaste ) {
@@ -639,13 +639,13 @@ const Home = () => {
                     if (res.data.container.type == "Collection" ) {
                         if (continueState)
                         {
-                            alert("Collection Transaction is not allowed");
+                            setErrDisposeMessage("Collection Transaction is not allowed");
                             return;
                         }
                         const _bin = res.data.container.waste.bin.find(item => item.name == res.data.container.name);
 
                         if (!_bin) {
-                            alert("Bin Collection error");
+                            setErrDisposeMessage("Bin Collection error");
                             return;
                         }
                         const collectionPayload = { ...res.data.container, weight: _bin.weight };
@@ -673,7 +673,7 @@ const Home = () => {
                         let _idscraplog = '';
                         if (continueState && _waste.name != prevWaste)
                         {
-                            alert("Waste name mismatch");
+                            setErrDisposeMessage("Waste name mismatch");
                             setScanData('');
                             return;
                         }
@@ -688,7 +688,7 @@ const Home = () => {
                             }
                             catch (err)
                             {
-                                alert("Error Fetching Transaction");
+                                setErrDisposeMessage("Error Fetching Transaction");
                                 return;
                             }
                         }
@@ -702,7 +702,7 @@ const Home = () => {
                     setScanData('');
                     setIsSubmitAllowed(true);
                 } else {
-                    alert("Container not found");
+                    setErrDisposeMessage("Container not found");
                     setUser(null);
                     setContainer(null);
                     setContainerName(res.data.name || '');
@@ -721,7 +721,7 @@ const Home = () => {
         apiClient.post('http://localhost:5000/VerificationScan', { binName: scanData })
             .then((res) => {
                 if (res.data.error) {
-                    alert(res.data.error);
+                    setErrDisposeMessage(res.data.error);
                 } else {
                 }
             })
@@ -894,7 +894,7 @@ const Home = () => {
         }
         catch (error) {
             console.log(error);
-            alert(error.response.data.error)
+            setErrDisposeMessage(error.response.data.error)
             return false;
         }
     }
@@ -906,10 +906,10 @@ const Home = () => {
         console.log(container);
         if (type == 'Dispose') {
             if (neto4Kg > 4) {
-                alert("Berat limbah melebihi kapasitas maximum");
+                setErrDisposeMessage("Berat limbah melebihi kapasitas maximum");
                 return;
             } else if (neto50Kg > 50) {
-                alert("Berat limbah melebihi kapasitas maximum");
+                setErrDisposeMessage("Berat limbah melebihi kapasitas maximum");
                 return;
             }
             let checkBinAvailable = binDispose;
