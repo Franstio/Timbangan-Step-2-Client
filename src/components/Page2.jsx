@@ -947,7 +947,8 @@ const Home = () => {
             setFinalStep(true);
             setmessage('');
             setmessage('Waiting For Verification');
-            setShowModalDispose(true);
+//            setShowModalDispose(true);
+            toggleContinueModal(true);
         }
     }
     useEffect(()=>{
@@ -999,6 +1000,7 @@ const Home = () => {
         {
             setFinalStep(true);
             settoplockId(binDispose.name_hostname);
+            setShowModalDispose(true);
         }
         inputRef.current.focus();
         setContinueState(response);
@@ -1300,7 +1302,7 @@ const Home = () => {
                                         <Typography variant="h4" align="center" gutterBottom>
                                             Dispose Dialokasikan ke Bin: {binname} Waste:{wastename}</Typography>
                                         <div className="flex justify-center mt-5">
-                                            <button type="button" autoFocus={true} onClick={() => {setShowModalDispose(false);toggleContinueModal(true);}} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
+                                            <button type="button" autoFocus={true} onClick={() => {setShowModalDispose(false);}} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Oke</button>
                                         </div>
                                     </form>
                                 </div>
