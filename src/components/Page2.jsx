@@ -611,6 +611,7 @@ const Home = () => {
                 const checkIndex = containers.findIndex(x=>x.dataContainer?.name == scanData);
                 if (checkIndex != -1)
                 {
+                    setAllowContinueModal(true);
                     setErrDisposeMessage('Bin telah di scan mohon scan bin yang lain');
                     return;
                 }
