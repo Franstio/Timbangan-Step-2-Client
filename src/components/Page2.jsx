@@ -396,7 +396,7 @@ const Home = () => {
                     return;
                 }
                 let check = false;
-                console.log({verificatin:containers});
+                console.log({verification:containers,binDispose:binDispose});
                 for (let i=0;i<containers.length;i++)
                 {
                     if (containers[i].dataContainer.waste.handletype != 'Rack' && !check)
