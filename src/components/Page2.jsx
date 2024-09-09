@@ -40,6 +40,7 @@ const Home = () => {
     const [showModal, setShowModal] = useState(false);
     const [showContinueModal,toggleContinueModal] = useState(false);
     const [showModalDispose, setShowModalDispose] = useState(false);
+    const [allowContinueModal,setAllowContinueModal] = useState(false);
     const [showModalInfoScale, setShowModalInfoScales] = useState(false);
     const [showErrorDispose,setShowErrorDispose] = useState(false);
     const [errDisposeMessage,setErrDisposeMessage] = useState('');
@@ -505,6 +506,7 @@ const Home = () => {
             
             const res = response.data;
             if (!res.success) {
+                setAllowContinueModal(true);
                 setErrDisposeMessage(res.message);
                 return false;
             }
@@ -534,6 +536,7 @@ const Home = () => {
         }
         catch (err)
         {
+            setAllowContinueModal(true);
             setErrDisposeMessage("Bin From Rack not found");
             return null;
         }
@@ -637,6 +640,11 @@ const Home = () => {
                     setWaste(_waste);
                     setmessage('');
                     if (res.data.container.type == "Collection" ) {
+                        if (user.OUT)
+                        {
+                            setErrDisposeMessage("Unauthorized User for Collection");
+                            return;
+                        }
                         if (continueState)
                         {
                             setErrDisposeMessage("Collection Transaction is not allowed");
@@ -671,6 +679,11 @@ const Home = () => {
                     }
                     else {
                         let _idscraplog = '';
+                        if (user.OUT)
+                        {
+                            setErrDisposeMessage("Unauthorized User For Dispose");
+                            return;
+                        }
                         if (continueState && _waste.name != prevWaste)
                         {
                             setErrDisposeMessage("Waste name mismatch");
@@ -940,6 +953,7 @@ const Home = () => {
             console.log([curWeight,checkBinAvailable.max_weight,checkBinAvailable.weight]);
             if (curWeight >= parseInt(checkBinAvailable.max_weight)  )
             {
+                setAllowContinueModal(true);
                 setErrDisposeMessage('Berat Timbangan Melebihi Kapasitas Maksimum');
                 return;
             }
@@ -1005,6 +1019,7 @@ const Home = () => {
             setShowModalDispose(true);
         }
         inputRef.current.focus();
+        setAllowContinueModal(false);
         setContinueState(response);
     }
 
@@ -1281,7 +1296,11 @@ const Home = () => {
                                     <form>
                                         <p>{errDisposeMessage}</p>
                                         <div className="flex justify-center mt-5">
-                                            <button type="button" onClick ={()=>{setShowErrorDispose(false); toggleContinueModal(true);}} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mr-2 rounded">Continue</button>
+                                            <button type="button" onClick ={()=>{
+                                                setShowErrorDispose(false);
+                                                if (allowContinueModal)
+                                                     toggleContinueModal(true);
+                                                }} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mr-2 rounded">Continue</button>
                                         </div>
                                     </form>
                                 </div>
