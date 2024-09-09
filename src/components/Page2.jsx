@@ -396,6 +396,7 @@ const Home = () => {
                     return;
                 }
                 let check = false;
+                console.log({verificatin:containers});
                 for (let i=0;i<containers.length;i++)
                 {
                     if (containers[i].dataContainer.waste.handletype != 'Rack' && !check)
@@ -640,7 +641,7 @@ const Home = () => {
                     setWaste(_waste);
                     setmessage('');
                     if (res.data.container.type == "Collection" ) {
-                        if (user.OUT)
+                        if (!user.OUT)
                         {
                             setErrDisposeMessage("Unauthorized User for Collection");
                             return;
@@ -679,7 +680,7 @@ const Home = () => {
                     }
                     else {
                         let _idscraplog = '';
-                        if (user.OUT)
+                        if (!user.IN)
                         {
                             setErrDisposeMessage("Unauthorized User For Dispose");
                             return;
