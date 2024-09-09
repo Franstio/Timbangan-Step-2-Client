@@ -974,7 +974,13 @@ const Home = () => {
     },[errDisposeMessage])
     useEffect(()=>{
         if (!showErrorDispose)
+        {
+            if (!allowContinueModal && inputRef.current)
+            {
+                inputRef.current.focus();
+            }
             setErrDisposeMessage('');
+        }
     },[showErrorDispose]);
     const handleCancel = () => {
         toggleModal();
