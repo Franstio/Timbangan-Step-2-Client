@@ -830,7 +830,7 @@ const Home = () => {
             }
         };
 
-        const isSuccess = await sendDataPanasonicServer(dataContainer?.station, dataContainer?.name, binDispose.name, _finalNeto, type);
+        const isSuccess = await sendDataPanasonicServer(dataContainer?.station, transactionData.toBin ? transactionData?.toBin :  _container.name, binDispose.name, _finalNeto, type);
         if (dataTransaction.idscraplog)
             _p.idscraplog = dataTransaction.idscraplog;
         _p.success = isSuccess;
