@@ -8,6 +8,7 @@ const apiClient = axios.create({
     withCredentials: false
 });
 const Home = () => {
+    const [allowReopen,setAllowReopen] = useState(true);
     const [hostname, setHostname] = useState('');
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
@@ -345,7 +346,13 @@ const Home = () => {
                         Lock Bottom
                     </button>
                 </div>
-            
+                {
+                    allowReopen && (
+                        <div className='flex justify-center mt-10 w-full'>
+                            <button  className={`flex-1 p-4 border rounded  flex justify-center items-center font-semibold bg-blue-500 text-white w-full`}>Reopen Lock</button>
+                        </div>
+                    )
+                }
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: 192.168.1.5 Online</p>
