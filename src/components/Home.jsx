@@ -8,7 +8,7 @@ const apiClient = axios.create({
     withCredentials: false
 });
 const Home = () => {
-    const [allowReopen,setAllowReopen] = useState(true);
+    const [allowReopen,setAllowReopen] = useState(false);
     const [hostname, setHostname] = useState('');
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
