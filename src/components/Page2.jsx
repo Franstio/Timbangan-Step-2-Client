@@ -326,7 +326,12 @@ const Home = () => {
         }
     }
     useEffect(() => {
-        setSocket(io(`http://${process.env.REACT_APP_TIMBANGAN}/`));
+        setSocket(io(`http://${process.env.REACT_APP_TIMBANGAN}/`,{
+            
+        reconnection: true,
+        autoConnect: true,
+        reconnectionAttempts: 100
+        }));
 
 
     }, []);
