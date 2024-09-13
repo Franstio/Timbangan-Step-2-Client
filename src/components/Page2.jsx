@@ -20,7 +20,7 @@ import {
 
 const apiClient = axios.create({
     withCredentials: false,
-    timeout: 5000
+    timeout: 3000
 });
 const Home = () => {
     const [user, setUser] = useState(null);
@@ -281,6 +281,8 @@ const Home = () => {
         try {
             const response = await apiClient.post(`http://${targetName}.local:5000/sensortop`, {
                 SensorTopId: 1
+            },{
+                timeout: 6000
             });
             if (response.status !== 200) {
                 return;
