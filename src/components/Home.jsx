@@ -161,6 +161,8 @@ const Home = () => {
             return;
         if (hostname && hostname != '')
         {
+            
+            socket.emit('getWeightBin', hostname);
             setInterval(()=>{
                 socket.emit('getWeightBin', hostname);
             },30*1000);
