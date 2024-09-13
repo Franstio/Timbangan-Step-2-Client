@@ -589,11 +589,6 @@ const Home = () => {
             })
             .catch(err => console.log(err));
     };
-    useEffect(() => {
-        if (!waste || waste == null)
-            return;
-        setmessage(getScaleName());
-    }, [waste]);
     const verifyBadge = async (station)=>{
         if (!user || !user.badgeId )
             return false;
@@ -685,6 +680,7 @@ const Home = () => {
                         return;
                     }
                     else {
+                        setmessage(getScaleName());
                         let _idscraplog = '';
                         if (!user.IN)
                         {
