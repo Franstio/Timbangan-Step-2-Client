@@ -394,11 +394,12 @@ const Home = () => {
     };
 
     const handleKeyPress = async (e) => {
-        if (inputRef.current)
-            inputRef.current.disabled = true;
         try
         {
             if (e.key === 'Enter') {
+                
+                if (inputRef.current)
+                   inputRef.current.disabled = true;
                 if (user == null)
                     handleScan();
                 else if (isFinalStep) {
