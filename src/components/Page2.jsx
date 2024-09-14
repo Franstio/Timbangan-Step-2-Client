@@ -394,57 +394,67 @@ const Home = () => {
     };
 
     const handleKeyPress = async (e) => {
-        if (e.key === 'Enter') {
-            if (user == null)
-                handleScan();
-            else if (isFinalStep) {
+        if (inputRef.current)
+            inputRef.current.disabled = true;
+        try
+        {
+            if (e.key === 'Enter') {
+                if (user == null)
+                    handleScan();
+                else if (isFinalStep) {
 
-                if (binDispose.name != scanData) {
-                    setErrDisposeMessage("mismatch name");
-                    setScanData('');
-                    return;
-                }
-                let check = false;
-                console.log({verification:containers,binDispose:binDispose});
-                for (let i=0;i<containers.length;i++)
-                {
-                    if (containers[i].dataContainer.waste.handletype != 'Rack' && !check)
+                    if (binDispose.name != scanData) {
+                        setErrDisposeMessage("mismatch name");
+                        setScanData('');
+                        return;
+                    }
+                    let check = false;
+                    console.log({verification:containers,binDispose:binDispose});
+                    for (let i=0;i<containers.length;i++)
                     {
-                        const isSensorTop = await readSensorTop(binDispose.name_hostname);
-                        check = isSensorTop;
-                        if (isSensorTop.error) {
-                            setErrDisposeMessage("Error Ketika Membaca Sensor");
-                            setScanData('');
-                            return;
+                        if (containers[i].dataContainer.waste.handletype != 'Rack' && !check)
+                        {
+                            const isSensorTop = await readSensorTop(binDispose.name_hostname);
+                            check = isSensorTop;
+                            if (isSensorTop.error) {
+                                setErrDisposeMessage("Error Ketika Membaca Sensor");
+                                setScanData('');
+                                return;
+                            }
+                            if (!isSensorTop) {
+                                setErrDisposeMessage("Tutup Penutup Atas.");
+                                setScanData('');
+                                return;
+                            }
                         }
-                        if (!isSensorTop) {
-                            setErrDisposeMessage("Tutup Penutup Atas.");
-                            setScanData('');
-                            return;
+                        if (containers[i].dataTransaction.idscraplog)
+                            await updateTransaksi(containers[i].dataTransaction,'Dispose');
+                        if (containers[i].dataContainer.waste.handletype=="Rack" || waste.handletype =='Rack')
+                            await saveTransaksiRack( containers[i].dataContainer,binDispose.name,'Dispose');
+                        else
+                        {
+                            const success = await updateBinWeight(containers[i].dataWeight);
+                            if (success)
+                                await saveTransaksi(containers[i].dataContainer,containers[i].dataWeight,containers[i].dataTransaction);
                         }
                     }
-                    if (containers[i].dataTransaction.idscraplog)
-                        await updateTransaksi(containers[i].dataTransaction,'Dispose');
-                    if (containers[i].dataContainer.waste.handletype=="Rack" || waste.handletype =='Rack')
-                        await saveTransaksiRack( containers[i].dataContainer,binDispose.name,'Dispose');
-                    else
-                    {
-                        const success = await updateBinWeight(containers[i].dataWeight);
-                        if (success)
-                            await saveTransaksi(containers[i].dataContainer,containers[i].dataWeight,containers[i].dataTransaction);
-                    }
+                    
+                    setContainers([]);
+                    setIdbin(binDispose.id);
+                    
+                    //VerificationScan();
+                    
+    //                setScanData('');
                 }
-                
-                setContainers([]);
-                setIdbin(binDispose.id);
-                
-                //VerificationScan();
-                
-//                setScanData('');
+                else {
+                    handleScan1();
+                }
             }
-            else {
-                handleScan1();
-            }
+        }
+        catch
+        {
+            if (inputRef.current)
+                inputRef.current.disabled = false;
         }
     };
     useEffect(()=>{
