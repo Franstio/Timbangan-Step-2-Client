@@ -409,7 +409,7 @@ const Home = () => {
                         setScanData('');
                         return;
                     }
-                    let check = false;
+                    let check = true;
                     console.log({verification:containers,binDispose:binDispose});
                     for (let i=0;i<containers.length;i++)
                     {
