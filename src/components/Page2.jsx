@@ -456,6 +456,12 @@ const Home = () => {
             if (inputRef.current)
                 inputRef.current.disabled = false;
         }
+        finally
+        {
+            
+            if (inputRef.current)
+                inputRef.current.disabled = false;
+        }
     };
     useEffect(()=>{
         console.log({currentContainer: containers});
