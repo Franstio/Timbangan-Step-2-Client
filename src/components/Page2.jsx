@@ -320,6 +320,8 @@ const Home = () => {
         try {
             const response = await apiClient.post(`http://${process.env.REACT_APP_TIMBANGAN}/UpdateBinWeightCollection`, {
                 binId: bottomLockHostData.binId
+            },{
+                timeout:6000
             }).then(x => {
                 const res = x.data;
             });
