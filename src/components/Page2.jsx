@@ -429,7 +429,7 @@ const Home = () => {
                         return;
                     }
                     const checkProcess = await checkProcessRunning();
-                    if (!checkProcess)
+                    if (checkProcess)
                     {
                         setErrDisposeMessage("Transaction Process Haven't completed yet");
                         return;
