@@ -1244,6 +1244,10 @@ const Home = () => {
                                 name="text"
                                 id="userId"
                                 value={scanData}
+                                onBlur={()=>{
+                                    if (inputRef && inputRef.current)
+                                        inputRef.current.focus();                                    
+                                }}
                                 onKeyDown={e => handleKeyPress(e)}
                                 ref={inputRef}
                                 onChange={e => setScanData(e.target.value)}
