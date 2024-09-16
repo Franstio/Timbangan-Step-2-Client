@@ -66,7 +66,9 @@ const Home = () => {
     const [logindate,setLoginDate] = useState('');
     const [containers,setContainers] = useState([]);
     //const ScaleName = getScaleName();
-
+    const navigation = [
+        { name: 'Dashboard', href: '#', current: true },
+    ]
 
     //    const socket = null;
     
@@ -397,7 +399,19 @@ const Home = () => {
         //freezeNeto(true);
         setShowModalDispose(!showModalDispose);
     };
-
+    const checkProcessRunning = async ()=>{
+        try
+        {
+            if (!binDispose)
+                return;
+            const res = await apiClient.get(`http://${binDispose.name_hostname}.local:5000/status`);
+            return res.data.isRunning;
+        }
+        catch 
+        {
+            return false;
+        }
+    }
     const handleKeyPress = async (e) => {
         try
         {
@@ -408,10 +422,16 @@ const Home = () => {
                 if (user == null)
                     handleScan();
                 else if (isFinalStep) {
-
+                     
                     if (binDispose.name != scanData) {
                         setErrDisposeMessage("mismatch name");
                         setScanData('');
+                        return;
+                    }
+                    const checkProcess = await checkProcessRunning();
+                    if (!checkProcess)
+                    {
+                        setErrDisposeMessage("Transaction Process Haven't completed yet");
                         return;
                     }
                     let check = true;
@@ -444,7 +464,9 @@ const Home = () => {
                                 await saveTransaksi(containers[i].dataContainer,containers[i].dataWeight,containers[i].dataTransaction);
                         }
                     }
-                    
+                    setmessage('DATA TELAH MASUK');
+                    await new Promise((res)=>setTimeout(res,2000));
+                    setmessage('');
                     setContainers([]);
                     setIdbin(binDispose.id);
                     
@@ -651,6 +673,8 @@ const Home = () => {
                 setErrDisposeMessage(res.data.error);
                 return;
             } else {
+                setFinalNeto(0);
+                setFinalStep(false);
                 if (res.data.container) {
                     const badgeCheck = await verifyBadge(res.data.container.station)
                     if (!badgeCheck)
@@ -864,9 +888,6 @@ const Home = () => {
         await apiClient.post("http://localhost:5000/SaveTransaksi", {
             ..._p
         });
-        setinstruksimsg('DATA TELAH MASUK');
-        await new Promise((resolve)=>setTimeout((resolve,2000)));
-        setinstruksimsg('');
     };
     const updateTransaksi = async (trdata,type)=>{
         await  updateTransaksiManual(trdata.idscraplog,type,waste);
@@ -992,9 +1013,8 @@ const Home = () => {
             if (curWeight <= parseFloat(checkBinAvailable?.max_weight ?? 100)  && container != null && checkBinAvailable != null)
                 setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
             setIsSubmitAllowed(false);
-            setFinalStep(true);
+//            setFinalStep(true);
             setmessage('');
-            setmessage('Waiting For Verification');
 //            setShowModalDispose(true);
             toggleContinueModal(true);
         }
@@ -1053,6 +1073,7 @@ const Home = () => {
         else
         {
             setFinalStep(true);
+            setmessage('Waiting For Verification');
             settoplockId(binDispose.name_hostname);
             setShowModalDispose(true);
         }
@@ -1063,6 +1084,61 @@ const Home = () => {
 
     return (
         <main>
+                        <Disclosure as="nav" className="bg-gray-800">
+                {({ open }) => (
+                    <>
+                        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+                            <div className="relative flex h-16 items-center justify-between">
+                                <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                                    <div className="flex flex-shrink-0 items-center">
+                                        <img
+                                            className="h-8 w-auto"
+                                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                            alt="Your Company"
+                                        />
+                                    </div>
+                                    <div className="hidden sm:ml-6 sm:block">
+                                        <div className="flex space-x-4">
+                                            {navigation.map((item) => (
+                                                <a
+                                                    key={item.name}
+                                                    href={item.href}
+                                                    className={classNames(
+                                                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                                        'rounded-md px-3 py-2 text-sm font-medium'
+                                                    )}
+                                                    aria-current={item.current ? 'page' : undefined}
+                                                >
+                                                    {item.name}
+                                                </a>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <Disclosure.Panel className="sm:hidden">
+                            <div className="space-y-1 px-2 pb-3 pt-2">
+                                {navigation.map((item) => (
+                                    <Disclosure.Button
+                                        key={item.name}
+                                        as="a"
+                                        href={item.href}
+                                        className={classNames(
+                                            item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                            'block rounded-md px-3 py-2 text-base font-medium'
+                                        )}
+                                        aria-current={item.current ? 'page' : undefined}
+                                    >
+                                        {item.name}
+                                    </Disclosure.Button>
+                                ))}
+                            </div>
+                        </Disclosure.Panel>
+                    </>
+                )}
+            </Disclosure>
             <div className='bg-[#f4f6f9] p-5'>
                 <div className="grid grid-cols-3 grid-flow-col gap-5">
                     {
