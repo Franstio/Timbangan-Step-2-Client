@@ -330,6 +330,8 @@ const Home = () => {
         }
     }
     useEffect(() => {
+        if (inputRef && inputRef.current)
+            inputRef.current.focus();
         setSocket(io(`http://${process.env.REACT_APP_TIMBANGAN}/`,{
             
         reconnection: true,
