@@ -469,12 +469,12 @@ const Home = () => {
                     setmessage('');
                     setContainers([]);
                     setIdbin(binDispose.id);
-                    
+                    setTypeCollection(null);
                     //VerificationScan();
                     
     //                setScanData('');
                 }
-                else {
+                else if (container == null) {
                     handleScan1();
                 }
             }
@@ -725,7 +725,7 @@ const Home = () => {
                         sendType(_bin.name_hostname, 'Collection');
                         setBinname(_bin.name);
                         setinstruksimsg('')
-                        setTypeCollection(res.data.container.type);
+                        setTypeCollection(null);
                         setmessage('');
                         return;
                     }
