@@ -864,6 +864,9 @@ const Home = () => {
         await apiClient.post("http://localhost:5000/SaveTransaksi", {
             ..._p
         });
+        setinstruksimsg('DATA TELAH MASUK');
+        await new Promise((resolve)=>setTimeout((resolve,2000)));
+        setinstruksimsg('');
     };
     const updateTransaksi = async (trdata,type)=>{
         await  updateTransaksiManual(trdata.idscraplog,type,waste);
