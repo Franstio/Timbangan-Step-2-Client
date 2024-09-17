@@ -363,7 +363,7 @@ const Home = () => {
                 }
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
-                <p>Server Status: 192.168.1.5 Online {socket.connect ? "Online":"Offline"}</p>
+                <p>Server Status: 192.168.1.5 Online {socket.connected ? "Online":"Offline"}</p>
                 <p>Status PLC : {localSocket.connected ? "Online": "Offline"}</p>
             </footer>
         </main>
