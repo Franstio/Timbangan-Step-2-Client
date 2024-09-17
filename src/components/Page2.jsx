@@ -65,6 +65,7 @@ const Home = () => {
     const [transactionData,setTransactionData] = useState({});
     const [logindate,setLoginDate] = useState('');
     const [containers,setContainers] = useState([]);
+    const [checkInputInverval, setCheckInputInterval] = useState(null);
     //const ScaleName = getScaleName();
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -412,6 +413,18 @@ const Home = () => {
             return false;
         }
     }
+    useEffect(()=>{
+        const updateFocus = ()=>{
+            if (inputRef && inputRef.current)
+            {
+                if (document.activeElement != inputRef.current)
+                    inputRef.current.focus();
+            }
+        }
+        if (checkInputInverval != null)
+            clearInterval(checkInputInverval);
+        setInterval(updateFocus,1000);
+    },[])
     const handleKeyPress = async (e) => {
         try
         {
