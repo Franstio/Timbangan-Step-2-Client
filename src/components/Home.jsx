@@ -22,6 +22,7 @@ const Home = () => {
     const [final,setFinal] = useState(false);
     const [sensor,setSensor] = useState([0,0]);
     const [maxWeight,setMaxWeight] = useState(0);
+    const [ipAddress, setIpAddress] = useState('');
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
     ]
@@ -29,6 +30,20 @@ const Home = () => {
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
     }
+    useEffect(()=>{
+        const getIp =async ()=>{
+            try
+            {
+            const ip = await apiClient.get(`http://localhost:5000/ip`);
+                setIpAddress(ip.data[0] );
+            }
+            catch
+            {
+                getIp();
+            }
+        };
+        getIp();
+    },[])
     useEffect(() => {
         setSocket(io(`http://${process.env.REACT_APP_TIMBANGAN}/`,{
             reconnection: true,
@@ -363,7 +378,7 @@ const Home = () => {
                 }
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
-                <p>Server Status: 192.168.1.5 Online {socket?.connected ? "Online":"Offline"}</p>
+                <p>Server Status: {ipAddress} {socket?.connected ? "Online":"Offline"}</p>
                 <p>Status PLC : {localSocket?.connected ? "Online": "Offline"}</p>
             </footer>
         </main>

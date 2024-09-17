@@ -66,6 +66,7 @@ const Home = () => {
     const [logindate,setLoginDate] = useState('');
     const [containers,setContainers] = useState([]);
     const [checkInputInverval, setCheckInputInterval] = useState(null);
+    const [ipAddress,setIpAddress] = useState('');
     //const ScaleName = getScaleName();
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -100,6 +101,20 @@ const Home = () => {
             />
         );
     };
+    useEffect(()=>{
+        const getIp =async ()=>{
+            try
+            {
+            const ip = await apiClient.get(`http://localhost:5000/ip`);
+                setIpAddress(ip.data[0] );
+            }
+            catch
+            {
+                getIp();
+            }
+        };
+        getIp();
+    },[])
     const getTotalWeight = ()=> containers.reduce((a,b)=>a+b.dataWeight, 0);
     /*const getRackLastTransaction = async (containerName)=>{
         const res  = await apiClient.get(`http://${rackTarget}/Transaksi/${containerName}`);
@@ -1359,7 +1374,7 @@ const Home = () => {
                 <p>Instruksi : {message} </p>
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
-                <p>Server Status: 192.168.1.5 {isOnline ? "Online" : "Offline"}</p>
+                <p>Server Status: {ipAddress} {isOnline ? "Online" : "Offline"}</p>
 
             </footer>
         </main>
