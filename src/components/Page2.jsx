@@ -748,7 +748,7 @@ const Home = () => {
                             setErrDisposeMessage("Bin Collection error");
                             return;
                         }
-                        const collectionPayload = { ...res.data.container, weight: _bin.weight };
+                        let collectionPayload = { ...res.data.container, weight: _bin.weight };
 //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
 
                         const isPending = await UpdateBinWeightCollectionManual(_bin.id);
