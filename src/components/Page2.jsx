@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment, useRef } from "react";
+import React, { useState, useEffect, Fragment, useRef, cloneElement } from "react";
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { IoSettingsOutline } from "react-icons/io5";
@@ -321,7 +321,6 @@ const Home = () => {
                 setinstruksimsg("Buka Penutup Bawah");
                 await sendYellowOffCollection();
                 await sendGreenlampOnCollection();
-                await UpdateBinWeightCollection();
                 await sendLockBottom();
                 //await sendDataPanasonicServer();
                 Promise.resolve();
@@ -338,11 +337,11 @@ const Home = () => {
                 binId: bottomLockHostData.binId
             },{
                 timeout:6000
-            }).then(x => {
-                const res = x.data;
             });
+            return response.data?.step3 ?? false;
         }
         catch (error) {
+            return false;
         }
     }
     useEffect(() => {
@@ -704,12 +703,12 @@ const Home = () => {
                 setFinalNeto(0);
                 setFinalStep(false);
                 if (res.data.container) {
-                    const badgeCheck = await verifyBadge(res.data.container.station)
-                    if (!badgeCheck)
+                    const badgeCheck = await verifyBadge(res.data.container.station);
+                    /*if (!badgeCheck)
                     {
                         setErrDisposeMessage("Badge Check Failed");
                         return;
-                    }
+                    }*/
                     /*if ( waste != null && res.data.container.IdWaste != waste.IdWaste ) {
                         alert("Waste Mismatch");
                         return;
@@ -738,6 +737,9 @@ const Home = () => {
                         }
                         const collectionPayload = { ...res.data.container, weight: _bin.weight };
 //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
+
+                        const isPending = await UpdateBinWeightCollection();
+                        collectionPayload = {...collectionPayload,status: isPending ? "PENDING|STEP3" : "",isSuccess:false};
                         if (res.data.container.waste.handletype=='Rack')
                         {
                             await saveTransaksiRack(collectionPayload,'','Collection');
@@ -905,14 +907,17 @@ const Home = () => {
                 badgeId: user.badgeId,
                 IdWaste: dataContainer.IdWaste,
                 type: type,
-                weight: _finalNeto
+                weight: _finalNeto,
+                toBin : binDispose.name,
+                fromContainer: dataTransaction?.toBin ? dataTransaction?.toBin : dataContainer.name 
             }
         };
-
         const isSuccess = await sendDataPanasonicServer(dataContainer.station, dataTransaction.toBin ? dataTransaction?.toBin :  dataContainer.name, binDispose.name, _finalNeto, type);
         if (dataTransaction.idscraplog)
             _p.idscraplog = dataTransaction.idscraplog;
         _p.success = isSuccess;
+        if (!_p.success)
+            _p.status = "Pending|PIDSG";
         await apiClient.post("http://localhost:5000/SaveTransaksi", {
             ..._p
         });
@@ -928,6 +933,8 @@ const Home = () => {
             status: "Done",
             weight: _finalNeto,
             logindate: logindate
+        },{
+            validateStatus
         });
 //        setWaste(null);
         setScanData('');
@@ -952,6 +959,17 @@ const Home = () => {
     const saveTransaksiCollection =async (_container) => {
         
         const resAPI = await sendDataPanasonicServer(_container.station, _container.name, '', _container.weight, 'Collection');
+        let status="";
+         if (_container.status.includes("|") ) // There is Issue on Step 3
+         {
+            status  = resAPI ? _container.status : `${_container.status}|PIDSG`;
+         }
+         else
+         {
+            status = resAPI ? _container.status : "PENDING|PIDSG";
+         }
+         const isSuccess = (!_container.status.includes('|'));
+             
         const res = await apiClient.post(`http://${process.env.REACT_APP_TIMBANGAN}/SaveTransaksiCollection`, {
             payload: {
                 idContainer: _container.containerId,
@@ -959,7 +977,8 @@ const Home = () => {
                 IdWaste: _container.IdWaste,
                 type: _container.type,
                 weight: _container.weight,
-                success: resAPI
+                success: isSuccess,
+                status : status
             }
         });
         setWaste(null);
