@@ -344,6 +344,19 @@ const Home = () => {
             return false;
         }
     }
+    const UpdateBinWeightCollectionManual = async (id) => {
+        try {
+            const response = await apiClient.post(`http://${process.env.REACT_APP_TIMBANGAN}/UpdateBinWeightCollection`, {
+                binId: id
+            },{
+                timeout:6000
+            });
+            return response.data?.step3 ?? false;
+        }
+        catch (error) {
+            return false;
+        }
+    }
     useEffect(() => {
         if (inputRef && inputRef.current)
             inputRef.current.focus();
@@ -738,7 +751,7 @@ const Home = () => {
                         const collectionPayload = { ...res.data.container, weight: _bin.weight };
 //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
 
-                        const isPending = await UpdateBinWeightCollection();
+                        const isPending = await UpdateBinWeightCollectionManual(_bin.id);
                         collectionPayload = {...collectionPayload,status: isPending ? "PENDING|STEP3" : "",isSuccess:false};
                         if (res.data.container.waste.handletype=='Rack')
                         {
