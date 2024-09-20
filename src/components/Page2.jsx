@@ -922,15 +922,16 @@ const Home = () => {
                 type: type,
                 weight: _finalNeto,
                 toBin : binDispose.name,
-                fromContainer: dataTransaction?.toBin ? dataTransaction?.toBin : dataContainer.name 
+                fromContainer: dataTransaction?.toBin ? dataTransaction?.toBin : dataContainer.name,
+                
             }
         };
         const isSuccess = await sendDataPanasonicServer(dataContainer.station, dataTransaction.toBin ? dataTransaction?.toBin :  dataContainer.name, binDispose.name, _finalNeto, type);
         if (dataTransaction.idscraplog)
-            _p.idscraplog = dataTransaction.idscraplog;
+            _p.payload.idscraplog = dataTransaction.idscraplog;
         _p.success = isSuccess;
         if (!_p.success)
-            _p.status = "Pending|PIDSG";
+            _p.payload.status = "Pending|PIDSG";
         await apiClient.post("http://localhost:5000/SaveTransaksi", {
             ..._p
         });
