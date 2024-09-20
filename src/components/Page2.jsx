@@ -752,7 +752,7 @@ const Home = () => {
 //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
 
                         const isPending = await UpdateBinWeightCollectionManual(_bin.id);
-                        collectionPayload = {...collectionPayload,status: isPending ? "PENDING|STEP3" : "",isSuccess:false};
+                        collectionPayload = {...collectionPayload,status: isPending ? "PENDING|STEP3" : "",success: !isPending};
                         if (res.data.container.waste.handletype=='Rack')
                         {
                             await saveTransaksiRack(collectionPayload,'','Collection');
@@ -983,7 +983,7 @@ const Home = () => {
          {
             status = resAPI ? _container.status : "PENDING|PIDSG";
          }
-         const isSuccess = (!_container.status.includes('|'));
+         const isSuccess = !status.includes('|');
              
         const res = await apiClient.post(`http://${process.env.REACT_APP_TIMBANGAN}/SaveTransaksiCollection`, {
             payload: {
