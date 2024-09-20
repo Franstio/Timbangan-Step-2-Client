@@ -934,7 +934,9 @@ const Home = () => {
             weight: _finalNeto,
             logindate: logindate
         },{
-            validateStatus
+            validateStatus: (status=>{
+                return true
+            })
         });
 //        setWaste(null);
         setScanData('');
