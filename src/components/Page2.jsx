@@ -58,6 +58,7 @@ const Home = () => {
     const [binDispose, setBinDispose] = useState(null);
     //const [ScaleName, setScaleName] = useState("");
     const inputRef = useRef(null);
+    const btnSubmitRef = useRef(null);
     const [bottomLockHostData, setBottomLockData] = useState({ binId: '', hostname: '' });
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
     const [rackTarget, setRackTarget] = useState(process.env.REACT_APP_RACK);
@@ -510,6 +511,7 @@ const Home = () => {
                     setContainers([]);
                     setIdbin(binDispose.id);
                     setTypeCollection(null);
+                    setBinDispose(null);
                     //VerificationScan();
                     
     //                setScanData('');
@@ -1029,57 +1031,73 @@ const Home = () => {
     }
 
     const handleSubmit = async () => {
+        if (btnSubmitRef.current)
+            btnSubmitRef.current.disabled = true;
         setShowModal(false);
-        const binWeight = container?.weightbin ?? 0;
-        const totalWeight = parseFloat(neto) + parseFloat(binWeight);
-        console.log(container);
-        if (type == 'Dispose') {
-            if (neto4Kg > 4) {
-                setErrDisposeMessage("Berat limbah melebihi kapasitas maximum");
-                return;
-            } else if (neto50Kg > 50) {
-                setErrDisposeMessage("Berat limbah melebihi kapasitas maximum");
-                return;
-            }
-            let checkBinAvailable = binDispose;
-            if (!continueState || binDispose == null)
-            {
-                if (container.waste.handletype=='Rack')
-                {
-                    let checkName = container.name;
-                    if (transactionData.idscraplog)
-                    {
-                        checkName = transactionData.toBin;
-                    }
-                    checkBinAvailable = await CheckBinCapacityRack(checkName);
-                    checkBinAvailable.max_weight = 100;
+        try
+        {
+            const binWeight = container?.weightbin ?? 0;
+            const totalWeight = parseFloat(neto) + parseFloat(binWeight);
+            console.log(container);
+            if (type == 'Dispose') {
+                if (neto4Kg > 4) {
+                    setErrDisposeMessage("Berat limbah melebihi kapasitas maximum");
+                    return;
+                } else if (neto50Kg > 50) {
+                    setErrDisposeMessage("Berat limbah melebihi kapasitas maximum");
+                    return;
                 }
-                else
-                    checkBinAvailable = await CheckBinCapacity();
+                let checkBinAvailable = binDispose;
+                if (!continueState || binDispose == null)
+                {
+                    if (container.waste.handletype=='Rack')
+                    {
+                        let checkName = container.name;
+                        if (transactionData.idscraplog)
+                        {
+                            checkName = transactionData.toBin;
+                        }
+                        checkBinAvailable = await CheckBinCapacityRack(checkName);
+                        checkBinAvailable.max_weight = 100;
+                    }
+                    else
+                        checkBinAvailable = await CheckBinCapacity();
+                }
+                if (checkBinAvailable == null)
+                {
+                    setErrDisposeMessage("Invalid Bin Detected");
+                    setContainer(null);
+                    return;
+                }
+                if (!checkBinAvailable)
+                    return;
+                const curWeight = getTotalWeight() + getWeight() + parseFloat(checkBinAvailable.weight);
+                console.log([curWeight,checkBinAvailable.max_weight,checkBinAvailable.weight]);
+                if (curWeight >= parseInt(checkBinAvailable.max_weight)  )
+                {
+                    setAllowContinueModal(true);
+                    setErrDisposeMessage('Berat Timbangan Melebihi Kapasitas Maksimum');
+                    return;
+                }
+                if (curWeight <= parseFloat(checkBinAvailable?.max_weight ?? 100)  && container != null && checkBinAvailable != null)
+                    setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
+                setIsSubmitAllowed(false);
+    //            setFinalStep(true);
+                setmessage('');
+    //            setShowModalDispose(true);
+                toggleContinueModal(true);
             }
-            if (checkBinAvailable == null)
-            {
-                setErrDisposeMessage("Invalid Bin Detected");
-                setContainer(null);
-                return;
-            }
-            if (!checkBinAvailable)
-                return;
-            const curWeight = getTotalWeight() + getWeight() + parseFloat(checkBinAvailable.weight);
-            console.log([curWeight,checkBinAvailable.max_weight,checkBinAvailable.weight]);
-            if (curWeight >= parseInt(checkBinAvailable.max_weight)  )
-            {
-                setAllowContinueModal(true);
-                setErrDisposeMessage('Berat Timbangan Melebihi Kapasitas Maksimum');
-                return;
-            }
-            if (curWeight <= parseFloat(checkBinAvailable?.max_weight ?? 100)  && container != null && checkBinAvailable != null)
-                setContainers([...containers,{dataContainer:container,dataWeight:getWeight(),dataTransaction:transactionData}]);
-            setIsSubmitAllowed(false);
-//            setFinalStep(true);
-            setmessage('');
-//            setShowModalDispose(true);
-            toggleContinueModal(true);
+        }
+        catch
+        {            
+            if (btnSubmitRef.current)
+                btnSubmitRef.current.disabled = false;
+        }
+        finally
+        {
+
+            if (btnSubmitRef.current)
+                btnSubmitRef.current.disabled = false;
         }
     }
     useEffect(()=>{
@@ -1303,7 +1321,7 @@ const Home = () => {
                                         </Typography>
                                         <p>Data Timbangan Sudah Sesuai?</p>
                                         <div className="flex justify-center mt-5">
-                                            <button type="button" onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
+                                            <button type="button" onClick={handleSubmit} ref={btnSubmitRef} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
                                             <button type="button" onClick={handleCancel} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
                                         </div>
                                     </form>
