@@ -72,12 +72,10 @@ const Home = () => {
         await apiClient.post('http://localhost:5000/observeBottomSensor',{readTarget:target});
 
     }
-    useEffect(()=>{
-        if (processStatus == undefined ||  processStatus==null)
-            return;
+    const observeBottom = async ()=>{
         if (processStatus)
         {
-            startObserveBottomSensor(0);
+            await startObserveBottomSensor(0);
             localSocket.on('target-0',(res)=>{
                 startProcess(false);
                 setinstruksimsg("Tutup Penutup Bawah");
@@ -87,7 +85,7 @@ const Home = () => {
         }
         else
         {
-            startObserveBottomSensor(1);
+            await startObserveBottomSensor(1);
             localSocket.on('target-1',(res)=>{
                 startProcess(null);
                 localSocket.off('target-1');
@@ -102,28 +100,27 @@ const Home = () => {
 
             });
         }
+    }
+    useEffect(()=>{
+        if (processStatus == undefined ||  processStatus==null)
+            return;
+        observeBottom();
     },[processStatus]);
 
     const startObserveTopSensor =async (target)=>{
         await apiClient.post('http://localhost:5000/observeTopSensor',{readTargetTop:target});
 
     }
-    useEffect(()=>{
-        if (topProcessStatus == undefined || topProcessStatus==null)
-            return;
-        if (topProcessStatus)
-        {
-            startObserveTopSensor(0);
-            localSocket.on('target-top-0',(res)=>{
-                startTopProcess(false);
-                setinstruksimsg("Tutup Penutup Atas");
-                localSocket.off('target-top-0');
-            });
-
-        }
-        else
-        {
-            startObserveTopSensor(1);
+    const observeTopOpen = async ()=>{
+        await startObserveTopSensor(0);
+        localSocket.on('target-top-0',(res)=>{
+            startTopProcess(false);
+            setinstruksimsg("Tutup Penutup Atas");
+            localSocket.off('target-top-0');
+        });
+    }
+    const observeTopClose = async ()=>{
+       await startObserveTopSensor(1);
             localSocket.on('target-top-1',(res)=>{
                 startTopProcess(null);
                 localSocket.off('target-top-1');
@@ -138,6 +135,17 @@ const Home = () => {
                 setBottomLock(type == 'Collection'); */
 
             });
+    }
+    useEffect(()=>{
+        if (topProcessStatus == undefined || topProcessStatus==null)
+            return;
+        if (topProcessStatus)
+        {
+            observeTopOpen();
+        }
+        else
+        {
+            observeTopClose();
         }
     },[topProcessStatus]);
     useEffect(() => {
