@@ -6,7 +6,7 @@ import io from 'socket.io-client';
 import GaugeComponent from 'react-gauge-component'
 const apiClient = axios.create({
     withCredentials: false,
-    timeout: 1000
+    timeout: 4000
 });
 const Home = () => {
     const [allowReopen,setAllowReopen] = useState(false);
