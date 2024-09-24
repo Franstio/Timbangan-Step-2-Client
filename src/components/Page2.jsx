@@ -1277,6 +1277,7 @@ const Home = () => {
                                 type="text"
                                 autoFocus={true}
                                 name="text"
+                                autoComplete={false}
                                 id="userId"
                                 value={scanData}
                                 onBlur={()=>{
