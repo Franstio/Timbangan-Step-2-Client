@@ -760,7 +760,7 @@ const Home = () => {
                             await saveTransaksiRack(collectionPayload,'','Collection');
                         }
                         else
-                            saveTransaksiCollection(collectionPayload);
+                            await saveTransaksiCollection(collectionPayload);
                         //                            UpdateBinWeightCollection();
                         setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                         setShowModal(false);
