@@ -937,7 +937,7 @@ const Home = () => {
         await apiClient.post("http://localhost:5000/SaveTransaksi", {
             ..._p
         },{
-            timeout: 10 * 1000
+            timeout: 10000
         });
     };
     const updateTransaksi = async (trdata,type)=>{
