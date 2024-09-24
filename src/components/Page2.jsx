@@ -936,6 +936,8 @@ const Home = () => {
             _p.payload.status = "Pending|PIDSG";
         await apiClient.post("http://localhost:5000/SaveTransaksi", {
             ..._p
+        },{
+            timeout: 10 * 1000
         });
     };
     const updateTransaksi = async (trdata,type)=>{
