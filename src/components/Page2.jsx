@@ -570,11 +570,12 @@ const Home = () => {
           setTimeout(() => {
             setmessage("");
             setinstruksimsg("");
+
+            setContainers([]);
+            setIdbin(binDispose.id);
+            setTypeCollection(null);
+            setBinDispose(null);
           }, 2000);
-          setContainers([]);
-          setIdbin(binDispose.id);
-          setTypeCollection(null);
-          setBinDispose(null);
           //VerificationScan();
 
           //                setScanData('');
