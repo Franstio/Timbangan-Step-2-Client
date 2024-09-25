@@ -567,9 +567,10 @@ const Home = () => {
           setmessage("DATA TELAH MASUK");
 
           setinstruksimsg("DATA TELAH MASUK");
-          await new Promise((res) => setTimeout(res, 2000));
-          setmessage("");
-          setinstruksimsg("");
+          setTimeout(() => {
+            setmessage("");
+            setinstruksimsg("");
+          }, 2000);
           setContainers([]);
           setIdbin(binDispose.id);
           setTypeCollection(null);
