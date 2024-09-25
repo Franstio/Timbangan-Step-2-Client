@@ -567,10 +567,10 @@ const Home = () => {
           setmessage("DATA TELAH MASUK");
 
           setinstruksimsg("DATA TELAH MASUK");
-          setTimeout(() => {
+          setTimeout(async () => {
             setmessage("");
-            setinstruksimsg("");
-
+            setinstruksimsg(" ");
+            await sendPesanTimbangan(binDispose.name_hostname, "");
             setContainers([]);
             setIdbin(binDispose.id);
             setTypeCollection(null);
@@ -615,7 +615,7 @@ const Home = () => {
     setWaste(null);
     setUser(null);
     setmessage("");
-    setinstruksimsg("");
+    setinstruksimsg(" ");
   };
   useEffect(() => {
     if (Idbin != -1) {
@@ -828,7 +828,7 @@ const Home = () => {
             setContainer(null);
             sendType(_bin.name_hostname, "Collection");
             setBinname(_bin.name);
-            setinstruksimsg("");
+            setinstruksimsg(" ");
             setTypeCollection(null);
             setmessage("");
             return;
