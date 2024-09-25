@@ -20,7 +20,7 @@ import {
 
 const apiClient = axios.create({
     withCredentials: false,
-    timeout: 5000
+    timeout: 3000
 });
 const Home = () => {
     const [user, setUser] = useState(null);
@@ -320,9 +320,9 @@ const Home = () => {
         if (bottomLockHostData.binId && bottomLockHostData.hostname && bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
             new Promise(async () => {
                 setinstruksimsg("Buka Penutup Bawah");
+                await sendLockBottom();
                 await sendYellowOffCollection();
                 await sendGreenlampOnCollection();
-                await sendLockBottom();
                 //await sendDataPanasonicServer();
                 Promise.resolve();
             }).then(() => {
@@ -580,9 +580,9 @@ const Home = () => {
         if (toplockId !== '') {
             (async () => {
                 try {
+                    await sendLockTop();
                     await sendYellowOff();
                     await sendGreenlampOn();
-                    await sendLockTop();
                 } catch (error) {
                     console.log('Error executing actions:', error);
                 } finally {
