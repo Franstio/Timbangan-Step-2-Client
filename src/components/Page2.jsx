@@ -130,9 +130,9 @@ const Home = () => {
         setLastRackWeight({...weightlist});
         return weightlist;
     }*/
-    const sendLockBottom = async () => {
+    const sendLockBottom = async (_bin) => {
         try {
-            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/lockBottom`, {
+            const response = await apiClient.post(`http://${_bin.name_hostname}.local:5000/lockBottom`, {
                 idLockBottom: 1
             });
             if (response.status != 200) {
@@ -209,9 +209,9 @@ const Home = () => {
         }
     };
 
-    const sendGreenlampOnCollection = async () => {
+    const sendGreenlampOnCollection = async (_bin) => {
         try {
-            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/greenlampon`, {
+            const response = await apiClient.post(`http://${_bin.name_hostname}.local:5000/greenlampon`, {
                 idLampGreen: 1
             });
             if (response.status != 200) {
@@ -248,9 +248,9 @@ const Home = () => {
         }
     };
 
-    const sendYellowOffCollection = async () => {
+    const sendYellowOffCollection = async (_bin) => {
         try {
-            const response = await apiClient.post(`http://${bottomLockHostData.hostname}.local:5000/yellowlampoff`, {
+            const response = await apiClient.post(`http://${_bin.name_hostname}.local:5000/yellowlampoff`, {
                 idLampYellow: 1
             });
             if (response.status != 200) {
@@ -316,21 +316,6 @@ const Home = () => {
         }
     };
 
-    useEffect(() => {
-        if (bottomLockHostData.binId && bottomLockHostData.hostname && bottomLockHostData.binId != '' && bottomLockHostData.hostname != '') {
-            new Promise(async () => {
-                setinstruksimsg("Buka Penutup Bawah");
-                await sendLockBottom();
-                await sendYellowOffCollection();
-                await sendGreenlampOnCollection();
-                //await sendDataPanasonicServer();
-                Promise.resolve();
-            }).then(() => {
-                setBottomLockData({ binId: '', hostname: '' });
-                //setinstruksimsg("buka penutup bawah");
-            });
-        }
-    }, [bottomLockHostData]);
 
     const UpdateBinWeightCollection = async () => {
         try {
@@ -762,7 +747,12 @@ const Home = () => {
                         else
                             await saveTransaksiCollection(collectionPayload);
                         //                            UpdateBinWeightCollection();
-                        setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
+//                        setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
+                        
+                        setinstruksimsg("Buka Penutup Bawah");
+                        await sendLockBottom(_bin);
+                        await sendYellowOffCollection(_bin);
+                        await sendGreenlampOnCollection(_bin);
                         setShowModal(false);
                         setScanData('');
                         setUser(null);
