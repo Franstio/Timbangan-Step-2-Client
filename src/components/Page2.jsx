@@ -782,6 +782,12 @@ const Home = () => {
 
                         const isPending = await UpdateBinWeightCollectionManual(_bin.id);
                         collectionPayload = {...collectionPayload,status: isPending ? "PENDING|STEP3" : "",success: !isPending};
+                        setinstruksimsg("Buka Penutup Bawah");
+                        await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
+                        await sendLockBottom(_bin);
+                        await sendYellowOffCollection(_bin);
+                        await sendGreenlampOnCollection(_bin);
+
                         if (res.data.container.waste.handletype=='Rack')
                         {
                             await saveTransaksiRack(collectionPayload,'','Collection');
@@ -791,11 +797,6 @@ const Home = () => {
                         //                            UpdateBinWeightCollection();
 //                        setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                         
-                        setinstruksimsg("Buka Penutup Bawah");
-                        await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
-                        await sendLockBottom(_bin);
-                        await sendYellowOffCollection(_bin);
-                        await sendGreenlampOnCollection(_bin);
                         setShowModal(false);
                         setScanData('');
                         setUser(null);
