@@ -28,7 +28,7 @@ import {
 
 const apiClient = axios.create({
   withCredentials: false,
-  timeout: 3000,
+  timeout: 2000,
 });
 const Home = () => {
   const [user, setUser] = useState(null);
@@ -792,6 +792,7 @@ const Home = () => {
 //                        setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
                         
                         setinstruksimsg("Buka Penutup Bawah");
+                        await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
                         await sendLockBottom(_bin);
                         await sendYellowOffCollection(_bin);
                         await sendGreenlampOnCollection(_bin);
