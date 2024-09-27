@@ -705,7 +705,10 @@ const Home = () => {
     if (!user || !user.badgeId) return false;
     try {
       const res = await apiClient.get(
-        `http://${apiTarget}/api/pid/pibadgeverify?f1=${station}&f2=${user.badgeId}`
+        `http://${apiTarget}/api/pid/pibadgeverify?f1=${station}&f2=${user.badgeId}`,
+        {
+          timeout: 1000
+        }
       );
       console.log(res);
       return true;
@@ -780,13 +783,13 @@ const Home = () => {
             };
             //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
 
+            await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
+            await sendLockBottom(_bin);
+            await sendYellowOffCollection(_bin);
+            await sendGreenlampOnCollection(_bin);
                         const isPending = await UpdateBinWeightCollectionManual(_bin.id);
                         collectionPayload = {...collectionPayload,status: isPending ? "PENDING|STEP3" : "",success: !isPending};
                         setinstruksimsg("Buka Penutup Bawah");
-                        await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
-                        await sendLockBottom(_bin);
-                        await sendYellowOffCollection(_bin);
-                        await sendGreenlampOnCollection(_bin);
 
                         if (res.data.container.waste.handletype=='Rack')
                         {
