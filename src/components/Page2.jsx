@@ -394,7 +394,6 @@ const Home = () => {
       io(`http://${process.env.REACT_APP_TIMBANGAN}/`, {
         reconnection: true,
         autoConnect: true,
-        reconnectionAttempts: 100,
       })
     );
   }, []);
