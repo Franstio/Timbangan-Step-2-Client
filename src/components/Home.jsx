@@ -84,7 +84,7 @@ const Home = () => {
             {
             }*/
         });
-        localSocket.on('refresh',(a)=>{
+        localSocket.on('refresh',function (a){
             location.reload();
         })
     }, [localSocket]);
