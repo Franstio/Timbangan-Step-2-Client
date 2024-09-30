@@ -44,7 +44,7 @@ const Home = () => {
         setType(localStorage.getItem('type'));
         setFinal(localStorage.getItem('final') == "" ? null : JSON.parse(localStorage.getItem('final')));
         setMaxWeight(localStorage.getItem('maxWeight')== "" || localStorage.getItem('maxWeight') == null ? 0 : parseFloat(localStorage.getItem('maxWeight')));
-        setAllowReopen(localStorage.getItem('allowReopen') == "" ? false : JSON.parse(localStorage.setItem('allowReopen')));
+        setAllowReopen(localStorage.getItem('allowReopen') == "" ? false : JSON.parse(localStorage.getItem('allowReopen')));
         setBottomLock(localStorage.getItem('bottomLockEnable') == "" ? false:  JSON.parse(localStorage.getItem('bottmLockEnable')));
     },[])
     function classNames(...classes) {
