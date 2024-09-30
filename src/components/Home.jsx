@@ -27,7 +27,26 @@ const Home = () => {
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
     ]
-
+    useEffect(()=>{
+        localStorage.setItem('topProcess',topProcessStatus );
+        localStorage.setItem('bottomProcess',processStatus );
+        localStorage.setItem('instruksimsg',instruksimsg);
+        localStorage.setItem('type',type);
+        localStorage.setItem('final',final);
+        localStorage.setItem('maxWeight',maxWeight);
+        localStorage.setItem('allowReopen',allowReopen);
+        localStorage.setItem('bottomLockEnable',bottomLockEnable);
+    },[topProcessStatus,processStatus,instruksimsg,type,final,maxWeight,allowReopen,bottomLockEnable])
+    useEffect(()=>{
+        startProcess(JSON.parse(localStorage.getItem('topProcess')));
+        startTopProcess(JSON.parse(localStorage.getItem('bottomProcess')));
+        setinstruksimsg(JSON.parse(localStorage.getItem('instruksimsg')));
+        setType(JSON.parse(localStorage.getItem('type')));
+        setFinal(JSON.parse(localStorage.getItem('final')));
+        setMaxWeight(JSON.parse(localStorage.getItem('maxWeight')));
+        setAllowReopen(JSON.parse(localStorage.setItem('allowReopen')));
+        setBottomLock(JSON.parse(localStorage.getItem('bottmLockEnable')));
+    },[])
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
     }
