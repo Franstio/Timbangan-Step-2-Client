@@ -21,7 +21,7 @@ const Home = () => {
     const [hostname, setHostname] = useState('');
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [Getweightbin, setGetweightbin] = useState(0);
-    const [instruksimsg, setinstruksimsg] = useState(localStorage.getItem('instruksimsg'));
+    const [instruksimsg, setinstruksimsg] = useState(localStorage.getItem('instruksimsg') == "null" ? "" : localStorage.getItem("instruksimsg"));
     const [bottomLockEnable, setBottomLock] = useState(localStorage.getItem('bottomLockEnable') == "" ? false:  JSON.parse(localStorage.getItem('bottmLockEnable')));
     const [type, setType] = useState(localStorage.getItem('type'));
     const [processStatus,startProcess] = useState(localStorage.getItem('bottomProcess') == ""? null :JSON.parse(localStorage.getItem('bottomProcess')));
@@ -42,7 +42,7 @@ const Home = () => {
     },[processStatus])
     useEffect(()=>{
         
-        localStorage.setItem('instruksimsg',instruksimsg);
+        localStorage.setItem('instruksimsg',instruksimsg == "null" ? "" : instruksimsg);
     },[instruksimsg])
     useEffect(()=>{
         
