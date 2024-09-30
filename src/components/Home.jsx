@@ -9,20 +9,20 @@ const apiClient = axios.create({
     timeout: 4000
 });
 const Home = () => {
-    const [allowReopen,setAllowReopen] = useState(false);
+    const [allowReopen,setAllowReopen] = useState(localStorage.getItem('allowReopen') == "" ? false : JSON.parse(localStorage.getItem('allowReopen')));
     const [hostname, setHostname] = useState('');
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
     const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
     const [Getweightbin, setGetweightbin] = useState(0);
-    const [instruksimsg, setinstruksimsg] = useState("");
+    const [instruksimsg, setinstruksimsg] = useState(localStorage.getItem('instruksimsg'));
     const [localSocket, setLocalSocket] = useState();
-    const [bottomLockEnable, setBottomLock] = useState(false);
-    const [type, setType] = useState('');
-    const [processStatus,startProcess] = useState(null);
-    const [topProcessStatus,startTopProcess]= useState(null);
-    const [final,setFinal] = useState(false);
+    const [bottomLockEnable, setBottomLock] = useState(localStorage.getItem('bottomLockEnable') == "" ? false:  JSON.parse(localStorage.getItem('bottmLockEnable')));
+    const [type, setType] = useState(localStorage.getItem('type'));
+    const [processStatus,startProcess] = useState(localStorage.getItem('bottomProcess') == ""? null :JSON.parse(localStorage.getItem('bottomProcess')));
+    const [topProcessStatus,startTopProcess]= useState(localStorage.getItem('topProcess')=="" ? null : JSON.parse(localStorage.getItem('topProcess')  ));
+    const [final,setFinal] = useState(localStorage.getItem('final') == "" ? false : JSON.parse(localStorage.getItem('final')));
     const [sensor,setSensor] = useState([0,0]);
-    const [maxWeight,setMaxWeight] = useState(0);
+    const [maxWeight,setMaxWeight] = useState(localStorage.getItem('maxWeight')== "" || localStorage.getItem('maxWeight') == null ? 0 : parseFloat(localStorage.getItem('maxWeight')));
     const [ipAddress, setIpAddress] = useState('');
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
@@ -57,16 +57,6 @@ const Home = () => {
     useEffect(()=>{
         localStorage.setItem('bottmLockEnable',bottomLockEnable);
     },[bottomLockEnable])
-    useEffect(()=>{
-        startProcess(localStorage.getItem('topProcess')=="" ? null : JSON.parse(localStorage.getItem('topProcess')  ));
-        startTopProcess(localStorage.getItem('bottomProcess') == ""? null :JSON.parse(localStorage.getItem('bottomProcess')));
-        setinstruksimsg(localStorage.getItem('instruksimsg'));
-        setType(localStorage.getItem('type'));
-        setFinal(localStorage.getItem('final') == "" ? null : JSON.parse(localStorage.getItem('final')));
-        setMaxWeight(localStorage.getItem('maxWeight')== "" || localStorage.getItem('maxWeight') == null ? 0 : parseFloat(localStorage.getItem('maxWeight')));
-        setAllowReopen(localStorage.getItem('allowReopen') == "" ? false : JSON.parse(localStorage.getItem('allowReopen')));
-        setBottomLock(localStorage.getItem('bottomLockEnable') == "" ? false:  JSON.parse(localStorage.getItem('bottmLockEnable')));
-    },[])
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
     }
