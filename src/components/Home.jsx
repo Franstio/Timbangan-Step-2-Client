@@ -38,14 +38,14 @@ const Home = () => {
         localStorage.setItem('bottomLockEnable',bottomLockEnable);
     },[topProcessStatus,processStatus,instruksimsg,type,final,maxWeight,allowReopen,bottomLockEnable])
     useEffect(()=>{
-        startProcess(JSON.parse(localStorage.getItem('topProcess')));
-        startTopProcess(JSON.parse(localStorage.getItem('bottomProcess')));
-        setinstruksimsg(JSON.parse(localStorage.getItem('instruksimsg')));
-        setType(JSON.parse(localStorage.getItem('type')));
-        setFinal(JSON.parse(localStorage.getItem('final')));
-        setMaxWeight(JSON.parse(localStorage.getItem('maxWeight')));
-        setAllowReopen(JSON.parse(localStorage.setItem('allowReopen')));
-        setBottomLock(JSON.parse(localStorage.getItem('bottmLockEnable')));
+        startProcess(localStorage.getItem('topProcess')=="" ? null : JSON.parse(localStorage.getItem('topProcess')  ));
+        startTopProcess(localStorage.getItem('bottomProcess') == ""? null :JSON.parse(localStorage.getItem('bottomProcess')));
+        setinstruksimsg(localStorage.getItem('instruksimsg'));
+        setType(localStorage.getItem('type'));
+        setFinal(localStorage.getItem('final') == "" ? null : JSON.parse(localStorage.getItem('final')));
+        setMaxWeight(localStorage.getItem('maxWeight')== "" || localStorage.getItem('maxWeight') == null ? 0 : parseFloat(localStorage.getItem('maxWeight')));
+        setAllowReopen(localStorage.getItem('allowReopen') == "" ? false : JSON.parse(localStorage.setItem('allowReopen')));
+        setBottomLock(localStorage.getItem('bottomLockEnable') == "" ? false:  JSON.parse(localStorage.getItem('bottmLockEnable')));
     },[])
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
