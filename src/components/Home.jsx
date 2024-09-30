@@ -29,14 +29,34 @@ const Home = () => {
     ]
     useEffect(()=>{
         localStorage.setItem('topProcess',topProcessStatus );
+    },[topProcessStatus])
+    useEffect(()=>{
+        
         localStorage.setItem('bottomProcess',processStatus );
+    },[processStatus])
+    useEffect(()=>{
+        
         localStorage.setItem('instruksimsg',instruksimsg);
+    },[instruksimsg])
+    useEffect(()=>{
+        
         localStorage.setItem('type',type);
+    },[type])
+    useEffect(()=>{
+        
         localStorage.setItem('final',final);
+    },[final])
+    useEffect(()=>{
+        
         localStorage.setItem('maxWeight',maxWeight);
+    },[maxWeight])
+    useEffect(()=>{
+        
         localStorage.setItem('allowReopen',allowReopen);
-        localStorage.setItem('bottomLockEnable',bottomLockEnable);
-    },[topProcessStatus,processStatus,instruksimsg,type,final,maxWeight,allowReopen,bottomLockEnable])
+    },[allowReopen])
+    useEffect(()=>{
+        localStorage.setItem('bottmLockEnable',bottomLockEnable);
+    },[bottomLockEnable])
     useEffect(()=>{
         startProcess(localStorage.getItem('topProcess')=="" ? null : JSON.parse(localStorage.getItem('topProcess')  ));
         startTopProcess(localStorage.getItem('bottomProcess') == ""? null :JSON.parse(localStorage.getItem('bottomProcess')));
