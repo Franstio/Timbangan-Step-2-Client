@@ -65,6 +65,9 @@ const Home = () => {
             {
             }*/
         });
+        localSocket.on('refresh',(a)=>{
+            location.reload();
+        })
     }, [localSocket]);
     const startObserveBottomSensor =async (target)=>{
         await apiClient.post('http://localhost:5000/observeBottomSensor',{readTarget:target});
