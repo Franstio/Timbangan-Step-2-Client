@@ -12,10 +12,16 @@ const Home = () => {
     const [allowReopen,setAllowReopen] = useState(localStorage.getItem('allowReopen') == "" ? false : JSON.parse(localStorage.getItem('allowReopen')));
     const [hostname, setHostname] = useState('');
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
-    const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
+    const [socket, setSocket] = useState(io(`http://${process.env.REACT_APP_TIMBANGAN}/`,{
+        reconnection: true,
+        autoConnect: true,
+    })); // Sesuaikan dengan alamat server
     const [Getweightbin, setGetweightbin] = useState(0);
     const [instruksimsg, setinstruksimsg] = useState(localStorage.getItem('instruksimsg'));
-    const [localSocket, setLocalSocket] = useState();
+    const [localSocket, setLocalSocket] = useState(io(`http://localhost:5000/`,{
+        reconnection: true,
+        autoConnect: true,
+        }));
     const [bottomLockEnable, setBottomLock] = useState(localStorage.getItem('bottomLockEnable') == "" ? false:  JSON.parse(localStorage.getItem('bottmLockEnable')));
     const [type, setType] = useState(localStorage.getItem('type'));
     const [processStatus,startProcess] = useState(localStorage.getItem('bottomProcess') == ""? null :JSON.parse(localStorage.getItem('bottomProcess')));
@@ -74,16 +80,6 @@ const Home = () => {
         };
         getIp();
     },[])
-    useEffect(() => {
-        setSocket(io(`http://${process.env.REACT_APP_TIMBANGAN}/`,{
-            reconnection: true,
-            autoConnect: true,
-        }));
-        setLocalSocket(io(`http://localhost:5000/`,{
-        reconnection: true,
-        autoConnect: true,
-        }));
-    }, [])
     useEffect(() => {
         if (!localSocket)
             return;
