@@ -30,6 +30,7 @@ const Home = () => {
     const [sensor,setSensor] = useState([0,0]);
     const [maxWeight,setMaxWeight] = useState(localStorage.getItem('maxWeight')== "" || localStorage.getItem('maxWeight') == null ? 0 : parseFloat(localStorage.getItem('maxWeight')));
     const [ipAddress, setIpAddress] = useState('');
+    const [bin,setBin] = useState(localStorage.getItem('bin') == "" ? null : JSON.parse(localStorage.getItem('bin')));
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
     ]
@@ -52,6 +53,9 @@ const Home = () => {
         
         localStorage.setItem('final',final);
     },[final])
+    useEffect(()=>{
+        setBin(localSocket.setItem('bin',bin));
+    })
     useEffect(()=>{
         
         localStorage.setItem('maxWeight',maxWeight);
@@ -184,6 +188,9 @@ const Home = () => {
             else
                 startTopProcess(true);
         });
+        localSocket.on('Bin',(bin)=>{
+            setBin(bin);
+        })
         localSocket.on('sensorUpdate',(data)=>{
             if (!data)
                 return;
@@ -288,9 +295,16 @@ const Home = () => {
         }
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        await apiClient.post("http://localhost:5000/End",{
+            bin:{
+                ...bin,
+                type: "Collection"
+            }
+        });
         sendLockBottom();
         setBottomLock(false);
+        setinstruksimsg("");
  //       setinstruksimsg("Buka pintu bawah");
     }
     useEffect(()=>{

@@ -532,13 +532,14 @@ const Home = () => {
                 );
             }
           }
+          await apiClient.post(`http://${binDispose.name_hostname}/End`,{bin:binDispose});
           setmessage("DATA TELAH MASUK");
 
-          setinstruksimsg("DATA TELAH MASUK");
+          //setinstruksimsg("DATA TELAH MASUK");
           setTimeout(async () => {
             setmessage("");
-            setinstruksimsg(" ");
-            await sendPesanTimbangan(binDispose.name_hostname, "");
+            //setinstruksimsg(" ");
+            //await sendPesanTimbangan(binDispose.name_hostname, "");
             setContainers([]);
             setIdbin(binDispose.id);
             setTypeCollection(null);
@@ -602,9 +603,9 @@ const Home = () => {
     if (toplockId !== "") {
       (async () => {
         try {
-          await sendLockTop();
-          await sendYellowOff();
-          await sendGreenlampOn();
+          //await sendLockTop();
+          //await sendYellowOff();
+          //await sendGreenlampOn();
         } catch (error) {
           console.log("Error executing actions:", error);
         } finally {
@@ -629,6 +630,8 @@ const Home = () => {
         setErrDisposeMessage(res.message);
         return false;
       }
+      bin.type = "Dispose";
+      const resData = await apiClient.post(`http://${bin.name_hostname}/Start`,{bin: bin});
       setBinDispose(res.bin);
       setBinname(res.bin.name);
       return res.bin;
@@ -782,13 +785,13 @@ const Home = () => {
             };
             //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
 
-            await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
-            await sendLockBottom(_bin);
-            await sendYellowOffCollection(_bin);
-            await sendGreenlampOnCollection(_bin);
+            //await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
+            //await sendLockBottom(_bin);
+           // await sendYellowOffCollection(_bin);
+            //await sendGreenlampOnCollection(_bin);
                         const isPending = await UpdateBinWeightCollectionManual(_bin.id);
                         collectionPayload = {...collectionPayload,status: isPending ? "PENDING|STEP3" : "",success: !isPending};
-                        setinstruksimsg("Buka Penutup Bawah");
+                 //       setinstruksimsg("Buka Penutup Bawah");
 
                         if (res.data.container.waste.handletype=='Rack')
                         {
@@ -1103,8 +1106,8 @@ const Home = () => {
             setFinalStep(false);
             setIsSubmitAllowed(false);
             setIdbin(-1);*/
-      await sendGreenlampOff(binDispose.name_hostname);
-      await sendYellowOn(binDispose.name_hostname);
+     // await sendGreenlampOff(binDispose.name_hostname);
+      //await sendYellowOn(binDispose.name_hostname);
       return true;
     } catch (error) {
       console.log(error);
