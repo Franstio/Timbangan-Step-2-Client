@@ -20,7 +20,7 @@ const Home = () => {
     const [allowReopen,setAllowReopen] = useState(localStorage.getItem('allowReopen') == "" ? false : JSON.parse(localStorage.getItem('allowReopen')));
     const [hostname, setHostname] = useState('');
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
-    const [Getweightbin, setGetweightbin] = useState(0);
+    const [Getweightbin, setGetweightbin] = useState(localStorage.getItem("WeightBin") == "" || localStorage.getItem("WeightBin")=="undefined" ?  0 : parseFloat(localStorage.getItem("WeightBin")));
     const [instruksimsg, setinstruksimsg] = useState(localStorage.getItem('instruksimsg') == "null" ? "" : localStorage.getItem("instruksimsg"));
     const [bottomLockEnable, setBottomLock] = useState(localStorage.getItem('bottomLockEnable') == "" ? false:  JSON.parse(localStorage.getItem('bottmLockEnable')));
     const [type, setType] = useState(localStorage.getItem('type'));
@@ -42,7 +42,10 @@ const Home = () => {
         localStorage.setItem('bottomProcess',processStatus );
     },[processStatus])
     useEffect(()=>{
-        
+        localStorage.setItem("WeightBin",Getweightbin);
+    },[Getweightbin])
+    useEffect(()=>{
+
         localStorage.setItem('instruksimsg',instruksimsg == "null" ? "" : instruksimsg);
     },[instruksimsg])
     useEffect(()=>{
@@ -95,6 +98,7 @@ const Home = () => {
             }*/
         });
         localSocket.on('refresh',function (a){
+            setGetweightbin(localStorage.getItem("WeightBin") == "" || localStorage.getItem("WeightBin")=="undefined" ? 0 : parseFloat(localStorage.getItem("WeightBin")));
         });
     }, [localSocket]);
     const startObserveBottomSensor =async (target)=>{

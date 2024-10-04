@@ -532,6 +532,7 @@ const Home = () => {
                 );
             }
           }
+          binDispose.weight = getTotalWeight() + parseFloat(binDispose.weight);
           await apiClient.post(`http://${binDispose.name_hostname}/End`,{bin:binDispose});
           setmessage("DATA TELAH MASUK");
 
