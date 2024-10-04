@@ -57,8 +57,8 @@ const Home = () => {
         localStorage.setItem('final',final);
     },[final])
     useEffect(()=>{
-        setBin(localStorage.setItem('bin',bin));
-    })
+        setBin(localStorage.setItem('bin',JSON.stringify(bin)));
+    },[bin])
     useEffect(()=>{
         
         localStorage.setItem('maxWeight',maxWeight);
