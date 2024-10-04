@@ -302,6 +302,7 @@ const Home = () => {
         await apiClient.post("http://localhost:5000/End",{
             bin:{
                 ...bin,
+                weight: 0,
                 type: "Collection"
             }
         });
