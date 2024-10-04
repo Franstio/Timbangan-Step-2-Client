@@ -58,6 +58,10 @@ const Home = () => {
     },[final])
     useEffect(()=>{
         localStorage.setItem('bin',JSON.stringify(bin));
+        if (bin.weight)
+        {
+            setGetweightbin(parseFloat(bin.Weight));
+        }
     },[bin])
     useEffect(()=>{
         
