@@ -57,7 +57,7 @@ const Home = () => {
         localStorage.setItem('final',final);
     },[final])
     useEffect(()=>{
-        setBin(localStorage.setItem('bin',JSON.stringify(bin)));
+        localStorage.setItem('bin',JSON.stringify(bin));
     },[bin])
     useEffect(()=>{
         
@@ -192,6 +192,7 @@ const Home = () => {
                 startTopProcess(true);
         });
         localSocket.on('Bin',(bin)=>{
+            console.log(bin);
             setBin(bin);
         })
         localSocket.on('sensorUpdate',(data)=>{
