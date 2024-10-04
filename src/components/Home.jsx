@@ -54,7 +54,7 @@ const Home = () => {
         localStorage.setItem('final',final);
     },[final])
     useEffect(()=>{
-        setBin(localSocket.setItem('bin',bin));
+        setBin(localStorage.setItem('bin',bin));
     })
     useEffect(()=>{
         
