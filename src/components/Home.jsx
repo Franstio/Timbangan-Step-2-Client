@@ -30,7 +30,7 @@ const Home = () => {
     const [sensor,setSensor] = useState([0,0]);
     const [maxWeight,setMaxWeight] = useState(localStorage.getItem('maxWeight')== "" || localStorage.getItem('maxWeight') == null ? 0 : parseFloat(localStorage.getItem('maxWeight')));
     const [ipAddress, setIpAddress] = useState('');
-    const [bin,setBin] = useState(localStorage.getItem('bin') == "" || localStorage.getItem('bin') == undefined ? null : JSON.parse(localStorage.getItem('bin')));
+    const [bin,setBin] = useState(localStorage.getItem('bin') == "" || localStorage.getItem('bin') == undefined || localStorage.getItem("bin")=="undefined" ? null : JSON.parse(localStorage.getItem('bin')));
     const navigation = [
         { name: 'Dashboard', href: '#', current: true },
     ]
