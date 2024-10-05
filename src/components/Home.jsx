@@ -58,9 +58,9 @@ const Home = () => {
     },[final])
     useEffect(()=>{
         localStorage.setItem('bin',JSON.stringify(bin));
-        if (bin.Weight)
+        if (bin.weight)
         {
-            setGetweightbin(parseFloat(bin.Weight));
+            setGetweightbin(parseFloat(bin.weight));
         }
     },[bin])
     useEffect(()=>{
@@ -103,7 +103,7 @@ const Home = () => {
         });
         localSocket.on('refresh',function (a){
             
-            const weight= (localStorage.getItem("bin") == "" || localStorage.getItem("bin")=="undefined") ? Getweightbin  : parseFloat(JSON.parse(localStorage.getItem("bin")).Weight);
+            const weight= (localStorage.getItem("bin") == "" || localStorage.getItem("bin")=="undefined") ? Getweightbin  : parseFloat(JSON.parse(localStorage.getItem("bin")).weight);
             setGetweightbin(weight);
             const binData = bin;
             console.log(binData);
@@ -202,8 +202,8 @@ const Home = () => {
         });
         localSocket.on('Bin',(_bin)=>{
             console.log(_bin);
-            if (_bin.Max_Weight)
-                setMaxWeight(parseFloat(_bin.Max_Weight));
+            if (_bin.max_weight)
+                setMaxWeight(parseFloat(_bin.max_weight));
             setBin({..._bin});
         })
         localSocket.on('sensorUpdate',(data)=>{
@@ -314,7 +314,7 @@ const Home = () => {
         await apiClient.post("http://localhost:5000/End",{
             bin:{
                 ...bin,
-                Weight: 0,
+                weight: 0,
                 type: "Collection"
             }
         });
