@@ -254,6 +254,11 @@ const Home = () => {
         if (!socket)
             return;
         socket.on('getweight', (data) => {
+            setBin({
+                ...bin,
+                weight: data.weight,
+                max_weight: data.max_weight
+            });
             setGetweightbin(prev => data.weight);
             setMaxWeight(data.max_weight);
         });
