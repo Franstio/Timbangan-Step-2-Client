@@ -103,7 +103,7 @@ const Home = () => {
         });
         localSocket.on('refresh',function (a){
             
-            const weight= (localStorage.getItem("bin") == "" || localStorage.getItem("bin")=="undefined") ? Getweightbin  : parseFloat(localStorage.getItem("bin").Weight);
+            const weight= (localStorage.getItem("bin") == "" || localStorage.getItem("bin")=="undefined") ? Getweightbin  : parseFloat(JSON.parse(localStorage.getItem("bin")).Weight);
             setGetweightbin(weight);
             const binData = bin;
             console.log(binData);
