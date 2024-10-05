@@ -114,7 +114,7 @@ const Home = () => {
                 const binData = JSON.parse(localStorage.getItem("bin"));
                 console.log(binData);
                 setBin({...binData});
-                io.emit("TriggerWeight",binData);
+                localSocket.emit("TriggerWeight",binData);
             }
 //            io.emit('TriggerWeight',binData);
 
