@@ -102,7 +102,12 @@ const Home = () => {
             }*/
         });
         localSocket.on('refresh',function (a){
-            setGetweightbin(localStorage.getItem("WeightBin") == "" || localStorage.getItem("WeightBin")=="undefined" ? 0 : parseFloat(localStorage.getItem("WeightBin")));
+            
+            const weight= (localStorage.getItem("WeightBin") == "" || localStorage.getItem("WeightBin")=="undefined") ? Getweightbin  : parseFloat(localStorage.getItem("WeightBin"));
+            setGetweightbin(weight);
+            const binData = bin;
+            console.log(binData);
+//            io.emit('TriggerWeight',binData);
         });
     }, [localSocket]);
     const startObserveBottomSensor =async (target)=>{
