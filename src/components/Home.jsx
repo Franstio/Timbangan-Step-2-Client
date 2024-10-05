@@ -62,6 +62,10 @@ const Home = () => {
         {
             setGetweightbin(parseFloat(bin.weight));
         }
+        if (bin.max_weight)
+        {
+            setMaxWeight(parseFloat(bin.max_weight));
+        }
     },[bin])
     useEffect(()=>{
         
@@ -103,11 +107,17 @@ const Home = () => {
         });
         localSocket.on('refresh',function (a){
             
-            const weight= (localStorage.getItem("bin") == "" || localStorage.getItem("bin")=="undefined") ? Getweightbin  : parseFloat(JSON.parse(localStorage.getItem("bin")).weight);
-            setGetweightbin(weight);
-            const binData = bin;
-            console.log(binData);
+            if (localStorage.getItem("bin") == "" || localStorage.getItem("bin")=="undefined")  
+                setGetweightbin(Getweightbin);
+            else
+            {
+                const binData = JSON.parse(localStorage.getItem("bin"));
+                console.log(binData);
+                setBin({...binData});
+                io.emit("TriggerWeight",binData);
+            }
 //            io.emit('TriggerWeight',binData);
+
         });
     }, [localSocket]);
     const startObserveBottomSensor =async (target)=>{
@@ -202,8 +212,6 @@ const Home = () => {
         });
         localSocket.on('Bin',(_bin)=>{
             console.log(_bin);
-            if (_bin.max_weight)
-                setMaxWeight(parseFloat(_bin.max_weight));
             setBin({..._bin});
         })
         localSocket.on('sensorUpdate',(data)=>{
