@@ -200,9 +200,9 @@ const Home = () => {
             else
                 startTopProcess(true);
         });
-        localSocket.on('Bin',(bin)=>{
-            console.log(bin);
-            setBin(bin);
+        localSocket.on('Bin',(_bin)=>{
+            console.log(_bin);
+            setBin({..._bin});
         })
         localSocket.on('sensorUpdate',(data)=>{
             if (!data)
