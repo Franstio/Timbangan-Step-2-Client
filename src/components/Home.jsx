@@ -103,7 +103,7 @@ const Home = () => {
         });
         localSocket.on('refresh',function (a){
             
-            const weight= (localStorage.getItem("WeightBin") == "" || localStorage.getItem("WeightBin")=="undefined") ? Getweightbin  : parseFloat(localStorage.getItem("WeightBin"));
+            const weight= (localStorage.getItem("bin") == "" || localStorage.getItem("bin")=="undefined") ? Getweightbin  : parseFloat(localStorage.getItem("bin").Weight);
             setGetweightbin(weight);
             const binData = bin;
             console.log(binData);
@@ -202,6 +202,8 @@ const Home = () => {
         });
         localSocket.on('Bin',(_bin)=>{
             console.log(_bin);
+            if (_bin.Max_Weight)
+                setMaxWeight(bin.Max_Weight);
             setBin({..._bin});
         })
         localSocket.on('sensorUpdate',(data)=>{
