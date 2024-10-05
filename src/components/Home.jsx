@@ -203,7 +203,7 @@ const Home = () => {
         localSocket.on('Bin',(_bin)=>{
             console.log(_bin);
             if (_bin.Max_Weight)
-                setMaxWeight(bin.Max_Weight);
+                setMaxWeight(parseFloat(_bin.Max_Weight));
             setBin({..._bin});
         })
         localSocket.on('sensorUpdate',(data)=>{
