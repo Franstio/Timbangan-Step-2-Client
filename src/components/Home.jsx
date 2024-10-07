@@ -20,7 +20,7 @@ const Home = () => {
     const [allowReopen,setAllowReopen] = useState(localStorage.getItem('allowReopen') == "" ? false : JSON.parse(localStorage.getItem('allowReopen')));
     const [hostname, setHostname] = useState('');
     const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
-    const [Getweightbin, setGetweightbin] = useState(localStorage.getItem("WeightBin") == "" || localStorage.getItem("WeightBin")=="undefined" ?  0 : parseFloat(localStorage.getItem("WeightBin")));
+    //const [Getweightbin, setGetweightbin] = useState(localStorage.getItem("WeightBin") == "" || localStorage.getItem("WeightBin")=="undefined" ?  0 : parseFloat(localStorage.getItem("WeightBin")));
     const [instruksimsg, setinstruksimsg] = useState(localStorage.getItem('instruksimsg') == "null" ? "" : localStorage.getItem("instruksimsg"));
     const [bottomLockEnable, setBottomLock] = useState(localStorage.getItem('bottomLockEnable') == "" ? false:  JSON.parse(localStorage.getItem('bottmLockEnable')));
     const [type, setType] = useState(localStorage.getItem('type'));
@@ -28,7 +28,7 @@ const Home = () => {
     const [topProcessStatus,startTopProcess]= useState(localStorage.getItem('topProcess')=="" ? null : JSON.parse(localStorage.getItem('topProcess')  ));
     const [final,setFinal] = useState(localStorage.getItem('final') == "" ? false : JSON.parse(localStorage.getItem('final')));
     const [sensor,setSensor] = useState([0,0]);
-    const [maxWeight,setMaxWeight] = useState(localStorage.getItem('maxWeight')== "" || localStorage.getItem('maxWeight') == null ? 0 : parseFloat(localStorage.getItem('maxWeight')));
+   // const [maxWeight,setMaxWeight] = useState(localStorage.getItem('maxWeight')== "" || localStorage.getItem('maxWeight') == null ? 0 : parseFloat(localStorage.getItem('maxWeight')));
     const [ipAddress, setIpAddress] = useState('');
     const [bin,setBin] = useState(localStorage.getItem('bin') == "" || localStorage.getItem('bin') == undefined || localStorage.getItem("bin")=="undefined" ? null : JSON.parse(localStorage.getItem('bin')));
     const navigation = [
@@ -41,9 +41,9 @@ const Home = () => {
         
         localStorage.setItem('bottomProcess',processStatus );
     },[processStatus])
-    useEffect(()=>{
+    /*useEffect(()=>{
         localStorage.setItem("WeightBin",Getweightbin);
-    },[Getweightbin])
+    },[Getweightbin])*/
     useEffect(()=>{
 
         localStorage.setItem('instruksimsg',instruksimsg == "null" ? "" : instruksimsg);
@@ -58,19 +58,11 @@ const Home = () => {
     },[final])
     useEffect(()=>{
         localStorage.setItem('bin',JSON.stringify(bin));
-        if (bin.weight)
-        {
-            setGetweightbin(parseFloat(bin.weight));
-        }
-        if (bin.max_weight)
-        {
-            setMaxWeight(parseFloat(bin.max_weight));
-        }
     },[bin])
-    useEffect(()=>{
+    /*useEffect(()=>{
         
         localStorage.setItem('maxWeight',maxWeight);
-    },[maxWeight])
+    },[maxWeight])*/
     useEffect(()=>{
         
         localStorage.setItem('allowReopen',allowReopen);
@@ -108,7 +100,7 @@ const Home = () => {
         localSocket.on('refresh',function (a){
             
             if (localStorage.getItem("bin") == "" || localStorage.getItem("bin")=="undefined")  
-                setGetweightbin(Getweightbin);
+                return setBin({weight:0,max_weight:0});
             else
             {
                 const binData = JSON.parse(localStorage.getItem("bin"));
@@ -254,13 +246,13 @@ const Home = () => {
         if (!socket)
             return;
         socket.on('getweight', (data) => {
-            setBin({
+            setBin(prev=>({
                 ...bin,
                 weight: data.weight,
                 max_weight: data.max_weight
-            });
-            setGetweightbin(prev => data.weight);
-            setMaxWeight(data.max_weight);
+            }));
+//            setGetweightbin(prev => data.weight);
+//            setMaxWeight(data.max_weight);
         });
     }, [socket]);
 
@@ -344,7 +336,7 @@ const Home = () => {
 
     // Menghitung nilai gaugeValue sesuai dengan aturan yang ditentukan
     const getGaugeValue = () => {
-        const _final = (Getweightbin / maxWeight) * 100;
+        const _final = ((parseFloat(bin?.weight ?? 0)) / (parseFloat(bin?.max_weight ?? 0)) * 100);
         return (_final  >= 100) ? 100 : _final;
     };
  // Dapatkan nilai GaugeComponent yang sesuai
@@ -386,7 +378,7 @@ const Home = () => {
                             />
 
                         </div>
-                        <p className='flex justify-center text-xl'>{Getweightbin}Kg</p>
+                        <p className='flex justify-center text-xl'>{bin?.weight ?? 0}Kg</p>
                     </div>
 
                     <div className='flex-1 p-4 border rounded max-w-md bg-white'>
