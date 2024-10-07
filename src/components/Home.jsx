@@ -204,7 +204,7 @@ const Home = () => {
         });
         localSocket.on('Bin',(_bin)=>{
             console.log(_bin);
-            setBin({..._bin});
+            setBin(prev=>({..._bin}));
         })
         localSocket.on('sensorUpdate',(data)=>{
             if (!data)
