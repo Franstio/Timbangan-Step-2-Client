@@ -146,57 +146,62 @@ const Home = () => {
         setLastRackWeight({...weightlist});
         return weightlist;
     }*/
-    const sendLockBottom = async (_bin) => {
-        try {
-            const response = await apiClient.post(`http://${_bin.name_hostname}.local:5000/lockBottom`, {
-                idLockBottom: 1
-            });
-            if (response.status != 200) {
-                return;
-            }
+  const sendLockBottom = async (_bin) => {
+    try {
+      const response = await apiClient.post(
+        `http://${_bin.name_hostname}.local:5000/lockBottom`,
+        {
+          idLockBottom: 1,
         }
-        catch (error) {
-        }
-    }
-    const formatDate = (date)=> {
-        let d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-    
-        if (month.length < 2) 
-            month = '0' + month;
-        if (day.length < 2) 
-            day = '0' + day;
-    
-        return [year, month, day].join('-');
-    }
+      );
+      if (response.status != 200) {
+        return;
+      }
+    } catch (error) {}
+  };
+  const formatDate = (date) => {
+    let d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
 
-    const sendDataPanasonicServer = async (stationName, frombinname, tobinname, weight, type) => {
-//        const _finalNeto = getWeight();
-        try {
-            const response = await apiClient.post(`http://${apiTarget}/api/pid/pidatalog`, {
-                badgeno: user.badgeId,
-                logindate: '',
-                stationname: stationName,
-                frombinname: frombinname,
-                tobinname: tobinname,
-                weight: weight,
-                activity: type
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
 
-            });
-            if (response.status != 200) {
-                return false;
-            }
-            await sendWeight(frombinname,weight);
-            return response.data.status == 'Success';
+    return [year, month, day].join("-");
+  };
+
+  const sendDataPanasonicServer = async (
+    stationName,
+    frombinname,
+    tobinname,
+    weight,
+    type
+  ) => {
+    //        const _finalNeto = getWeight();
+    try {
+      const response = await apiClient.post(
+        `http://${apiTarget}/api/pid/pidatalog`,
+        {
+          badgeno: user.badgeId,
+          logindate: "",
+          stationname: stationName,
+          frombinname: frombinname,
+          tobinname: tobinname,
+          weight: weight,
+          activity: type,
         }
-        catch (error) {
-            console.log(error);
-            return false;
-        }
+      );
+      if (response.status != 200) {
+        return false;
+      }
+      await sendWeight(frombinname, weight);
+      return response.data.status == "Success";
+    } catch (error) {
+      console.log(error);
+      return false;
     }
-
+  };
 
   useEffect(() => {
     let targetHostName = "";
@@ -230,18 +235,21 @@ const Home = () => {
     }
   };
 
-    const sendGreenlampOnCollection = async (_bin) => {
-        try {
-            const response = await apiClient.post(`http://${_bin.name_hostname}.local:5000/greenlampon`, {
-                idLampGreen: 1
-            });
-            if (response.status != 200) {
-                return;
-            }
-        } catch (error) {
-            console.log(error);
+  const sendGreenlampOnCollection = async (_bin) => {
+    try {
+      const response = await apiClient.post(
+        `http://${_bin.name_hostname}.local:5000/greenlampon`,
+        {
+          idLampGreen: 1,
         }
-    };
+      );
+      if (response.status != 200) {
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const sendGreenlampOff = async (targetName) => {
     try {
@@ -275,18 +283,21 @@ const Home = () => {
     }
   };
 
-    const sendYellowOffCollection = async (_bin) => {
-        try {
-            const response = await apiClient.post(`http://${_bin.name_hostname}.local:5000/yellowlampoff`, {
-                idLampYellow: 1
-            });
-            if (response.status != 200) {
-                return;
-            }
-        } catch (error) {
-            console.log(error);
+  const sendYellowOffCollection = async (_bin) => {
+    try {
+      const response = await apiClient.post(
+        `http://${_bin.name_hostname}.local:5000/yellowlampoff`,
+        {
+          idLampYellow: 1,
         }
-    };
+      );
+      if (response.status != 200) {
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const sendYellowOn = async (targetName) => {
     try {
@@ -354,7 +365,6 @@ const Home = () => {
       return { error: error };
     }
   };
-
 
   const UpdateBinWeightCollection = async () => {
     try {
@@ -533,7 +543,9 @@ const Home = () => {
             }
           }
           binDispose.weight = getTotalWeight() + parseFloat(binDispose.weight);
-          await apiClient.post(`http://${binDispose.name_hostname}/End`,{bin:binDispose});
+          await apiClient.post(`http://${binDispose.name_hostname}/End`, {
+            bin: binDispose,
+          });
           setmessage("DATA TELAH MASUK");
 
           //setinstruksimsg("DATA TELAH MASUK");
@@ -632,7 +644,10 @@ const Home = () => {
         return false;
       }
       res.bin.type = "Dispose";
-      const resData = await apiClient.post(`http://${res.bin.name_hostname}/Start`,{bin: res.bin});
+      const resData = await apiClient.post(
+        `http://${res.bin.name_hostname}/Start`,
+        { bin: res.bin }
+      );
       setBinDispose(res.bin);
       setBinname(res.bin.name);
       return res.bin;
@@ -663,7 +678,7 @@ const Home = () => {
   useEffect(() => {
     if (!binDispose || binDispose == null || !binDispose.name_hostname) return;
     setinstruksimsg("Buka Penutup Atas");
-//    sendType(binDispose.name_hostname, "Dispose");
+    //    sendType(binDispose.name_hostname, "Dispose");
   }, [binDispose]);
   async function sendLockTop() {
     try {
@@ -710,7 +725,7 @@ const Home = () => {
       const res = await apiClient.get(
         `http://${apiTarget}/api/pid/pibadgeverify?f1=${station}&f2=${user.badgeId}`,
         {
-          timeout: 1000
+          timeout: 1000,
         }
       );
       console.log(res);
@@ -785,89 +800,84 @@ const Home = () => {
               weight: _bin.weight,
             };
             //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
-            _bin.type  = 'Collection';
-            const resData = await apiClient.post(`http://${res.bin.name_hostname}/Start`,{bin: _bin});
+            _bin.type = "Collection";
+            const resData = await apiClient.post(
+              `http://${_bin.name_hostname}/Start`,
+              { bin: _bin }
+            );
             //await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
             //await sendLockBottom(_bin);
-           // await sendYellowOffCollection(_bin);
+            // await sendYellowOffCollection(_bin);
             //await sendGreenlampOnCollection(_bin);
-                        const isPending = await UpdateBinWeightCollectionManual(_bin.id);
-                        collectionPayload = {...collectionPayload,status: isPending ? "PENDING|STEP3" : "",success: !isPending};
-                 //       setinstruksimsg("Buka Penutup Bawah");
+            const isPending = await UpdateBinWeightCollectionManual(_bin.id);
+            collectionPayload = {
+              ...collectionPayload,
+              status: isPending ? "PENDING|STEP3" : "",
+              success: !isPending,
+            };
+            //       setinstruksimsg("Buka Penutup Bawah");
 
-                        if (res.data.container.waste.handletype=='Rack')
-                        {
-                            await saveTransaksiRack(collectionPayload,'','Collection');
-                        }
-                        else
-                            await saveTransaksiCollection(collectionPayload);
-                        //                            UpdateBinWeightCollection();
-//                        setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
-                        
-                        setShowModal(false);
-                        setScanData('');
-                        setUser(null);
-                        setContainer(null);
-                        //sendType(_bin.name_hostname, 'Collection');
-                        setBinname(_bin.name);
-                        setinstruksimsg('')
-                        setTypeCollection(null);
-                        setmessage('');
-                        return;
-                    }
-                    else {
-                        setmessage(getScaleName());
-                        let _idscraplog = '';
-                        if (!user.IN)
-                        {
-                            setErrDisposeMessage("Unauthorized User For Dispose");
-                            return;
-                        }
-                        if (continueState && _waste.name != prevWaste)
-                        {
-                            setErrDisposeMessage("Waste name mismatch");
-                            setScanData('');
-                            return;
-                        }
-                        if (_waste.step1)
-                        {
-                            try
-                            {
-                                const checkTr = await apiClient.get("http://localhost:5000/Transaksi/"+scanData);
-                                const tr = checkTr.data;
-                                _idscraplog = tr.idscraplog;
-                                setTransactionData(tr);
-                            }
-                            catch (err)
-                            {
-                                setErrDisposeMessage("Error Fetching Transaction");
-                                return;
-                            }
-                        }
-                        else
-                            setTransactionData({});
-                        setContainer(res.data.container);
-                        setType(res.data.container.type);
-                        setShowModalInfoScales(true);
-                    }
-                    setWastename(res.data.container.waste.name);
-                    setScanData('');
-                    setIsSubmitAllowed(true);
-                } else {
-                    setErrDisposeMessage("Container not found");
-                    setUser(null);
-                    setContainer(null);
-                    setContainerName(res.data.name || '');
-                    setScanData('');
-                    setIsSubmitAllowed(false);
-                }
+            if (res.data.container.waste.handletype == "Rack") {
+              await saveTransaksiRack(collectionPayload, "", "Collection");
+            } else await saveTransaksiCollection(collectionPayload);
+            //                            UpdateBinWeightCollection();
+            //                        setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
+
+            setShowModal(false);
+            setScanData("");
+            setUser(null);
+            setContainer(null);
+            //sendType(_bin.name_hostname, 'Collection');
+            setBinname(_bin.name);
+            setinstruksimsg("");
+            setTypeCollection(null);
+            setmessage("");
+            return;
+          } else {
+            setmessage(getScaleName());
+            let _idscraplog = "";
+            if (!user.IN) {
+              setErrDisposeMessage("Unauthorized User For Dispose");
+              return;
             }
-
+            if (continueState && _waste.name != prevWaste) {
+              setErrDisposeMessage("Waste name mismatch");
+              setScanData("");
+              return;
+            }
+            if (_waste.step1) {
+              try {
+                const checkTr = await apiClient.get(
+                  "http://localhost:5000/Transaksi/" + scanData
+                );
+                const tr = checkTr.data;
+                _idscraplog = tr.idscraplog;
+                setTransactionData(tr);
+              } catch (err) {
+                setErrDisposeMessage("Error Fetching Transaction");
+                return;
+              }
+            } else setTransactionData({});
+            setContainer(res.data.container);
+            setType(res.data.container.type);
+            setShowModalInfoScales(true);
+          }
+          setWastename(res.data.container.waste.name);
+          setScanData("");
+          setIsSubmitAllowed(true);
+        } else {
+          setErrDisposeMessage("Container not found");
+          setUser(null);
+          setContainer(null);
+          setContainerName(res.data.name || "");
+          setScanData("");
+          setIsSubmitAllowed(false);
         }
-        catch (err) {
-            console.log(err)
-        };
-    };
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const VerificationScan = () => {
     apiClient
@@ -1108,7 +1118,7 @@ const Home = () => {
             setFinalStep(false);
             setIsSubmitAllowed(false);
             setIdbin(-1);*/
-     // await sendGreenlampOff(binDispose.name_hostname);
+      // await sendGreenlampOff(binDispose.name_hostname);
       //await sendYellowOn(binDispose.name_hostname);
       return true;
     } catch (error) {
