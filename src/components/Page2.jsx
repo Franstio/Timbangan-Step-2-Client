@@ -662,8 +662,8 @@ const Home = () => {
   };
   useEffect(() => {
     if (!binDispose || binDispose == null || !binDispose.name_hostname) return;
-    setinstruksimsg("buka penutup atas");
-    sendType(binDispose.name_hostname, "Dispose");
+    setinstruksimsg("Buka Penutup Atas");
+//    sendType(binDispose.name_hostname, "Dispose");
   }, [binDispose]);
   async function sendLockTop() {
     try {
@@ -785,7 +785,8 @@ const Home = () => {
               weight: _bin.weight,
             };
             //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
-
+            _bin.type  = 'Collection';
+            const resData = await apiClient.post(`http://${res.bin.name_hostname}/Start`,{bin: _bin});
             //await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
             //await sendLockBottom(_bin);
            // await sendYellowOffCollection(_bin);
@@ -807,7 +808,7 @@ const Home = () => {
                         setScanData('');
                         setUser(null);
                         setContainer(null);
-                        sendType(_bin.name_hostname, 'Collection');
+                        //sendType(_bin.name_hostname, 'Collection');
                         setBinname(_bin.name);
                         setinstruksimsg('')
                         setTypeCollection(null);
