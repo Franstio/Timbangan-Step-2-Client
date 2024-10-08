@@ -543,9 +543,12 @@ const Home = () => {
             }
           }
           binDispose.weight = getTotalWeight() + parseFloat(binDispose.weight);
-          await apiClient.post(`http://${binDispose.name_hostname}.local/End`, {
-            bin: binDispose,
-          });
+          await apiClient.post(
+            `http://${binDispose.name_hostname}.local:5000/End`,
+            {
+              bin: binDispose,
+            }
+          );
           setmessage("DATA TELAH MASUK");
 
           //setinstruksimsg("DATA TELAH MASUK");
@@ -645,7 +648,7 @@ const Home = () => {
       }
       res.bin.type = "Dispose";
       const resData = await apiClient.post(
-        `http://${res.bin.name_hostname}.local/Start`,
+        `http://${res.bin.name_hostname}.local:5000/Start`,
         { bin: res.bin }
       );
       setBinDispose(res.bin);
@@ -802,7 +805,7 @@ const Home = () => {
             //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
             _bin.type = "Collection";
             const resData = await apiClient.post(
-              `http://${_bin.name_hostname}.local/Start`,
+              `http://${_bin.name_hostname}.local:5000/Start`,
               { bin: _bin }
             );
             //await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
