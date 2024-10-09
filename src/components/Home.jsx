@@ -261,11 +261,6 @@ const Home = () => {
             const response = await apiClient.post(`http://localhost:5000/lockBottom`, {
                 idLockBottom: 1
             });
-            new Promise(async () => {
-                await sendGreenlampOff();
-                await sendYellowOn();
-                Promise.resolve();
-            })
             setinstruksimsg("buka penutup bawah");
             setFinal(true);
         } catch (error) {
@@ -323,7 +318,7 @@ const Home = () => {
                 type: "Collection"
             }
         });
-        sendLockBottom();
+        //sendLockBottom();
         setBottomLock(false);
         setinstruksimsg("");
  //       setinstruksimsg("Buka pintu bawah");
