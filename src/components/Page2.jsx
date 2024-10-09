@@ -647,10 +647,6 @@ const Home = () => {
         return false;
       }
       res.bin.type = "Dispose";
-      const resData = await apiClient.post(
-        `http://${res.bin.name_hostname}.local:5000/Start`,
-        { bin: res.bin }
-      );
       setBinDispose(res.bin);
       setBinname(res.bin.name);
       return res.bin;
@@ -1246,6 +1242,10 @@ const Home = () => {
       setTransactionData({});
       setFinalStep(false);
     } else {
+      const resData = await apiClient.post(
+        `http://${binDispose.name_hostname}.local:5000/Start`,
+        { bin: binDispose }
+      );
       setFinalStep(true);
       setmessage("Waiting For Verification");
       settoplockId(binDispose.name_hostname);
