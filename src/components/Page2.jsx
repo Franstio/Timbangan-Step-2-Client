@@ -1029,20 +1029,27 @@ const Home = () => {
       : _waste.scales == "4Kg"
       ? neto4Kg
       : neto50Kg;
-    const res = await apiClient.put(
-      "http://localhost:5000/Transaksi/" + _idscraplog,
-      {
-        type: _type,
-        status: "Done",
-        weight: _finalNeto,
-        logindate: logindate,
-      },
-      {
-        validateStatus: (status) => {
-          return true;
+    try
+    {
+      const res = await apiClient.put(
+        "http://localhost:5000/Transaksi/" + _idscraplog,
+        {
+          type: _type,
+          status: "Done",
+          weight: _finalNeto,
+          logindate: logindate,
         },
-      }
-    );
+        {
+          validateStatus: (status) => {
+            return true;
+          },
+        }
+      );
+    }
+    catch (e)
+    {
+      console.log(e);
+    }
     //        setWaste(null);
   //  setScanData("");
 //    setinstruksimsg("");
