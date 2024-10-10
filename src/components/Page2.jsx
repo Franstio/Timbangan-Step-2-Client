@@ -1044,8 +1044,8 @@ const Home = () => {
       }
     );
     //        setWaste(null);
-    setScanData("");
-    setinstruksimsg("");
+  //  setScanData("");
+//    setinstruksimsg("");
   };
   const updateContainerstatus = async () => {
     //const _finalNeto = getWeight();
