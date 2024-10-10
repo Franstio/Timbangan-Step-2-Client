@@ -1008,8 +1008,8 @@ const Home = () => {
     );
     if (dataTransaction.idscraplog)
       _p.payload.idscraplog = dataTransaction.idscraplog;
-    _p.success = isSuccess;
-    if (!_p.success) _p.payload.status = "Pending|PIDSG";
+    _p.payload.success = isSuccess;
+    if (!_p.payload.success) _p.payload.status = "Pending|PIDSG";
     await apiClient.post(
       "http://localhost:5000/SaveTransaksi",
       {
