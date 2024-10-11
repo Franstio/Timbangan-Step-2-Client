@@ -109,7 +109,6 @@ const Home = () => {
                 localSocket.emit("TriggerWeight",binData);
             }
 //            io.emit('TriggerWeight',binData);
-
         });
     }, [localSocket]);
     const startObserveBottomSensor =async (target)=>{

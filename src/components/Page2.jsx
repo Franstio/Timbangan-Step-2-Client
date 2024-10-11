@@ -28,7 +28,7 @@ import {
 
 const apiClient = axios.create({
   withCredentials: false,
-  timeout: 2000,
+  timeout: 2500,
 });
 const Home = () => {
   const [user, setUser] = useState(null);
@@ -679,19 +679,6 @@ const Home = () => {
     setinstruksimsg("Buka Penutup Atas");
     //    sendType(binDispose.name_hostname, "Dispose");
   }, [binDispose]);
-  async function sendLockTop() {
-    try {
-      const response = await apiClient.post(
-        `http://${toplockId}.local:5000/locktop/`,
-        {
-          idLockTop: 1,
-        }
-      );
-      setinstruksimsg("Buka Penutup Atas");
-    } catch (error) {
-      console.log(error);
-    }
-  }
   useEffect(() => {
     if (user == null || container == null) setScanData("");
   }, [user, container]);
