@@ -1016,7 +1016,7 @@ const Home = () => {
         ..._p,
       },
       {
-        timeout: 10000,
+        timeout: 1000,
       }
     );
   };
