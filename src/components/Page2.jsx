@@ -28,7 +28,7 @@ import {
 
 const apiClient = axios.create({
   withCredentials: false,
-  timeout: 2500,
+  timeout: 3000,
 });
 const Home = () => {
   const [user, setUser] = useState(null);
