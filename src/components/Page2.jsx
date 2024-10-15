@@ -727,7 +727,7 @@ const Home = () => {
     try {
       if (containers.length > 0) {
         const checkIndex = containers.findIndex(
-          (x) => x.dataContainer?.name == scanData
+          (x) => x.dataContainer?.name.toLowerCase() == scanData.toLowerCase()
         );
         if (checkIndex != -1) {
           setAllowContinueModal(true);
