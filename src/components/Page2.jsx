@@ -206,11 +206,12 @@ const Home = () => {
           activity: type,
         }
       );
+      console.log({pidsg_res:response});
       if (response.status != 200) {
         return false;
       }
       await sendWeight(frombinname, weight);
-      return response.data.status == "Success";
+      return response.data.status == "Success" || response.data.result == 'Success';
     } catch (error) {
       console.log(error);
       return false;
@@ -995,6 +996,7 @@ const Home = () => {
         type: type,
         weight: _finalNeto,
         toBin: binDispose.name,
+        status: "Done",
         fromContainer: dataTransaction?.toBin
           ? dataTransaction?.toBin
           : dataContainer.name,
