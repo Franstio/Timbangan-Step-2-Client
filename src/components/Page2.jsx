@@ -564,17 +564,17 @@ const Home = () => {
             }
           );
           setmessage("DATA TELAH MASUK");
-
-          //setinstruksimsg("DATA TELAH MASUK");
-          setTimeout(async () => {
-            setmessage("");
             //setinstruksimsg(" ");
             //await sendPesanTimbangan(binDispose.name_hostname, "");
             setContainers([]);
             setIdbin(binDispose.id);
             setTypeCollection(null);
             setBinDispose(null);
-          }, 2000);
+            setFinalStep(false);
+          //setinstruksimsg("DATA TELAH MASUK");
+          setTimeout(async () => {
+            setmessage("");
+          }, 700);
           //VerificationScan();
 
           //                setScanData('');
