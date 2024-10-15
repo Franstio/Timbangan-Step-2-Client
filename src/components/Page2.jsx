@@ -144,7 +144,7 @@ const Home = () => {
         setIsOnline(false);
       }
     }
-    getStatus();
+    setInterval( ()=>getStatus(),5000);
   },[])
   const getTotalWeight = () => containers.reduce((a, b) => a + b.dataWeight, 0);
   /*const getRackLastTransaction = async (containerName)=>{
