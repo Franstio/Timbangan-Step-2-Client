@@ -431,7 +431,7 @@ const Home = () => {
                         </div>
                     </div>
                     {
-                        allowReopen ? 
+                        allowReopen && !bottomLockEnable ? 
                         <button
                         className={`flex-1 p-4 border rounded max-w-xs flex justify-center items-center font-semibold ${bottomLockEnable ? 'bg-blue-500 text-white' : 'bg-white text-black'
                             }`}
