@@ -78,7 +78,7 @@ const Home = () => {
   const [logindate, setLoginDate] = useState("");
   const [containers, setContainers] = useState([]);
   const [checkInputInverval, setCheckInputInterval] = useState(null);
-  const [ipAddress, setIpAddress] = useState("");
+  const [ipAddress, setIpAddress] = useState(process.env.REACT_APP_PIDSG);
   //const ScaleName = getScaleName();
   const navigation = [{ name: "Dashboard", href: "#", current: true }];
 
@@ -121,7 +121,7 @@ const Home = () => {
       />
     );
   };
-  useEffect(() => {
+  /*useEffect(() => {
     const getIp = async () => {
       try {
         const ip = await apiClient.get(`http://localhost:5000/ip`);
@@ -131,7 +131,20 @@ const Home = () => {
       }
     };
     getIp();
-  }, []);
+  }, []);*/
+  useEffect(()=>{
+    const getStatus = async ()=>{
+      try
+      {
+        const res = await apiClient.get(`http://${ipAddress}`);
+        setIsOnline(res.status>=200 && res.status < 300);
+      }
+      catch (er)
+      {
+        setIsOnline(false);
+      }
+    }
+  })
   const getTotalWeight = () => containers.reduce((a, b) => a + b.dataWeight, 0);
   /*const getRackLastTransaction = async (containerName)=>{
         const res  = await apiClient.get(`http://${rackTarget}/Transaksi/${containerName}`);
@@ -411,10 +424,10 @@ const Home = () => {
     if (!socket) return;
     socket.emit("connectScale");
     socket.on("connect", () => {
-      setIsOnline(true);
+     // setIsOnline(true);
     });
     socket.on("disconnect", () => {
-      setIsOnline(false);
+      //setIsOnline(false);
     });
     socket.on("data1", (weight50Kg) => {
       try {
