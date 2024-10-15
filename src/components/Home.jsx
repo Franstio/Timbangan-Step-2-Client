@@ -201,6 +201,9 @@ const Home = () => {
             else
                 startTopProcess(true);
         });
+        localSocket.on('reopen',(lock)=>{
+            setAllowReopen(lock.reopen);
+        })
         localSocket.on('Bin',(_bin)=>{
             console.log(_bin);
             setBin(prev=>({..._bin}));
@@ -327,7 +330,11 @@ const Home = () => {
             startProcess(final);
     },[final])
 
-
+    const handleReopen = async ()=>{
+        const url = `http://localhost:5000/${ type=='Collection' ? 'lockBottom' : 'lockTop'}`;
+        const payload = type='Collection' ? {idLockBottom:1} : {idLockTop:1};
+        await apiClient.post(url,{...payload});
+    }
     // Menghitung nilai gaugeValue sesuai dengan aturan yang ditentukan
     const getGaugeValue = () => {
         const _final = ((parseFloat(bin?.weight ?? 0)) / (parseFloat(bin?.max_weight ?? 0)) * 100);
@@ -423,7 +430,17 @@ const Home = () => {
                             <FiberManualRecordIcon fontSize="small" style={{ color:  (sensor[6] == 0? 'gray' : 'green')}} />
                         </div>
                     </div>
-
+                    {
+                        allowReopen ? 
+                        <button
+                        className={`flex-1 p-4 border rounded max-w-xs flex justify-center items-center font-semibold ${bottomLockEnable ? 'bg-blue-500 text-white' : 'bg-white text-black'
+                            }`}
+                        disabled={!allowReopen}
+                        onClick={handleReopen}
+                    >
+                        Reopen Lock
+                    </button>
+                        :
                     <button
                         className={`flex-1 p-4 border rounded max-w-xs flex justify-center items-center font-semibold ${bottomLockEnable ? 'bg-blue-500 text-white' : 'bg-white text-black'
                             }`}
@@ -432,14 +449,8 @@ const Home = () => {
                     >
                         Lock Bottom
                     </button>
+                    }
                 </div>
-                {
-                    allowReopen && (
-                        <div className='flex justify-center mt-10 w-full'>
-                            <button  className={`flex-1 p-4 border rounded  flex justify-center items-center font-semibold bg-blue-500 text-white w-full`}>Reopen Lock</button>
-                        </div>
-                    )
-                }
             </div>
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: {ipAddress} {socket?.connected ? "Online":"Offline"}</p>
