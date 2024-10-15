@@ -144,7 +144,8 @@ const Home = () => {
         setIsOnline(false);
       }
     }
-  })
+    getStatus();
+  },[])
   const getTotalWeight = () => containers.reduce((a, b) => a + b.dataWeight, 0);
   /*const getRackLastTransaction = async (containerName)=>{
         const res  = await apiClient.get(`http://${rackTarget}/Transaksi/${containerName}`);
