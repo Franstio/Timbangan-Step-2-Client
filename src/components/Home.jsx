@@ -332,7 +332,7 @@ const Home = () => {
 
     const handleReopen = async ()=>{
         const url = `http://localhost:5000/${ type=='Collection' ? 'lockBottom' : 'lockTop'}`;
-        const payload = type='Collection' ? {idLockBottom:1} : {idLockTop:1};
+        const payload = type=='Collection' ? {idLockBottom:1} : {idLockTop:1};
         await apiClient.post(url,{...payload});
     }
     // Menghitung nilai gaugeValue sesuai dengan aturan yang ditentukan
