@@ -194,7 +194,11 @@ const Home = () => {
   ) => {
     //        const _finalNeto = getWeight();
     try {
-      const response = await apiClient.post(
+      
+      await sendWeight(frombinname, weight);
+      if (!isOnline)
+        return false;
+      const response =  await apiClient.post(
         `http://${apiTarget}/api/pid/pidatalog`,
         {
           badgeno: user.badgeId,
@@ -210,7 +214,6 @@ const Home = () => {
       if (response.status != 200) {
         return false;
       }
-      await sendWeight(frombinname, weight);
       return response.data.status == "Success" || response.data.result == 'Success';
     } catch (error) {
       console.log(error);
@@ -723,6 +726,8 @@ const Home = () => {
   const verifyBadge = async (station) => {
     if (!user || !user.badgeId) return false;
     try {
+      if (!isOnline)
+        return false;
       const res = await apiClient.get(
         `http://${apiTarget}/api/pid/pibadgeverify?f1=${station}&f2=${user.badgeId}`,
         {
@@ -974,6 +979,8 @@ const Home = () => {
   };
   const sendWeight = async (name, weight) => {
     try {
+      if (!isOnline)
+        return;
       const response = await apiClient.post(
         `http://${apiTarget}/api/pid/sendWeight`,
         {
