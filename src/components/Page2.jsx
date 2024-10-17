@@ -37,6 +37,7 @@ const Home = () => {
   const [continueState, setContinueState] = useState(false);
   const [isFinalStep, setFinalStep] = useState(false);
   const [scanData, setScanData] = useState("");
+  const [binOffline,setBinOffline] = useState(false);
   const [container, setContainer] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
   const [waste, setWaste] = useState(null);
@@ -521,6 +522,22 @@ const Home = () => {
           }
           let check = true;
           console.log({ verification: containers, binDispose: binDispose });
+          binDispose.weight = getTotalWeight() + parseFloat(binDispose.weight);
+          try
+          {
+            await apiClient.post(
+              `http://${binDispose.name_hostname}.local:5000/End`,
+              {
+                bin: binDispose,
+              }
+            );
+          }
+          catch (err)
+          {
+            console.log(err);
+            setBinOffline(true);
+            setScanData('');
+          }
           for (let i = 0; i < containers.length; i++) {
             if (
               containers[i].dataContainer.waste.handletype != "Rack" &&
@@ -560,13 +577,7 @@ const Home = () => {
                 );
             }
           }
-          binDispose.weight = getTotalWeight() + parseFloat(binDispose.weight);
-          await apiClient.post(
-            `http://${binDispose.name_hostname}.local:5000/End`,
-            {
-              bin: binDispose,
-            }
-          );
+
           setmessage("DATA TELAH MASUK");
             //setinstruksimsg(" ");
             //await sendPesanTimbangan(binDispose.name_hostname, "");
@@ -807,10 +818,20 @@ const Home = () => {
             };
             //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
             _bin.type = "Collection";
-            const resData = await apiClient.post(
-              `http://${_bin.name_hostname}.local:5000/Start`,
-              { bin: _bin }
-            );
+            try
+            {
+              const resData = await apiClient.post(
+                `http://${_bin.name_hostname}.local:5000/Start`,
+                { bin: _bin }
+              );
+            }
+            catch (err)
+            {
+              console.log(err);
+                setBinOffline(true);
+                setContainer(null);
+                return;
+            }
             //await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
             //await sendLockBottom(_bin);
             // await sendYellowOffCollection(_bin);
@@ -1259,14 +1280,26 @@ const Home = () => {
       setTransactionData({});
       setFinalStep(false);
     } else {
-      const resData = await apiClient.post(
-        `http://${binDispose.name_hostname}.local:5000/Start`,
-        { bin: binDispose }
-      );
-      setFinalStep(true);
-      setmessage("Waiting For Verification");
-      settoplockId(binDispose.name_hostname);
-      setShowModalDispose(true);
+      try
+      {
+        const resData = await apiClient.post(
+          `http://${binDispose.name_hostname}.local:5000/Start`,
+          { bin: binDispose }
+        );          
+        setFinalStep(true);
+        setmessage("Waiting For Verification");
+        settoplockId(binDispose.name_hostname);
+        setShowModalDispose(true);
+      }
+      catch (er)
+      {
+          console.log(err);
+          setFinalStep(false);
+          setIdbin(-1);
+          setNeto(0);
+          setScanData('');
+          setBinOffline(true);
+      }
     }
     inputRef.current.focus();
     setAllowContinueModal(false);
@@ -1577,7 +1610,37 @@ const Home = () => {
             </div>
           )}
         </div>
+        <div className="flex justify-start">
+          {binOffline && (
+            <div className="fixed z-10 inset-0 overflow-y-auto">
+              <div className="flex items-center justify-center min-h-screen">
+                <div
+                  className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                  aria-hidden="true"
+                ></div>
 
+                <div className="bg-white rounded p-8 max-w-md mx-auto z-50">
+                  <div className="text-center mb-4"></div>
+                  <form>
+                    <p>Bin Offline</p>
+                    <div className="flex justify-center mt-5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setBinOffline(false);
+                          setScanData('');
+                        }}
+                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mr-2 rounded"
+                      >
+                        Continue
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
         <div className="flex justify-start">
           {showModalDispose && (
             <div
