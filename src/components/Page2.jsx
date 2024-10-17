@@ -1295,6 +1295,7 @@ const Home = () => {
       {
           console.log(err);
           setFinalStep(false);
+          setIsSubmitAllowed(true);
           setIdbin(-1);
           setNeto(0);
           setScanData('');
