@@ -1291,7 +1291,7 @@ const Home = () => {
         settoplockId(binDispose.name_hostname);
         setShowModalDispose(true);
       }
-      catch (er)
+      catch (err)
       {
           console.log(err);
           setFinalStep(false);
