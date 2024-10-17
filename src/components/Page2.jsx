@@ -1294,6 +1294,10 @@ const Home = () => {
       catch (err)
       {
           console.log(err);
+          
+          const items = containers;
+          items.splice(-1,1);
+          setContainers((prev)=>[...items]);
           setFinalStep(false);
           setIsSubmitAllowed(true);
           setIdbin(-1);
