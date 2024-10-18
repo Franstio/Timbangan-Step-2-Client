@@ -537,6 +537,7 @@ const Home = () => {
             console.log(err);
             setBinOffline(true);
             setScanData('');
+            return
           }
           for (let i = 0; i < containers.length; i++) {
             if (
