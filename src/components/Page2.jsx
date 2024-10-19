@@ -515,29 +515,32 @@ const Home = () => {
             setScanData("");
             return;
           }
-          const checkProcess = await checkProcessRunning();
-          if (checkProcess) {
-            setErrDisposeMessage("Transaction Process Haven't completed yet");
-            return;
-          }
-          let check = true;
-          console.log({ verification: containers, binDispose: binDispose });
-          binDispose.weight = getTotalWeight() + parseFloat(binDispose.weight);
-          try
+          if (containers[i].dataContainer.waste.handletype!="Rack")
           {
-            await apiClient.post(
-              `http://${binDispose.name_hostname}.local:5000/End`,
-              {
-                bin: binDispose,
-              }
-            );
-          }
-          catch (err)
-          {
-            console.log(err);
-            setBinOffline(true);
-            setScanData('');
-            return
+            const checkProcess = await checkProcessRunning();
+            if (checkProcess) {
+              setErrDisposeMessage("Transaction Process Haven't completed yet");
+              return;
+            }
+            let check = true;
+            console.log({ verification: containers, binDispose: binDispose });
+            binDispose.weight = getTotalWeight() + parseFloat(binDispose.weight);
+            try
+            {
+              await apiClient.post(
+                `http://${binDispose.name_hostname}.local:5000/End`,
+                {
+                  bin: binDispose,
+                }
+              );
+            }
+            catch (err)
+            {
+              console.log(err);
+              setBinOffline(true);
+              setScanData('');
+              return
+            }
           }
           for (let i = 0; i < containers.length; i++) {
             if (
