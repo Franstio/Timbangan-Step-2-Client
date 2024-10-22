@@ -1286,10 +1286,14 @@ const Home = () => {
     } else {
       try
       {
-        const resData = await apiClient.post(
-          `http://${binDispose.name_hostname}.local:5000/Start`,
-          { bin: binDispose }
-        );          
+        
+        if (container.waste.handletype != 'Rack')
+        {
+          const resData = await apiClient.post(
+            `http://${binDispose.name_hostname}.local:5000/Start`,
+            { bin: binDispose }
+          );
+        }          
         setFinalStep(true);
         setmessage("Waiting For Verification");
         settoplockId(binDispose.name_hostname);
