@@ -515,6 +515,7 @@ const Home = () => {
             setScanData("");
             return;
           }
+          let check = true;
           if (containers[0].dataContainer.waste.handletype!="Rack")
           {
             const checkProcess = await checkProcessRunning();
@@ -522,7 +523,6 @@ const Home = () => {
               setErrDisposeMessage("Transaction Process Haven't completed yet");
               return;
             }
-            let check = true;
             console.log({ verification: containers, binDispose: binDispose });
             binDispose.weight = getTotalWeight() + parseFloat(binDispose.weight);
             try
