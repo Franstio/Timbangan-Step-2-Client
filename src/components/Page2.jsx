@@ -515,7 +515,7 @@ const Home = () => {
             setScanData("");
             return;
           }
-          if (containers[i].dataContainer.waste.handletype!="Rack")
+          if (containers[0].dataContainer.waste.handletype!="Rack")
           {
             const checkProcess = await checkProcessRunning();
             if (checkProcess) {
