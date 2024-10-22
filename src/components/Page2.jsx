@@ -824,10 +824,13 @@ const Home = () => {
             _bin.type = "Collection";
             try
             {
-              const resData = await apiClient.post(
-                `http://${_bin.name_hostname}.local:5000/Start`,
-                { bin: _bin }
-              );
+              if (res.data.container.waste.handletype!='Rack')
+              {
+                const resData = await apiClient.post(
+                  `http://${_bin.name_hostname}.local:5000/Start`,
+                  { bin: _bin }
+                );
+              }
             }
             catch (err)
             {
