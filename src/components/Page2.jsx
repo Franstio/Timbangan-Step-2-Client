@@ -37,7 +37,7 @@ const Home = () => {
   const [continueState, setContinueState] = useState(false);
   const [isFinalStep, setFinalStep] = useState(false);
   const [scanData, setScanData] = useState("");
-  const [binOffline,setBinOffline] = useState(false);
+  const [binOffline, setBinOffline] = useState(false);
   const [container, setContainer] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
   const [waste, setWaste] = useState(null);
@@ -133,20 +133,17 @@ const Home = () => {
     };
     getIp();
   }, []);*/
-  useEffect(()=>{
-    const getStatus = async ()=>{
-      try
-      {
+  useEffect(() => {
+    const getStatus = async () => {
+      try {
         const res = await apiClient.get(`http://${ipAddress}`);
-        setIsOnline(res.status>=200 && res.status < 300);
-      }
-      catch (er)
-      {
+        setIsOnline(res.status >= 200 && res.status < 300);
+      } catch (er) {
         setIsOnline(false);
       }
-    }
-    setInterval( ()=>getStatus(),5000);
-  },[])
+    };
+    setInterval(() => getStatus(), 5000);
+  }, []);
   const getTotalWeight = () => containers.reduce((a, b) => a + b.dataWeight, 0);
   /*const getRackLastTransaction = async (containerName)=>{
         const res  = await apiClient.get(`http://${rackTarget}/Transaksi/${containerName}`);
@@ -195,11 +192,9 @@ const Home = () => {
   ) => {
     //        const _finalNeto = getWeight();
     try {
-      
       await sendWeight(frombinname, weight);
-      if (!isOnline)
-        return false;
-      const response =  await apiClient.post(
+      if (!isOnline) return false;
+      const response = await apiClient.post(
         `http://${apiTarget}/api/pid/pidatalog`,
         {
           badgeno: user.badgeId,
@@ -211,11 +206,13 @@ const Home = () => {
           activity: type,
         }
       );
-      console.log({pidsg_res:response});
+      console.log({ pidsg_res: response });
       if (response.status != 200) {
         return false;
       }
-      return response.data.status == "Success" || response.data.result == 'Success';
+      return (
+        response.data.status == "Success" || response.data.result == "Success"
+      );
     } catch (error) {
       console.log(error);
       return false;
@@ -430,7 +427,7 @@ const Home = () => {
     if (!socket) return;
     socket.emit("connectScale");
     socket.on("connect", () => {
-     // setIsOnline(true);
+      // setIsOnline(true);
     });
     socket.on("disconnect", () => {
       //setIsOnline(false);
@@ -516,30 +513,27 @@ const Home = () => {
             return;
           }
           let check = true;
-          if (containers[0].dataContainer.waste.handletype!="Rack")
-          {
+          if (containers[0].dataContainer.waste.handletype != "Rack") {
             const checkProcess = await checkProcessRunning();
             if (checkProcess) {
               setErrDisposeMessage("Transaction Process Haven't completed yet");
               return;
             }
             console.log({ verification: containers, binDispose: binDispose });
-            binDispose.weight = getTotalWeight() + parseFloat(binDispose.weight);
-            try
-            {
+            binDispose.weight =
+              getTotalWeight() + parseFloat(binDispose.weight);
+            try {
               await apiClient.post(
                 `http://${binDispose.name_hostname}.local:5000/End`,
                 {
                   bin: binDispose,
                 }
               );
-            }
-            catch (err)
-            {
+            } catch (err) {
               console.log(err);
               setBinOffline(true);
-              setScanData('');
-              return
+              setScanData("");
+              return;
             }
           }
           for (let i = 0; i < containers.length; i++) {
@@ -565,14 +559,14 @@ const Home = () => {
             if (
               containers[i].dataContainer.waste.handletype == "Rack" ||
               waste.handletype == "Rack"
-            )
-             await updateBinWeight(containers[i].dataWeight);
+            ) {
+              await updateBinWeight(containers[i].dataWeight);
               await saveTransaksiRack(
                 containers[i].dataContainer,
                 binDispose.name,
                 "Dispose"
               );
-            else {
+            } else {
               const success = await updateBinWeight(containers[i].dataWeight);
               if (success)
                 await saveTransaksi(
@@ -584,13 +578,13 @@ const Home = () => {
           }
 
           setmessage("DATA TELAH MASUK");
-            //setinstruksimsg(" ");
-            //await sendPesanTimbangan(binDispose.name_hostname, "");
-            setContainers([]);
-            setIdbin(binDispose.id);
-            setTypeCollection(null);
-            setBinDispose(null);
-            setFinalStep(false);
+          //setinstruksimsg(" ");
+          //await sendPesanTimbangan(binDispose.name_hostname, "");
+          setContainers([]);
+          setIdbin(binDispose.id);
+          setTypeCollection(null);
+          setBinDispose(null);
+          setFinalStep(false);
           //setinstruksimsg("DATA TELAH MASUK");
           setTimeout(async () => {
             setmessage("");
@@ -742,8 +736,7 @@ const Home = () => {
   const verifyBadge = async (station) => {
     if (!user || !user.badgeId) return false;
     try {
-      if (!isOnline)
-        return false;
+      if (!isOnline) return false;
       const res = await apiClient.get(
         `http://${apiTarget}/api/pid/pibadgeverify?f1=${station}&f2=${user.badgeId}`,
         {
@@ -823,22 +816,18 @@ const Home = () => {
             };
             //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
             _bin.type = "Collection";
-            try
-            {
-              if (res.data.container.waste.handletype!='Rack')
-              {
+            try {
+              if (res.data.container.waste.handletype != "Rack") {
                 const resData = await apiClient.post(
                   `http://${_bin.name_hostname}.local:5000/Start`,
                   { bin: _bin }
                 );
               }
-            }
-            catch (err)
-            {
+            } catch (err) {
               console.log(err);
-                setBinOffline(true);
-                setContainer(null);
-                return;
+              setBinOffline(true);
+              setContainer(null);
+              return;
             }
             //await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
             //await sendLockBottom(_bin);
@@ -1008,8 +997,7 @@ const Home = () => {
   };
   const sendWeight = async (name, weight) => {
     try {
-      if (!isOnline)
-        return;
+      if (!isOnline) return;
       const response = await apiClient.post(
         `http://${apiTarget}/api/pid/sendWeight`,
         {
@@ -1068,8 +1056,7 @@ const Home = () => {
       : _waste.scales == "4Kg"
       ? neto4Kg
       : neto50Kg;
-    try
-    {
+    try {
       const res = await apiClient.put(
         "http://localhost:5000/Transaksi/" + _idscraplog,
         {
@@ -1084,14 +1071,12 @@ const Home = () => {
           },
         }
       );
-    }
-    catch (e)
-    {
+    } catch (e) {
       console.log(e);
     }
     //        setWaste(null);
-  //  setScanData("");
-//    setinstruksimsg("");
+    //  setScanData("");
+    //    setinstruksimsg("");
   };
   const updateContainerstatus = async () => {
     //const _finalNeto = getWeight();
@@ -1288,34 +1273,29 @@ const Home = () => {
       setTransactionData({});
       setFinalStep(false);
     } else {
-      try
-      {
-        
-        if (container.waste.handletype != 'Rack')
-        {
+      try {
+        if (container.waste.handletype != "Rack") {
           const resData = await apiClient.post(
             `http://${binDispose.name_hostname}.local:5000/Start`,
             { bin: binDispose }
           );
-        }          
+        }
         setFinalStep(true);
         setmessage("Waiting For Verification");
         settoplockId(binDispose.name_hostname);
         setShowModalDispose(true);
-      }
-      catch (err)
-      {
-          console.log(err);
-          
-          const items = containers;
-          items.splice(-1,1);
-          setContainers((prev)=>[...items]);
-          setFinalStep(false);
-          setIsSubmitAllowed(true);
-          setIdbin(-1);
-          setNeto(0);
-          setScanData('');
-          setBinOffline(true);
+      } catch (err) {
+        console.log(err);
+
+        const items = containers;
+        items.splice(-1, 1);
+        setContainers((prev) => [...items]);
+        setFinalStep(false);
+        setIsSubmitAllowed(true);
+        setIdbin(-1);
+        setNeto(0);
+        setScanData("");
+        setBinOffline(true);
       }
     }
     inputRef.current.focus();
@@ -1645,7 +1625,7 @@ const Home = () => {
                         type="button"
                         onClick={() => {
                           setBinOffline(false);
-                          setScanData('');
+                          setScanData("");
                         }}
                         className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mr-2 rounded"
                       >
