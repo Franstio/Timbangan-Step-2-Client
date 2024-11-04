@@ -28,7 +28,7 @@ import {
 
 const apiClient = axios.create({
   withCredentials: false,
-  timeout: 2000,
+  timeout: 3000,
 });
 const Home = () => {
   const [user, setUser] = useState(null);
@@ -37,6 +37,7 @@ const Home = () => {
   const [continueState, setContinueState] = useState(false);
   const [isFinalStep, setFinalStep] = useState(false);
   const [scanData, setScanData] = useState("");
+  const [binOffline,setBinOffline] = useState(false);
   const [container, setContainer] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
   const [waste, setWaste] = useState(null);
@@ -78,7 +79,7 @@ const Home = () => {
   const [logindate, setLoginDate] = useState("");
   const [containers, setContainers] = useState([]);
   const [checkInputInverval, setCheckInputInterval] = useState(null);
-  const [ipAddress, setIpAddress] = useState("");
+  const [ipAddress, setIpAddress] = useState(process.env.REACT_APP_PIDSG);
   //const ScaleName = getScaleName();
   const navigation = [{ name: "Dashboard", href: "#", current: true }];
 
@@ -121,7 +122,7 @@ const Home = () => {
       />
     );
   };
-  useEffect(() => {
+  /*useEffect(() => {
     const getIp = async () => {
       try {
         const ip = await apiClient.get(`http://localhost:5000/ip`);
@@ -131,7 +132,21 @@ const Home = () => {
       }
     };
     getIp();
-  }, []);
+  }, []);*/
+  useEffect(()=>{
+    const getStatus = async ()=>{
+      try
+      {
+        const res = await apiClient.get(`http://${ipAddress}`);
+        setIsOnline(res.status>=200 && res.status < 300);
+      }
+      catch (er)
+      {
+        setIsOnline(false);
+      }
+    }
+    setInterval( ()=>getStatus(),5000);
+  },[])
   const getTotalWeight = () => containers.reduce((a, b) => a + b.dataWeight, 0);
   /*const getRackLastTransaction = async (containerName)=>{
         const res  = await apiClient.get(`http://${rackTarget}/Transaksi/${containerName}`);
@@ -180,7 +195,11 @@ const Home = () => {
   ) => {
     //        const _finalNeto = getWeight();
     try {
-      const response = await apiClient.post(
+      
+      await sendWeight(frombinname, weight);
+      if (!isOnline)
+        return false;
+      const response =  await apiClient.post(
         `http://${apiTarget}/api/pid/pidatalog`,
         {
           badgeno: user.badgeId,
@@ -192,11 +211,11 @@ const Home = () => {
           activity: type,
         }
       );
+      console.log({pidsg_res:response});
       if (response.status != 200) {
         return false;
       }
-      await sendWeight(frombinname, weight);
-      return response.data.status == "Success";
+      return response.data.status == "Success" || response.data.result == 'Success';
     } catch (error) {
       console.log(error);
       return false;
@@ -411,10 +430,10 @@ const Home = () => {
     if (!socket) return;
     socket.emit("connectScale");
     socket.on("connect", () => {
-      setIsOnline(true);
+     // setIsOnline(true);
     });
     socket.on("disconnect", () => {
-      setIsOnline(false);
+      //setIsOnline(false);
     });
     socket.on("data1", (weight50Kg) => {
       try {
@@ -496,13 +515,33 @@ const Home = () => {
             setScanData("");
             return;
           }
-          const checkProcess = await checkProcessRunning();
-          if (checkProcess) {
-            setErrDisposeMessage("Transaction Process Haven't completed yet");
-            return;
-          }
           let check = true;
-          console.log({ verification: containers, binDispose: binDispose });
+          if (containers[0].dataContainer.waste.handletype!="Rack")
+          {
+            const checkProcess = await checkProcessRunning();
+            if (checkProcess) {
+              setErrDisposeMessage("Transaction Process Haven't completed yet");
+              return;
+            }
+            console.log({ verification: containers, binDispose: binDispose });
+            binDispose.weight = getTotalWeight() + parseFloat(binDispose.weight);
+            try
+            {
+              await apiClient.post(
+                `http://${binDispose.name_hostname}.local:5000/End`,
+                {
+                  bin: binDispose,
+                }
+              );
+            }
+            catch (err)
+            {
+              console.log(err);
+              setBinOffline(true);
+              setScanData('');
+              return
+            }
+          }
           for (let i = 0; i < containers.length; i++) {
             if (
               containers[i].dataContainer.waste.handletype != "Rack" &&
@@ -543,25 +582,19 @@ const Home = () => {
                 );
             }
           }
-          binDispose.weight = getTotalWeight() + parseFloat(binDispose.weight);
-          await apiClient.post(
-            `http://${binDispose.name_hostname}.local:5000/End`,
-            {
-              bin: binDispose,
-            }
-          );
-          setmessage("DATA TELAH MASUK");
 
-          //setinstruksimsg("DATA TELAH MASUK");
-          setTimeout(async () => {
-            setmessage("");
+          setmessage("DATA TELAH MASUK");
             //setinstruksimsg(" ");
             //await sendPesanTimbangan(binDispose.name_hostname, "");
             setContainers([]);
             setIdbin(binDispose.id);
             setTypeCollection(null);
             setBinDispose(null);
-          }, 2000);
+            setFinalStep(false);
+          //setinstruksimsg("DATA TELAH MASUK");
+          setTimeout(async () => {
+            setmessage("");
+          }, 700);
           //VerificationScan();
 
           //                setScanData('');
@@ -648,10 +681,6 @@ const Home = () => {
         return false;
       }
       res.bin.type = "Dispose";
-      const resData = await apiClient.post(
-        `http://${res.bin.name_hostname}.local:5000/Start`,
-        { bin: res.bin }
-      );
       setBinDispose(res.bin);
       setBinname(res.bin.name);
       return res.bin;
@@ -684,19 +713,6 @@ const Home = () => {
     setinstruksimsg("Buka Penutup Atas");
     //    sendType(binDispose.name_hostname, "Dispose");
   }, [binDispose]);
-  async function sendLockTop() {
-    try {
-      const response = await apiClient.post(
-        `http://${toplockId}.local:5000/locktop/`,
-        {
-          idLockTop: 1,
-        }
-      );
-      setinstruksimsg("Buka Penutup Atas");
-    } catch (error) {
-      console.log(error);
-    }
-  }
   useEffect(() => {
     if (user == null || container == null) setScanData("");
   }, [user, container]);
@@ -726,6 +742,8 @@ const Home = () => {
   const verifyBadge = async (station) => {
     if (!user || !user.badgeId) return false;
     try {
+      if (!isOnline)
+        return false;
       const res = await apiClient.get(
         `http://${apiTarget}/api/pid/pibadgeverify?f1=${station}&f2=${user.badgeId}`,
         {
@@ -745,7 +763,7 @@ const Home = () => {
     try {
       if (containers.length > 0) {
         const checkIndex = containers.findIndex(
-          (x) => x.dataContainer?.name == scanData
+          (x) => x.dataContainer?.name.toLowerCase() == scanData.toLowerCase()
         );
         if (checkIndex != -1) {
           setAllowContinueModal(true);
@@ -805,10 +823,23 @@ const Home = () => {
             };
             //                        await updateTransaksiManual(_idscraplog,"Collection",_waste);
             _bin.type = "Collection";
-            const resData = await apiClient.post(
-              `http://${_bin.name_hostname}.local:5000/Start`,
-              { bin: _bin }
-            );
+            try
+            {
+              if (res.data.container.waste.handletype!='Rack')
+              {
+                const resData = await apiClient.post(
+                  `http://${_bin.name_hostname}.local:5000/Start`,
+                  { bin: _bin }
+                );
+              }
+            }
+            catch (err)
+            {
+              console.log(err);
+                setBinOffline(true);
+                setContainer(null);
+                return;
+            }
             //await sendPesanTimbangan(_bin.name_hostname,"Buka Penutup Bawah");
             //await sendLockBottom(_bin);
             // await sendYellowOffCollection(_bin);
@@ -977,6 +1008,8 @@ const Home = () => {
   };
   const sendWeight = async (name, weight) => {
     try {
+      if (!isOnline)
+        return;
       const response = await apiClient.post(
         `http://${apiTarget}/api/pid/sendWeight`,
         {
@@ -999,6 +1032,7 @@ const Home = () => {
         type: type,
         weight: _finalNeto,
         toBin: binDispose.name,
+        status: "Done",
         fromContainer: dataTransaction?.toBin
           ? dataTransaction?.toBin
           : dataContainer.name,
@@ -1013,15 +1047,15 @@ const Home = () => {
     );
     if (dataTransaction.idscraplog)
       _p.payload.idscraplog = dataTransaction.idscraplog;
-    _p.success = isSuccess;
-    if (!_p.success) _p.payload.status = "Pending|PIDSG";
+    _p.payload.success = isSuccess;
+    if (!_p.payload.success) _p.payload.status = "Pending|PIDSG";
     await apiClient.post(
       "http://localhost:5000/SaveTransaksi",
       {
         ..._p,
       },
       {
-        timeout: 10000,
+        timeout: 1000,
       }
     );
   };
@@ -1034,23 +1068,30 @@ const Home = () => {
       : _waste.scales == "4Kg"
       ? neto4Kg
       : neto50Kg;
-    const res = await apiClient.put(
-      "http://localhost:5000/Transaksi/" + _idscraplog,
-      {
-        type: _type,
-        status: "Done",
-        weight: _finalNeto,
-        logindate: logindate,
-      },
-      {
-        validateStatus: (status) => {
-          return true;
+    try
+    {
+      const res = await apiClient.put(
+        "http://localhost:5000/Transaksi/" + _idscraplog,
+        {
+          type: _type,
+          status: "Done",
+          weight: _finalNeto,
+          logindate: logindate,
         },
-      }
-    );
+        {
+          validateStatus: (status) => {
+            return true;
+          },
+        }
+      );
+    }
+    catch (e)
+    {
+      console.log(e);
+    }
     //        setWaste(null);
-    setScanData("");
-    setinstruksimsg("");
+  //  setScanData("");
+//    setinstruksimsg("");
   };
   const updateContainerstatus = async () => {
     //const _finalNeto = getWeight();
@@ -1247,10 +1288,35 @@ const Home = () => {
       setTransactionData({});
       setFinalStep(false);
     } else {
-      setFinalStep(true);
-      setmessage("Waiting For Verification");
-      settoplockId(binDispose.name_hostname);
-      setShowModalDispose(true);
+      try
+      {
+        
+        if (container.waste.handletype != 'Rack')
+        {
+          const resData = await apiClient.post(
+            `http://${binDispose.name_hostname}.local:5000/Start`,
+            { bin: binDispose }
+          );
+        }          
+        setFinalStep(true);
+        setmessage("Waiting For Verification");
+        settoplockId(binDispose.name_hostname);
+        setShowModalDispose(true);
+      }
+      catch (err)
+      {
+          console.log(err);
+          
+          const items = containers;
+          items.splice(-1,1);
+          setContainers((prev)=>[...items]);
+          setFinalStep(false);
+          setIsSubmitAllowed(true);
+          setIdbin(-1);
+          setNeto(0);
+          setScanData('');
+          setBinOffline(true);
+      }
     }
     inputRef.current.focus();
     setAllowContinueModal(false);
@@ -1561,7 +1627,37 @@ const Home = () => {
             </div>
           )}
         </div>
+        <div className="flex justify-start">
+          {binOffline && (
+            <div className="fixed z-10 inset-0 overflow-y-auto">
+              <div className="flex items-center justify-center min-h-screen">
+                <div
+                  className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                  aria-hidden="true"
+                ></div>
 
+                <div className="bg-white rounded p-8 max-w-md mx-auto z-50">
+                  <div className="text-center mb-4"></div>
+                  <form>
+                    <p>Bin Offline</p>
+                    <div className="flex justify-center mt-5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setBinOffline(false);
+                          setScanData('');
+                        }}
+                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mr-2 rounded"
+                      >
+                        Continue
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
         <div className="flex justify-start">
           {showModalDispose && (
             <div
