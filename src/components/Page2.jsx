@@ -527,6 +527,7 @@ const Home = () => {
               containers[i].dataContainer.waste.handletype == "Rack" ||
               waste.handletype == "Rack"
             )
+             await updateBinWeight(containers[i].dataWeight);
               await saveTransaksiRack(
                 containers[i].dataContainer,
                 binDispose.name,
