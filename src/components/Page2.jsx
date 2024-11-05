@@ -943,21 +943,27 @@ const Home = () => {
         };*/
   const saveTransaksiRack = async (_container, binName, type) => {
     const _finalNeto = _container.waste.scales == "4Kg" ? neto4Kg : neto50Kg;
-    const res = await apiClient.post(`http://${rackTarget}/Transaksi`, {
-      name: binName,
-      containerName: transactionData.toBin
-        ? transactionData?.toBin
-        : _container.name,
-      waste: _container.waste.name,
-      payload: {
-        badgeId: user.badgeId,
-        //            idContainer: _container.containerId,
-        //            IdWaste: _container.IdWaste,
-        type: type,
-        idqrmachine: binName,
-        weight: _finalNeto,
+    const res = await apiClient.post(
+      `http://${rackTarget}/Transaksi`,
+      {
+        name: binName,
+        containerName: transactionData.toBin
+          ? transactionData?.toBin
+          : _container.name,
+        waste: _container.waste.name,
+        payload: {
+          badgeId: user.badgeId,
+          //            idContainer: _container.containerId,
+          //            IdWaste: _container.IdWaste,
+          type: type,
+          idqrmachine: binName,
+          weight: _finalNeto,
+        },
       },
-    });
+      {
+        timeout: 10000,
+      }
+    );
     if (res.data && res.data.msg) {
       const data = res.data.msg;
       const isSuccess = await sendDataPanasonicServer(
