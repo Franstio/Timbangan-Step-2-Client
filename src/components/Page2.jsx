@@ -686,9 +686,15 @@ const Home = () => {
   const CheckBinCapacityRack = async (data) => {
     const lines = data.trim().split("-");
     const line = lines[lines.length - 2];
-    const res = await apiClient.post(`http://${rackTarget}/CheckBinCapacity`, {
-      line: line,
-    });
+    const res = await apiClient.post(
+      `http://${rackTarget}/CheckBinCapacity`,
+      {
+        line: line,
+      },
+      {
+        timeout: 10000,
+      }
+    );
     const bin = res.data.bins[0];
     try {
       const _res = await apiClient.get(`http://localhost:5000/bin/` + bin.name);
