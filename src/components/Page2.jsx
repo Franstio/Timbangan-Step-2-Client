@@ -1231,8 +1231,16 @@ const Home = () => {
         //            setFinalStep(true);
         setmessage("");
         //            setShowModalDispose(true);
-        if (container.waste.handletype == "Rack") handleFormContinue(false);
-        else toggleContinueModal(true);
+        if (container.waste.handletype == "Rack") {
+          console.log(binDispose);
+          setFinalStep(true);
+          setmessage("Waiting For Verification");
+          settoplockId(binDispose.name_hostname);
+          setShowModalDispose(true);
+          inputRef.current.focus();
+          setAllowContinueModal(false);
+          setContinueState(false);
+        } else toggleContinueModal(true);
       }
     } catch {
       if (btnSubmitRef.current) btnSubmitRef.current.disabled = false;
@@ -1258,7 +1266,6 @@ const Home = () => {
   const handleFormContinue = async (response) => {
     toggleContinueModal(false);
     setScanData("");
-    console.log(containers);
     if (response || containers.length < 1) {
       /*if (transactionData.idscraplog)
                 await updateTransaksi('Dispose');
