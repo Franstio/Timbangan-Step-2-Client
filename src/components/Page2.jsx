@@ -1258,6 +1258,7 @@ const Home = () => {
   const handleFormContinue = async (response) => {
     toggleContinueModal(false);
     setScanData("");
+    console.log(containers);
     if (response || containers.length < 1) {
       /*if (transactionData.idscraplog)
                 await updateTransaksi('Dispose');
