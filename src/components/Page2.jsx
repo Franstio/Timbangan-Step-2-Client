@@ -1231,7 +1231,7 @@ const Home = () => {
         //            setFinalStep(true);
         setmessage("");
         //            setShowModalDispose(true);
-        if (container.waste.handletype == "Rack") handleFormContinue(true);
+        if (container.waste.handletype == "Rack") handleFormContinue(false);
         else toggleContinueModal(true);
       }
     } catch {
