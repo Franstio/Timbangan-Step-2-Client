@@ -1231,7 +1231,8 @@ const Home = () => {
         //            setFinalStep(true);
         setmessage("");
         //            setShowModalDispose(true);
-        toggleContinueModal(true);
+        if (container.waste.handletype == "Rack") handleFormContinue(true);
+        else toggleContinueModal(true);
       }
     } catch {
       if (btnSubmitRef.current) btnSubmitRef.current.disabled = false;
