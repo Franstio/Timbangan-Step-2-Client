@@ -802,6 +802,8 @@ const Home = () => {
           if (res.data.container.type == "Collection") {
             if (!user.OUT) {
               setErrDisposeMessage("Unauthorized User for Collection");
+              setUser(null);
+              setScanData("");
               return;
             }
             if (continueState) {
@@ -868,6 +870,8 @@ const Home = () => {
             let _idscraplog = "";
             if (!user.IN) {
               setErrDisposeMessage("Unauthorized User For Dispose");
+              setUser(null);
+              setScanData("");
               return;
             }
             if (continueState && _waste.name != prevWaste) {
