@@ -31,6 +31,7 @@ const apiClient = axios.create({
   timeout: 3000,
 });
 const Home = () => {
+  const [allowRefresh,setAllowRefresh] = useState(true);
   const [user, setUser] = useState(null);
   const [Scales4Kg, setScales4Kg] = useState({});
   const [Scales50Kg, setScales50Kg] = useState({});
@@ -88,7 +89,9 @@ const Home = () => {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
-
+  useEffect(()=>{
+    setAllowRefresh(container == null);
+  },[container])
   const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
     height: 10,
     borderRadius: 5,
@@ -1140,6 +1143,9 @@ const Home = () => {
     setWaste(null);
     setScanData("");
   };
+  const refreshPage = ()=>{
+    window.location.reload();
+  }
 
   const updateBinWeight = async (dataWeight) => {
     try {
@@ -1726,10 +1732,15 @@ const Home = () => {
 
         <p>Instruksi : {message} </p>
       </div>
-      <footer className="flex-1 rounded border flex justify-center gap-40 p-3 bg-white">
-        <p>
+      <footer className="flex-1 rounded border flex flex-col justify-center gap-1 p-3 bg-white">
+        <p className="text-center">
           Server Status: {ipAddress} {isOnline ? "Online" : "Offline"}
         </p>
+        <button 
+        onClick={()=>refreshPage()}
+        disabled={!allowRefresh}
+        className={`block w-full border rounded py-2  justify-center items-center font-bold mt-5 ${allowRefresh ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
+        >Refresh</button>
       </footer>
     </main>
   );
