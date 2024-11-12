@@ -805,6 +805,8 @@ const Home = () => {
           if (res.data.container.type == "Collection") {
             if (!user.OUT) {
               setErrDisposeMessage("Unauthorized User for Collection");
+              setUser(null);
+              setScanData("");
               return;
             }
             if (continueState) {
@@ -871,6 +873,8 @@ const Home = () => {
             let _idscraplog = "";
             if (!user.IN) {
               setErrDisposeMessage("Unauthorized User For Dispose");
+              setUser(null);
+              setScanData("");
               return;
             }
             if (continueState && _waste.name != prevWaste) {
@@ -1237,7 +1241,16 @@ const Home = () => {
         //            setFinalStep(true);
         setmessage("");
         //            setShowModalDispose(true);
-        toggleContinueModal(true);
+        if (container.waste.handletype == "Rack") {
+          console.log(binDispose);
+          setFinalStep(true);
+          setmessage("Waiting For Verification");
+          settoplockId(binDispose.name_hostname);
+          setShowModalDispose(true);
+          inputRef.current.focus();
+          setAllowContinueModal(false);
+          setContinueState(false);
+        } else toggleContinueModal(true);
       }
     } catch {
       if (btnSubmitRef.current) btnSubmitRef.current.disabled = false;
