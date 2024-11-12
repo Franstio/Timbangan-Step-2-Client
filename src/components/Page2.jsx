@@ -31,7 +31,6 @@ const apiClient = axios.create({
   timeout: 3000,
 });
 const Home = () => {
-  const [allowRefresh,setAllowRefresh] = useState(true);
   const [user, setUser] = useState(null);
   const [Scales4Kg, setScales4Kg] = useState({});
   const [Scales50Kg, setScales50Kg] = useState({});
@@ -89,9 +88,6 @@ const Home = () => {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
-  useEffect(()=>{
-    setAllowRefresh(container == null);
-  },[container])
   const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
     height: 10,
     borderRadius: 5,
@@ -1751,8 +1747,8 @@ const Home = () => {
         </p>
         <button 
         onClick={()=>refreshPage()}
-        disabled={!allowRefresh}
-        className={`block w-full border rounded py-2  justify-center items-center font-bold mt-5 ${allowRefresh ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
+        disabled={isSubmitAllowed}
+        className={`block w-full border rounded py-2  justify-center items-center font-bold mt-5 ${!allowRefresh ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
         >Refresh</button>
       </footer>
     </main>
