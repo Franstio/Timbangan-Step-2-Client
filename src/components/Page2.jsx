@@ -1748,7 +1748,7 @@ const Home = () => {
         <button 
         onClick={()=>refreshPage()}
         disabled={isSubmitAllowed}
-        className={`block w-full border rounded py-2  justify-center items-center font-bold mt-5 ${!allowRefresh ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
+        className={`block w-full border rounded py-2  justify-center items-center font-bold mt-5 ${!isSubmitAllowed ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
         >Refresh</button>
       </footer>
     </main>
