@@ -110,7 +110,7 @@ const Home = () => {
             }
 //            io.emit('TriggerWeight',binData);
         });
-    }, [localSocket]);
+    }, []);
     const startObserveBottomSensor =async (target)=>{
         await apiClient.post('http://localhost:5000/observeBottomSensor',{readTarget:target});
 
@@ -218,7 +218,7 @@ const Home = () => {
             }
             setSensor(_data);
         });
-    }, [localSocket]);
+    }, []);
     useEffect(() => {
         axios.get('http://localhost:5000/hostname', { withCredentials: false })
             .then(response => {
@@ -240,7 +240,7 @@ const Home = () => {
                 socket.emit('getWeightBin', hostname);
             },30*1000);
         }
-    }, [hostname, socket]);
+    }, [hostname]);
     useEffect(() => {
         /*socket.on('connect', ()=>{
             socket.emit('getWeightBin',hostname);
@@ -256,7 +256,7 @@ const Home = () => {
 //            setGetweightbin(prev => data.weight);
 //            setMaxWeight(data.max_weight);
         });
-    }, [socket]);
+    }, []);
 
     async function sendLockBottom() {
         try {
