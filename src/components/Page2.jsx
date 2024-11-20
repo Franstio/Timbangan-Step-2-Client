@@ -1303,7 +1303,7 @@ const Home = () => {
       setNeto(0);
       setScanData("");
       setinstruksimsg("-");
-      //setContainer(null);
+      setContainer(null);
       setTransactionData({});
       setFinalStep(false);
     } else {
