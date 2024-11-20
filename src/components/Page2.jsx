@@ -1308,6 +1308,7 @@ const Home = () => {
       setFinalStep(false);
     } else {
       try {
+        console.log(container);
         if (container.waste.handletype != "Rack") {
           const resData = await apiClient.post(
             `http://${binDispose.name_hostname}.local:5000/Start`,
