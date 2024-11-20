@@ -1130,6 +1130,8 @@ const Home = () => {
     } else {
       status = resAPI ? _container.status : "PENDING|PIDSG";
     }
+    if (status=="")
+      status = "Done";
     const isSuccess = !status.includes("|");
 
     const res = await apiClient.post(
