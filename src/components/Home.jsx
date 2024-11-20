@@ -77,7 +77,7 @@ const Home = () => {
         const getIp =async ()=>{
             try
             {
-            const ip = await- apiClient.get(`http://localhost:5000/ip`);
+            const ip = await apiClient.get(`http://localhost:5000/ip`);
                 setIpAddress(ip.data[0] );
             }
             catch
@@ -88,6 +88,8 @@ const Home = () => {
         getIp();
     },[])
     useEffect(() => {
+        if (!localSocket)
+            return;
         localSocket.on('UpdateInstruksi', (instruksi) => {
             
             setinstruksimsg(instruksi);
@@ -108,7 +110,7 @@ const Home = () => {
             }
 //            io.emit('TriggerWeight',binData);
         });
-    }, []);
+    }, [localSocket]);
     const startObserveBottomSensor =async (target)=>{
         await apiClient.post('http://localhost:5000/observeBottomSensor',{readTarget:target});
 
@@ -190,6 +192,8 @@ const Home = () => {
         }
     },[topProcessStatus]);
     useEffect(() => {
+        if (!localSocket)
+            return;
         localSocket.on('GetType', (type) => {
             setType(type);
             if (type=='Collection')
@@ -214,7 +218,7 @@ const Home = () => {
             }
             setSensor(_data);
         });
-    }, []);
+    }, [localSocket]);
     useEffect(() => {
         axios.get('http://localhost:5000/hostname', { withCredentials: false })
             .then(response => {
@@ -226,6 +230,8 @@ const Home = () => {
             });
     }, []);
     useEffect(() => {
+        if (!socket)
+            return;
         if (hostname && hostname != '')
         {
             
@@ -234,13 +240,14 @@ const Home = () => {
                 socket.emit('getWeightBin', hostname);
             },30*1000);
         }
-    }, [hostname]);
+    }, [hostname, socket]);
     useEffect(() => {
         /*socket.on('connect', ()=>{
             socket.emit('getWeightBin',hostname);
         });*/
+        if (!socket)
+            return;
         socket.on('getweight', (data) => {
-            console.log(data);
             setBin(prev=>({
                 ...bin,
                 weight: data.weight,
@@ -249,7 +256,7 @@ const Home = () => {
 //            setGetweightbin(prev => data.weight);
 //            setMaxWeight(data.max_weight);
         });
-    }, []);
+    }, [socket]);
 
     async function sendLockBottom() {
         try {
