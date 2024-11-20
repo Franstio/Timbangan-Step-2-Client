@@ -338,6 +338,7 @@ const Home = () => {
     // Menghitung nilai gaugeValue sesuai dengan aturan yang ditentukan
     const getGaugeValue = () => {
         const _final = ((parseFloat(bin?.weight ?? 0)) / (parseFloat(bin?.max_weight ?? 0)) * 100);
+        console.log(_final);
         return (_final  >= 100) ? 100 : _final;
     };
  // Dapatkan nilai GaugeComponent yang sesuai
