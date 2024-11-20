@@ -1295,7 +1295,7 @@ const Home = () => {
 
             }*/
 
-      if (containers.length < 1 && !response) setUser(null);
+//      if (containers.length < 1 && !response) setUser(null);
       setIsSubmitAllowed(false);
       setIdbin(-1);
       freezeNeto(false);
@@ -1303,7 +1303,7 @@ const Home = () => {
       setNeto(0);
       setScanData("");
       setinstruksimsg("-");
-      setContainer(null);
+      //setContainer(null);
       setTransactionData({});
       setFinalStep(false);
     } else {
