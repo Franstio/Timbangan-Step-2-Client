@@ -77,7 +77,7 @@ const Home = () => {
         const getIp =async ()=>{
             try
             {
-            const ip = await apiClient.get(`http://localhost:5000/ip`);
+            const ip = await- apiClient.get(`http://localhost:5000/ip`);
                 setIpAddress(ip.data[0] );
             }
             catch
@@ -88,8 +88,6 @@ const Home = () => {
         getIp();
     },[])
     useEffect(() => {
-        if (!localSocket)
-            return;
         localSocket.on('UpdateInstruksi', (instruksi) => {
             
             setinstruksimsg(instruksi);
@@ -192,8 +190,6 @@ const Home = () => {
         }
     },[topProcessStatus]);
     useEffect(() => {
-        if (!localSocket)
-            return;
         localSocket.on('GetType', (type) => {
             setType(type);
             if (type=='Collection')
@@ -230,8 +226,6 @@ const Home = () => {
             });
     }, []);
     useEffect(() => {
-        if (!socket)
-            return;
         if (hostname && hostname != '')
         {
             
@@ -245,9 +239,8 @@ const Home = () => {
         /*socket.on('connect', ()=>{
             socket.emit('getWeightBin',hostname);
         });*/
-        if (!socket)
-            return;
         socket.on('getweight', (data) => {
+            console.log(data);
             setBin(prev=>({
                 ...bin,
                 weight: data.weight,
