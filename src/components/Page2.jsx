@@ -483,7 +483,10 @@ const Home = () => {
     try {
       if (!binDispose) return;
       const res = await apiClient.get(
-        `http://${binDispose.name_hostname}.local:5000/status`
+        `http://${binDispose.name_hostname}.local:5000/status`,
+        {
+          timeout: 10 * 1000
+        }
       );
       return res.data.isRunning;
     } catch {
@@ -526,6 +529,9 @@ const Home = () => {
                 `http://${binDispose.name_hostname}.local:5000/End`,
                 {
                   bin: binDispose,
+                },
+                {
+                  timeout: 10 * 1000
                 }
               );
             } catch (err) {
@@ -1137,6 +1143,7 @@ const Home = () => {
           weight: _container.weight,
           success: isSuccess,
           status: status,
+          fromContainer: _container.name
         },
       }
     );
@@ -1304,7 +1311,10 @@ const Home = () => {
         if (container.waste.handletype != "Rack") {
           const resData = await apiClient.post(
             `http://${binDispose.name_hostname}.local:5000/Start`,
-            { bin: binDispose }
+            { bin: binDispose },
+            {
+              timeout: 10 * 1000
+            }
           );
         }
         setFinalStep(true);
