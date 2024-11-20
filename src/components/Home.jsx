@@ -98,9 +98,10 @@ const Home = () => {
             }*/
         });
         localSocket.on('refresh',function (a){
-            
+            console.log(localStorage.getItem("bin"));
             if (localStorage.getItem("bin") == "" || localStorage.getItem("bin")=="undefined")  
-                return setBin({weight:0,max_weight:0});
+               
+            {setBin({weight:0,max_weight:0});}
             else
             {
                 const binData = JSON.parse(localStorage.getItem("bin"));
