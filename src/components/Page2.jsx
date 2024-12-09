@@ -1160,7 +1160,7 @@ const Home = () => {
     try
     {
       setSyncing(true);
-      const res  = await apiClient.get('sync-all',{
+      const res  = await apiClient.get('http://lcaolhsot:5000/sync-all',{
         validateStatus: ()=>true
       });
       console.log(res);
