@@ -72,6 +72,7 @@ const Home = () => {
     binId: "",
     hostname: "",
   });
+  const [syncing,setSyncing] = useState(false);
   const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
   const [rackTarget, setRackTarget] = useState(process.env.REACT_APP_RACK);
   const [apiTarget, setApiTarget] = useState(process.env.REACT_APP_PIDSG);
@@ -1155,7 +1156,24 @@ const Home = () => {
   const refreshPage = ()=>{
     window.location.reload();
   }
-
+  const syncData = async ()=>{
+    try
+    {
+      setSyncing(true);
+      const res  = await apiClient.get('sync-all',{
+        validateStatus: ()=>true
+      });
+      console.log(res);
+    }
+    catch (er)
+    {
+      console.log(er);
+    }
+    finally
+    {
+      setSyncing(false);
+    }
+  }
   const updateBinWeight = async (dataWeight) => {
     try {
       const _finalNeto = dataWeight; //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
@@ -1757,11 +1775,19 @@ const Home = () => {
         <p className="text-center">
           Server Status: {ipAddress} {isOnline ? "Online" : "Offline"}
         </p>
-        <button 
+      <div className="flex gap-3 flex-row w-100 justify-center">
+      <button 
+        onClick={()=>syncData()}
+        disabled={isSubmitAllowed || syncing}
+        className={`p-3 border rounded py-2  justify-center items-center font-bold mt-5 ${!isSubmitAllowed && !syncing ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
+        >Sync Data</button>
+      <button 
         onClick={()=>refreshPage()}
-        disabled={isSubmitAllowed}
-        className={`block w-full border rounded py-2  justify-center items-center font-bold mt-5 ${!isSubmitAllowed ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
+        disabled={isSubmitAllowed || syncing}
+        className={`p-3 border rounded py-2  justify-center items-center font-bold mt-5 ${!isSubmitAllowed && !syncing ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
         >Refresh</button>
+      </div>
+                
       </footer>
     </main>
   );
