@@ -46,6 +46,7 @@ const Home = () => {
   const [binname, setBinname] = useState("");
   const [containerName, setContainerName] = useState("");
   const [isFreeze, freezeNeto] = useState(false);
+  const [refreshModal,setRefreshModal] = useState(false);
   const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showContinueModal, toggleContinueModal] = useState(false);
@@ -1154,7 +1155,7 @@ const Home = () => {
     setScanData("");
   };
   const refreshPage = ()=>{
-    window.location.reload();
+    setRefreshModal(true);
   }
   const syncData = async ()=>{
     try
@@ -1633,6 +1634,44 @@ const Home = () => {
             </div>
           )}
         </div>
+
+        <div className="flex justify-start">
+          {refreshModal && (
+            <div className="fixed z-10 inset-0 overflow-y-auto">
+              <div className="flex items-center justify-center min-h-screen">
+                <div
+                  className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                  aria-hidden="true"
+                ></div>
+
+                <div className="bg-white rounded p-10 max-w-md mx-auto z-50">
+                  <div className="text-center mb-4"></div>
+                  <form>
+                    <span className="text-2xl">
+                      Apakah benar mau di refresh?
+                    </span>
+                    <div className="flex justify-center gap-8 mt-5">
+                      <button
+                        type="button"
+                        onClick={() => window.location.reload()}
+                        className="bg-blue-500 hover:bg-blue-600 text-2xl text-white font-bold py-3 px-5 mr-2 rounded"
+                      >
+                        Iya
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setRefreshModal(false)}
+                        className="bg-gray-500 hover:bg-red-600 text-2xl text-white font-bold py-3 px-5 rounded"
+                      >
+                        Tidak
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
         <div className="flex justify-start">
           {showErrorDispose && (
             <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -1775,7 +1814,7 @@ const Home = () => {
         <p className="text-center">
           Server Status: {ipAddress} {isOnline ? "Online" : "Offline"}
         </p>
-      <div className="flex gap-3 flex-row w-100 justify-center">
+      <div className="flex gap-3 flex-row w-100 justify-end pe-5">
       {/* <button 
         onClick={()=>syncData()}
         disabled={isSubmitAllowed || syncing}
