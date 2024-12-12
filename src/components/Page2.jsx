@@ -1776,15 +1776,15 @@ const Home = () => {
           Server Status: {ipAddress} {isOnline ? "Online" : "Offline"}
         </p>
       <div className="flex gap-3 flex-row w-100 justify-center">
-      <button 
+      {/* <button 
         onClick={()=>syncData()}
         disabled={isSubmitAllowed || syncing}
         className={`p-3 border rounded py-2  justify-center items-center font-bold mt-5 ${!isSubmitAllowed && !syncing ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
-        >Sync Data</button>
+        >Sync Data</button> */}
       <button 
         onClick={()=>refreshPage()}
         disabled={isSubmitAllowed || syncing}
-        className={`p-3 border rounded py-2  justify-center items-center font-bold mt-5 ${!isSubmitAllowed && !syncing ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
+        className={`p-3 border rounded py-2 w-100  justify-center items-center font-bold mt-5 ${!isSubmitAllowed && !syncing ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
         >Refresh</button>
       </div>
                 
