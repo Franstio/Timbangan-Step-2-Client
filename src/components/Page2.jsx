@@ -536,7 +536,7 @@ const Home = () => {
   }, []);
   const handleKeyPress = async (e) => {
     try {
-      const check = await checkAPI(url);
+      const check = await checkAPI("localhost:5000");
       if (!check)
       {
         setServerActive(check);
