@@ -84,9 +84,38 @@ const Home = () => {
   const [ipAddress, setIpAddress] = useState(process.env.REACT_APP_PIDSG);
   //const ScaleName = getScaleName();
   const navigation = [{ name: "Dashboard", href: "#", current: true }];
-
+  const [serverErr,setServerErr] = useState({show:false,message:''});
+  const [serverActive,setServerActive] = useState(true);
+  const [rackActive,setRackActive] = useState(true);
   //    const socket = null;
-
+    useEffect(()=>{
+      if (!serverErr.show && !serverActive )
+          setServerErr({show:true,message:"Server Disconnecting, Halting Application"});
+      else if (serverErr.show && serverActive && rackActive )
+          setServerErr({show:false,message:''});
+  },[serverActive])
+  useEffect(()=>{
+    if (!rackActive)    
+      setServerErr({show:true,message: "Rack Disconnected, please try again"});
+  },[rackActive])
+  const checkAPI = async (url)=>{
+      try
+      {
+          const res = await apiClient.get(`http://${url}/ping`,{timeout:2500});
+          return true;
+      }
+      catch{
+          return false;
+      }
+  }
+  useEffect(()=>{
+      const f = async()=>{
+          const r = await checkAPI('localhost:5000');
+          setServerActive(r);
+      }
+      f();
+      setInterval(async ()=>await f(),3000);
+  },[])
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
@@ -507,6 +536,12 @@ const Home = () => {
   }, []);
   const handleKeyPress = async (e) => {
     try {
+      const check = await checkAPI(url);
+      if (!check)
+      {
+        setServerActive(check);
+        return;
+      }
       if (e.key === "Enter") {
         if (inputRef.current) inputRef.current.disabled = true;
         if (user == null) handleScan();
@@ -542,6 +577,13 @@ const Home = () => {
               setScanData("");
               return;
             }
+          }
+          else
+          {
+            const rackCheck = await checkAPI(rackTarget);
+            setRackActive(rackCheck);
+            if (!rackCheck)
+              return;
           }
           for (let i = 0; i < containers.length; i++) {
             if (
@@ -1770,7 +1812,37 @@ const Home = () => {
             </div>
           )}
         </div>
+        <div className="flex justify-start">
+        {serverErr.show && (
+                        <div className="fixed z-10 inset-0 overflow-y-auto">
+                            <div className="flex items-center justify-center min-h-screen">
+                                <div
+                                    className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                                    aria-hidden="true"
+                                ></div>
 
+                                <div className="bg-white rounded p-8 max-w-md mx-auto z-50">
+                                    <div className="text-center mb-4"></div>
+                                    <form>
+                                        <p>{serverErr.message}</p>
+                                        <div className="flex justify-center mt-5">
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setServerErr((prev) => ({ show: false, message: '' }));
+                                                    setServerActive(true);
+                                                }}
+                                                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mr-2 rounded"
+                                            >
+                                                Continue
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+        </div>
         <div className="flex justify-start">
           {showModalInfoScale &&
             process.env.REACT_APP_50Kg == "1" &&
