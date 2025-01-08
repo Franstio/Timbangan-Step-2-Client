@@ -102,7 +102,7 @@ const Home = () => {
       try
       {
           const res = await apiClient.get(`http://${url}/ping`,{timeout:2500});
-          return true;
+          return res.status==200;
       }
       catch{
           return false;
