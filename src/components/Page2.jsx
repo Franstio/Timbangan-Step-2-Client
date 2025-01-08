@@ -848,7 +848,7 @@ const Home = () => {
           setTypeCollection(res.data.container.type);
           setWaste(_waste);
           setmessage("");
-          if (res.data.container.waste.handletype=='rack')
+          if (res.data.container.waste.handletype=='Rack')
           {
               const rackCheck = await checkAPI(rackTarget);
               setRackActive(rackCheck);
