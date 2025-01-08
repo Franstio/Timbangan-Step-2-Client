@@ -848,6 +848,13 @@ const Home = () => {
           setTypeCollection(res.data.container.type);
           setWaste(_waste);
           setmessage("");
+          if (res.data.container.waste.handletype=='rack')
+          {
+              const rackCheck = await checkAPI(rackTarget);
+              setRackActive(rackCheck);
+              if (!rackCheck)
+                return;
+          }
           if (res.data.container.type == "Collection") {
             if (!user.OUT) {
               setErrDisposeMessage("Unauthorized User for Collection");
