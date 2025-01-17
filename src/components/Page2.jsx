@@ -733,6 +733,7 @@ const Home = () => {
     }
   };
   const CheckBinCapacityRack = async (data) => {
+    try {
     const lines = data.trim().split("-");
     const line = lines[lines.length - 2];
     const res = await apiClient.post(
@@ -745,15 +746,7 @@ const Home = () => {
         timeout: 10000,
       }
     );
-    if (res.status != 200)
-    {
-      
-      setAllowContinueModal(true);
-      setErrDisposeMessage("Bin From Rack not found");
-      return null;
-    }
     const bin = res.data.bins[0];
-    try {
       const _res = await apiClient.get(`http://localhost:5000/bin/` + bin.name);
       bin.id = _res.data.bin.id;
       setBinDispose(bin);
@@ -762,7 +755,7 @@ const Home = () => {
     } catch (err) {
       setAllowContinueModal(true);
       setErrDisposeMessage("Bin From Rack not found");
-      return null;
+      return undefined;
     }
   };
   useEffect(() => {
