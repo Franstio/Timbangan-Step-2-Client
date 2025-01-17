@@ -754,7 +754,7 @@ const Home = () => {
       return bin;
     } catch (err) {
       setAllowContinueModal(true);
-      setErrDisposeMessage("Bin From Rack not found");
+      setErrDisposeMessage("Bin From Rack Not Available");
       return null;
     }
   };
