@@ -755,7 +755,7 @@ const Home = () => {
     } catch (err) {
       setAllowContinueModal(true);
       setErrDisposeMessage("Bin From Rack not found");
-      return undefined;
+      return null;
     }
   };
   useEffect(() => {
@@ -1280,12 +1280,16 @@ const Home = () => {
 //            checkBinAvailable.max_weight = 100;
           } else checkBinAvailable = await CheckBinCapacity();
         }
-        if (checkBinAvailable == null) {
+        if (checkBinAvailable == null && container.waste.handletype!='Rack') {
           setErrDisposeMessage("Invalid Bin Detected");
           setContainer(null);
           return;
         }
-        if (!checkBinAvailable || checkBinAvailable==null) return;
+        if (!checkBinAvailable )
+        {
+          setContainer(null);
+           return;
+        }
         const curWeight =
           getTotalWeight() + getWeight() + parseFloat(checkBinAvailable.weight);
         console.log([
