@@ -744,6 +744,13 @@ const Home = () => {
         timeout: 10000,
       }
     );
+    if (res.status != 200)
+    {
+      
+      setAllowContinueModal(true);
+      setErrDisposeMessage("Bin From Rack not found");
+      return null;
+    }
     const bin = res.data.bins[0];
     try {
       const _res = await apiClient.get(`http://localhost:5000/bin/` + bin.name);
@@ -1284,7 +1291,7 @@ const Home = () => {
           setContainer(null);
           return;
         }
-        if (!checkBinAvailable) return;
+        if (!checkBinAvailable || checkBinAvailable==null) return;
         const curWeight =
           getTotalWeight() + getWeight() + parseFloat(checkBinAvailable.weight);
         console.log([
