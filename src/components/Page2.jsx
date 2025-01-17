@@ -739,6 +739,7 @@ const Home = () => {
       `http://${rackTarget}/CheckBinCapacity`,
       {
         line: line,
+        weight: getWeight()
       },
       {
         timeout: 10000,
