@@ -1276,7 +1276,7 @@ const Home = () => {
               checkName = transactionData.toBin;
             }
             checkBinAvailable = await CheckBinCapacityRack(checkName);
-            checkBinAvailable.max_weight = 100;
+//            checkBinAvailable.max_weight = 100;
           } else checkBinAvailable = await CheckBinCapacity();
         }
         if (checkBinAvailable == null) {
