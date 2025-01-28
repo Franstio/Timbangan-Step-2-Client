@@ -1906,8 +1906,8 @@ const Home = () => {
         >Sync Data</button> */}
       <button 
         onClick={()=>refreshPage()}
-        disabled={isSubmitAllowed || syncing}
-        className={`p-3 border rounded py-2 w-100  justify-center items-center font-bold mt-5 ${!isSubmitAllowed && !syncing ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
+        disabled={isSubmitAllowed || syncing || isFinalStep}
+        className={`p-3 border rounded py-2 w-100  justify-center items-center font-bold mt-5 ${!isSubmitAllowed && !syncing && !isFinalStep ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
         >Refresh</button>
       </div>
                 
