@@ -840,10 +840,10 @@ const Home = () => {
                         setErrDisposeMessage("Badge Check Failed");
                         return;
                     }*/
-          /*if ( waste != null && res.data.container.IdWaste != waste.IdWaste ) {
+          if ( waste != null && res.data.container.IdWaste != waste.IdWaste ) {
                         alert("Waste Mismatch");
                         return;
-                    }*/
+          }
           const prevWaste = waste?.name;
           const _waste = res.data.container.waste;
           setTypeCollection(res.data.container.type);
