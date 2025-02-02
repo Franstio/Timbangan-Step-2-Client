@@ -840,6 +840,7 @@ const Home = () => {
                         setErrDisposeMessage("Badge Check Failed");
                         return;
                     }*/
+          console.log([res.data.container.IdWaste, waste.IdWaste])
           if ( waste != null && res.data.container.IdWaste != waste.IdWaste ) {
 
             setErrDisposeMessage("Waste Mismatch");
