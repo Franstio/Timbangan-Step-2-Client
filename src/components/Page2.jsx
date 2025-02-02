@@ -841,7 +841,7 @@ const Home = () => {
                         return;
                     }*/
           console.log([res.data.container.IdWaste, waste])
-          if ( waste != null && res.data.container.IdWaste != waste.IdWaste ) {
+          if ( waste != null && res.data.container.IdWaste != waste.Id ) {
 
             setErrDisposeMessage("Waste Mismatch");
             setScanData("");
