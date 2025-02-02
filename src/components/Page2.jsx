@@ -841,8 +841,10 @@ const Home = () => {
                         return;
                     }*/
           if ( waste != null && res.data.container.IdWaste != waste.IdWaste ) {
-                        alert("Waste Mismatch");
-                        return;
+
+            setErrDisposeMessage("Waste Mismatch");
+            setScanData("");
+            return;
           }
           const prevWaste = waste?.name;
           const _waste = res.data.container.waste;
