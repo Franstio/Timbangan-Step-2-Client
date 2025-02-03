@@ -1416,6 +1416,9 @@ const Home = () => {
         setIdbin(-1);
         setNeto(0);
         setScanData("");
+        const _containers = [...containers];
+        _containers.pop();
+        setContainers([...containers]);
         setBinOffline(true);
       }
     }
@@ -1907,6 +1910,8 @@ const Home = () => {
         <p className="text-center">
           Server Status: {ipAddress} {isOnline ? "Online" : "Offline"}
         </p>
+        
+        { process.env.VERSION && <p>Version : {process.env.VERSION} </p>}
       <div className="flex gap-3 flex-row w-100 justify-end pe-5">
       {/* <button 
         onClick={()=>syncData()}

@@ -460,6 +460,7 @@ const Home = () => {
             <footer className='flex-1 rounded border flex justify-center gap-40 p-3 bg-white'  >
                 <p>Server Status: {ipAddress} {socket?.connected ? "Online":"Offline"}</p>
                 <p>Status PLC : {localSocket?.connected ? "Online": "Offline"}</p>
+                { process.env.VERSION && <p>Version : {process.env.VERSION} </p>}
             </footer>
         </main>
     );
