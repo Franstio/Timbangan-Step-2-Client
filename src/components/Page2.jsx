@@ -101,7 +101,7 @@ const Home = () => {
   const checkAPI = async (url)=>{
       try
       {
-          const res = await apiClient.get(`http://${url}/ping`,{timeout:2500});
+          const res = await apiClient.get(`http://${url}/ping`,{timeout:5000});
           return res.status==200;
       }
       catch{
@@ -111,10 +111,10 @@ const Home = () => {
   useEffect(()=>{
       const f = async()=>{
           const r = await checkAPI('localhost:5000');
-          setServerActive(r);
+          setServerActive(r);    
+          setImmediate(async ()=>{await f()});
       }
       f();
-      setInterval(async ()=>await f(),3000);
   },[])
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -634,6 +634,7 @@ const Home = () => {
           setTypeCollection(null);
           setBinDispose(null);
           setFinalStep(false);
+          setWaste(null);
           //setinstruksimsg("DATA TELAH MASUK");
           setTimeout(async () => {
             setmessage("");
@@ -1056,7 +1057,7 @@ const Home = () => {
         },
       });
       //            updateBinWeight();
-      //            setWaste(null);
+      setWaste(null);
       setTransactionData({});
       setScanData("");
       setUser(null);
