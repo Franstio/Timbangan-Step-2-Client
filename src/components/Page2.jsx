@@ -1911,7 +1911,7 @@ const Home = () => {
           Server Status: {ipAddress} {isOnline ? "Online" : "Offline"}
         </p>
         
-        { process.env.VERSION && <p>Version : {process.env.VERSION} </p>}
+        { process.env.REACT_APP_VERSION && <p>Version : {process.env.REACT_APP_VERSION} </p>}
       <div className="flex gap-3 flex-row w-100 justify-end pe-5">
       {/* <button 
         onClick={()=>syncData()}
