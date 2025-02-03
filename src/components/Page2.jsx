@@ -114,7 +114,7 @@ const Home = () => {
           setServerActive(r);    
           setTimeout(async ()=>{await f()},1);
       }
-      f();
+      setTimeout(f(),1);
   },[])
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
