@@ -1791,7 +1791,7 @@ const Home = () => {
                           
                           const tempContainers = [...containers];
                           tempContainers.filter((val,index)=>tempContainers.indexOf(val)===index);
-                          setContainer([...tempContainers]);
+                          setContainers([...tempContainers]);
                           setScanData("");
                         }}
                         className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mr-2 rounded"
