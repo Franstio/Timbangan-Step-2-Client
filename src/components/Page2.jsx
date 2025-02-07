@@ -1420,7 +1420,7 @@ const Home = () => {
         const _containers = [...containers];
         _containers.pop();
         console.log({after:_containers});
-        setContainers(containers);
+        setContainers(_containers);
         setBinOffline(true);
       }
     }
