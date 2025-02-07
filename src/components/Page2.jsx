@@ -1409,7 +1409,8 @@ const Home = () => {
         setFinalStep(true);
         setmessage("Waiting For Verification");
         settoplockId(binDispose.name_hostname);
-        setShowModalDispose(true);
+        setShowModalDispose(true);    
+        setAllowContinueModal(false);
       } catch (err) {
         console.log(err);
 
@@ -1421,11 +1422,11 @@ const Home = () => {
         setIdbin(-1);
         setNeto(0);
         setScanData("");
+        setAllowContinueModal(true);
         setErrDisposeMessage('Bin Offline');
       }
     }
     inputRef.current.focus();
-    setAllowContinueModal(false);
     setContinueState(response);
   };
 
