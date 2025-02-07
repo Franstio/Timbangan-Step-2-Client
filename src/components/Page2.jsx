@@ -1418,8 +1418,7 @@ const Home = () => {
         setScanData("");
         const _containers = [...containers];
         _containers.pop();
-        setContainers([...containers]);
-        console.log(_containers);
+        setContainers(containers);
         setBinOffline(true);
       }
     }
