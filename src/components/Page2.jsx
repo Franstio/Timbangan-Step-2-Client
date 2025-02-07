@@ -119,6 +119,7 @@ const Home = () => {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
+  
   const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
     height: 10,
     borderRadius: 5,
@@ -1787,6 +1788,10 @@ const Home = () => {
                         type="button"
                         onClick={() => {
                           setBinOffline(false);
+                          
+                          const tempContainers = [...containers];
+                          tempContainers.filter((val,index)=>tempContainers.indexOf(val)===index);
+                          setContainer([...tempContainers]);
                           setScanData("");
                         }}
                         className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mr-2 rounded"
