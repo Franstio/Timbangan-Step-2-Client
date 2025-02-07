@@ -1422,6 +1422,7 @@ const Home = () => {
         setNeto(0);
         setScanData("");
         setBinOffline(true);
+        toggleContinueModal(true);
       }
     }
     inputRef.current.focus();
