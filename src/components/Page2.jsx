@@ -112,7 +112,7 @@ const Home = () => {
       const f = async()=>{
           const r = await checkAPI('localhost:5000');
           setServerActive(r);    
-          setTimeout(async ()=>{await f()},1);
+          setTimeout(async ()=>{await f()},1000);
       }
       setTimeout(()=>f(),1);
   },[])
