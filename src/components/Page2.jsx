@@ -1310,8 +1310,11 @@ const Home = () => {
         if (
           curWeight <= parseFloat(checkBinAvailable?.max_weight ?? 100) &&
           container != null &&
-          checkBinAvailable != null
+          checkBinAvailable != null &&
+          containers.findIndex(x=>x.datContainer.name==container.name) == -1
         )
+        {
+            
           setContainers([
             ...containers,
             {
@@ -1320,6 +1323,7 @@ const Home = () => {
               dataTransaction: transactionData,
             },
           ]);
+        }
         setIsSubmitAllowed(false);
         //            setFinalStep(true);
         setmessage("");
@@ -1417,10 +1421,6 @@ const Home = () => {
         setIdbin(-1);
         setNeto(0);
         setScanData("");
-        const _containers = [...containers];
-        _containers.pop();
-        console.log({after:_containers});
-        setContainers(_containers);
         setBinOffline(true);
       }
     }
