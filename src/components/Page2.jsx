@@ -1421,8 +1421,7 @@ const Home = () => {
         setIdbin(-1);
         setNeto(0);
         setScanData("");
-        setBinOffline(true);
-        toggleContinueModal(true);
+        setErrDisposeMessage('Bin Offline');
       }
     }
     inputRef.current.focus();
