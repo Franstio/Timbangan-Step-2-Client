@@ -1419,6 +1419,7 @@ const Home = () => {
         setScanData("");
         const _containers = [...containers];
         _containers.pop();
+        console.log({after:_containers});
         setContainers(containers);
         setBinOffline(true);
       }
@@ -1788,10 +1789,6 @@ const Home = () => {
                         type="button"
                         onClick={() => {
                           setBinOffline(false);
-                          
-                          const tempContainers = [...containers];
-                          tempContainers.filter((val,index)=>tempContainers.indexOf(val)===index);
-                          setContainers([...tempContainers]);
                           setScanData("");
                         }}
                         className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 mr-2 rounded"
