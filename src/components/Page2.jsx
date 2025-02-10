@@ -1361,7 +1361,7 @@ const Home = () => {
     freezeNeto(false);
   };
   const reloadBin = async ()=>{
-    if (containers.length > 0 && binDispose != null) 
+    if (containers.length > 0 && binDispose != null && binDispose.name_hostname) 
       await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
     window.location.reload();
   }
