@@ -1311,7 +1311,7 @@ const Home = () => {
           curWeight <= parseFloat(checkBinAvailable?.max_weight ?? 100) &&
           container != null &&
           checkBinAvailable != null &&
-          containers.findIndex(x=>x.datContainer.name==container.name) == -1
+          containers.findIndex(x=>x.dataContainer.name==container.name) == -1
         )
         {
             
