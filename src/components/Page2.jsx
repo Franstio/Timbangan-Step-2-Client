@@ -109,14 +109,14 @@ const Home = () => {
           return false;
       }
   }
-  useEffect(()=>{
-      const f = async()=>{
-          const r = await checkAPI('localhost:5000');
-          setServerActive(r);    
-          setTimeout(async ()=>{await f()},1000);
-      }
-      setTimeout(()=>f(),1);
-  },[])
+  // useEffect(()=>{
+  //     const f = async()=>{
+  //         const r = await checkAPI('localhost:5000');
+  //         setServerActive(r);    
+  //         setTimeout(async ()=>{await f()},1000);
+  //     }
+  //     setTimeout(()=>f(),1);
+  // },[])
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
