@@ -100,6 +100,7 @@ const Home = () => {
         localSocket.on('reload',(ret)=>{
             localStorage.clear();
             window.location.reload();
+            localSocket.emit('reload');
         });
         localSocket.on('refresh',function (a){
             console.log(localStorage.getItem("bin"));

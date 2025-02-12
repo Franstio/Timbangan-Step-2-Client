@@ -1367,6 +1367,16 @@ const Home = () => {
       try
       {
         await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
+        if (!reloadLocal)
+        {
+          const resData = await apiClient.post(
+            `http://${binDispose.name_hostname}.local:5000/Start`,
+            { bin: binDispose },
+            {
+              timeout: 10 * 1000
+            }
+          );
+        }
       }
       catch (er)
       {
