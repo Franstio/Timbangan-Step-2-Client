@@ -47,6 +47,7 @@ const Home = () => {
   const [containerName, setContainerName] = useState("");
   const [isFreeze, freezeNeto] = useState(false);
   const [refreshModal,setRefreshModal] = useState(false);
+  const [refreshBinModal,setRefreshBinModal] = useState(false);
   const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showContinueModal, toggleContinueModal] = useState(false);
@@ -1360,7 +1361,7 @@ const Home = () => {
     toggleModal();
     freezeNeto(false);
   };
-  const reloadBin = async ()=>{
+  const reloadBin = async (reloadLocal)=>{
     if (containers.length > 0 && binDispose != null && binDispose.name_hostname) 
     {
       try
@@ -1372,6 +1373,7 @@ const Home = () => {
         console.log(er);
       }
     }
+    if (reloadLocal)
     window.location.reload();
   }
   const handleFormContinue = async (response) => {
@@ -1731,7 +1733,7 @@ const Home = () => {
                     <div className="flex justify-center gap-8 mt-5">
                       <button
                         type="button"
-                        onClick={reloadBin}
+                        onClick={()=>reloadBin(true)}
                         className="bg-blue-500 hover:bg-blue-600 text-2xl text-white font-bold py-3 px-5 mr-2 rounded"
                       >
                         Iya
@@ -1739,6 +1741,43 @@ const Home = () => {
                       <button
                         type="button"
                         onClick={() => setRefreshModal(false)}
+                        className="bg-gray-500 hover:bg-red-600 text-2xl text-white font-bold py-3 px-5 rounded"
+                      >
+                        Tidak
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="flex justify-start">
+          {refreshBinModal && (
+            <div className="fixed z-10 inset-0 overflow-y-auto">
+              <div className="flex items-center justify-center min-h-screen">
+                <div
+                  className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                  aria-hidden="true"
+                ></div>
+
+                <div className="bg-white rounded p-10 max-w-md mx-auto z-50">
+                  <div className="text-center mb-4"></div>
+                  <form>
+                    <span className="text-2xl">
+                      Apakah benar mau di refresh?
+                    </span>
+                    <div className="flex justify-center gap-8 mt-5">
+                      <button
+                        type="button"
+                        onClick={()=>reloadBin(false)}
+                        className="bg-blue-500 hover:bg-blue-600 text-2xl text-white font-bold py-3 px-5 mr-2 rounded"
+                      >
+                        Iya
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setRefreshBinModal(false)}
                         className="bg-gray-500 hover:bg-red-600 text-2xl text-white font-bold py-3 px-5 rounded"
                       >
                         Tidak
@@ -1931,11 +1970,17 @@ const Home = () => {
         className={`p-3 border rounded py-2  justify-center items-center font-bold mt-5 ${!isSubmitAllowed && !syncing ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
         >Sync Data</button> */}
       <button 
+        onClick={()=>setRefreshBinModal(true)}
+        // disabled={isSubmitAllowed || syncing || isFinalStep}
+        className={`p-3 border rounded py-2 w-100  justify-center items-center font-bold mt-5 ${/*!isSubmitAllowed && !syncing && !isFinalStep*/ true ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
+        >Reset Bin</button>
+              <button 
         onClick={()=>refreshPage()}
         // disabled={isSubmitAllowed || syncing || isFinalStep}
         className={`p-3 border rounded py-2 w-100  justify-center items-center font-bold mt-5 ${/*!isSubmitAllowed && !syncing && !isFinalStep*/ true ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
-        >Refresh</button>
+        >Reset All</button>
       </div>
+      
                 
       </footer>
     </main>
