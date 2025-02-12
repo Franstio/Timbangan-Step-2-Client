@@ -91,7 +91,12 @@ const Home = () => {
   //    const socket = null;
     useEffect(()=>{
       if (!serverErr.show && !serverActive )
+      {
           setServerErr({show:true,message:"Server Disconnecting, Halting Application"});
+          setTimeout(() => {
+            setServerErr({show:false,message:''});
+          }, 1000);
+      }
       else if (serverErr.show && serverActive && rackActive )
           setServerErr({show:false,message:''});
   },[serverActive])
