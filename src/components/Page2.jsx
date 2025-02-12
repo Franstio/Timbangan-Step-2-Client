@@ -1965,7 +1965,7 @@ const Home = () => {
         { process.env.REACT_APP_VERSION && <p>Version : {process.env.REACT_APP_VERSION} </p>}
       <div className="flex gap-3 flex-row w-100 justify-end pe-5">
       {
-        binDispose.name_hostname &&
+        binDispose?.name_hostname &&
         <button 
         
         onClick={()=>setRefreshBinModal(true)}
