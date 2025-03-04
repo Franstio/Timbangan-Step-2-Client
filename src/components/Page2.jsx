@@ -1373,7 +1373,7 @@ const Home = () => {
       try
       {
         await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
-        if (!reloadLocal || true)
+        if (true)
         {
             setTimeout(async ()=>{
             const resData = await apiClient.post(
@@ -1382,7 +1382,9 @@ const Home = () => {
               {
                 timeout: 10 * 1000
               }
-            );
+            );          
+            if (reloadLocal)
+              window.location.reload();
           },2000);
         }
       }
@@ -1391,8 +1393,6 @@ const Home = () => {
         console.log(er);
       }
     }
-    if (reloadLocal)
-      window.location.reload();
   }
   const RefreshNetwork = async ()=>{
     try
