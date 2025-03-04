@@ -25,7 +25,7 @@ import {
   CircularProgress,
   Grid,
 } from "@mui/material";
-import {usePersistentState} from 'react-persistent-state';
+import useLocalStoragePath from 'use-local-storage-state';
 
 const apiClient = axios.create({
   withCredentials: false,
@@ -36,20 +36,20 @@ const Home = () => {
   const [Scales4Kg, setScales4Kg] = useState({});
   const [Scales50Kg, setScales50Kg] = useState({});
   const [continueState, setContinueState] = useState(false);
-  const [isFinalStep, setFinalStep] = usePersistentState(false);
+  const [isFinalStep, setFinalStep] = useLocalStoragePath("isFinalStep", { defaultValue: false });
   const [scanData, setScanData] = useState("");
   const [binOffline, setBinOffline] = useState(false);
   const [container, setContainer] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
-  const [waste, setWaste] = usePersistentState(null);
-  const [wastename, setWastename] = usePersistentState("");
-  const [Idbin, setIdbin] = usePersistentState(-1);
-  const [binname, setBinname] = usePersistentState("");
+  const [waste, setWaste] = useLocalStoragePath("waste", { defaultValue: null });
+  const [wastename, setWastename] = useLocalStoragePath("wastename", { defaultValue: "" });
+  const [Idbin, setIdbin] = useLocalStoragePath("Idbin", { defaultValue: -1 });
+  const [binname, setBinname] = useLocalStoragePath("binname", { defaultValue: "" });
   const [containerName, setContainerName] = useState("");
-  const [isFreeze, freezeNeto] = usePersistentState(false);
-  const [refreshModal,setRefreshModal] = useState(false);
-  const [refreshBinModal,setRefreshBinModal] = useState(false);
-  const [isSubmitAllowed, setIsSubmitAllowed] = usePersistentState(false);
+  const [isFreeze, freezeNeto] = useLocalStoragePath("isFreeze", { defaultValue: false });
+  const [refreshModal, setRefreshModal] = useState(false);
+  const [refreshBinModal, setRefreshBinModal] = useState(false);
+  const [isSubmitAllowed, setIsSubmitAllowed] = useLocalStoragePath("isSubmitAllowed", { defaultValue: false });
   const [showModal, setShowModal] = useState(false);
   const [showContinueModal, toggleContinueModal] = useState(false);
   const [showModalDispose, setShowModalDispose] = useState(false);
@@ -58,38 +58,36 @@ const Home = () => {
   const [showErrorDispose, setShowErrorDispose] = useState(false);
   const [errDisposeMessage, setErrDisposeMessage] = useState("");
   const [finalneto, setFinalNeto] = useState(0);
-  const [neto, setNeto] = usePersistentState({});
-  const [neto50Kg, setNeto50kg] = usePersistentState(0);
-  const [neto4Kg, setNeto4kg] = usePersistentState(0);
-  const [toplockId, settoplockId] = usePersistentState({ hostname: "" });
-  const [instruksimsg, setinstruksimsg] = usePersistentState("");
-  const [message, setmessage] = usePersistentState("");
-  const [type, setType] = usePersistentState("");
-  const [typecollection, setTypeCollection] = usePersistentState("");
-  const [weightbin, setWeightbin] = usePersistentState("");
-  const [binDispose, setBinDispose] = usePersistentState(null);
-  //const [ScaleName, setScaleName] = useState("");
+  const [neto, setNeto] = useLocalStoragePath("neto", { defaultValue: {} });
+  const [neto50Kg, setNeto50kg] = useLocalStoragePath("neto50Kg", { defaultValue: 0 });
+  const [neto4Kg, setNeto4kg] = useLocalStoragePath("neto4Kg", { defaultValue: 0 });
+  const [toplockId, settoplockId] = useLocalStoragePath("toplockId", { defaultValue: { hostname: "" } });
+  const [instruksimsg, setinstruksimsg] = useLocalStoragePath("instruksimsg", { defaultValue: "" });
+  const [message, setmessage] = useLocalStoragePath("message", { defaultValue: "" });
+  const [type, setType] = useLocalStoragePath("type", { defaultValue: "" });
+  const [typecollection, setTypeCollection] = useLocalStoragePath("typecollection", { defaultValue: "" });
+  const [weightbin, setWeightbin] = useLocalStoragePath("weightbin", { defaultValue: "" });
+  const [binDispose, setBinDispose] = useLocalStoragePath("binDispose", { defaultValue: null });
   const inputRef = useRef(null);
   const btnSubmitRef = useRef(null);
   const [bottomLockHostData, setBottomLockData] = useState({
     binId: "",
     hostname: "",
   });
-  const [syncing,setSyncing] = useState(false);
+  const [syncing, setSyncing] = useState(false);
   const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
   const [rackTarget, setRackTarget] = useState(process.env.REACT_APP_RACK);
   const [apiTarget, setApiTarget] = useState(process.env.REACT_APP_PIDSG);
-  const [transactionData, setTransactionData] = usePersistentState({});
-  const [logindate, setLoginDate] = usePersistentState("");
-  const [containers, setContainers] = usePersistentState([]);
+  const [transactionData, setTransactionData] = useLocalStoragePath("transactionData", { defaultValue: {} });
+  const [logindate, setLoginDate] = useLocalStoragePath("logindate", { defaultValue: "" });
+  const [containers, setContainers] = useLocalStoragePath("containers", { defaultValue: [] });
   const [checkInputInverval, setCheckInputInterval] = useState(null);
   const [ipAddress, setIpAddress] = useState(process.env.REACT_APP_PIDSG);
-  //const ScaleName = getScaleName();
   const navigation = [{ name: "Dashboard", href: "#", current: true }];
-  const [serverErr,setServerErr] = useState({show:false,message:''});
-  const [serverActive,setServerActive] = useState(true);
-  const [rackActive,setRackActive] = useState(true);
-  //    const socket = null;
+  const [serverErr, setServerErr] = useState({ show: false, message: "" });
+  const [serverActive, setServerActive] = useState(true);
+  const [rackActive, setRackActive] = useState(true);
+
     useEffect(()=>{
       if (!serverErr.show && !serverActive )
       {
