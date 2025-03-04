@@ -1794,7 +1794,7 @@ const Home = () => {
                   <div className="text-center mb-4"></div>
                   <form>
                     <span className="text-2xl">
-                      Apakah benar mau di refresh?
+                    Apakah benar anda ingin reset {binDispose?.name_hostname ?? ""} ?
                     </span>
                     <div className="flex justify-center gap-8 mt-5">
                       <button
