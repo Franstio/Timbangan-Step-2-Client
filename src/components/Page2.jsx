@@ -25,6 +25,7 @@ import {
   CircularProgress,
   Grid,
 } from "@mui/material";
+import {usePersistentState} from 'react-persistent-state';
 
 const apiClient = axios.create({
   withCredentials: false,
@@ -35,20 +36,20 @@ const Home = () => {
   const [Scales4Kg, setScales4Kg] = useState({});
   const [Scales50Kg, setScales50Kg] = useState({});
   const [continueState, setContinueState] = useState(false);
-  const [isFinalStep, setFinalStep] = useState(false);
+  const [isFinalStep, setFinalStep] = usePersistentState(false);
   const [scanData, setScanData] = useState("");
   const [binOffline, setBinOffline] = useState(false);
   const [container, setContainer] = useState(null);
   const [isOnline, setIsOnline] = useState(false);
-  const [waste, setWaste] = useState(null);
-  const [wastename, setWastename] = useState("");
-  const [Idbin, setIdbin] = useState(-1);
-  const [binname, setBinname] = useState("");
+  const [waste, setWaste] = usePersistentState(null);
+  const [wastename, setWastename] = usePersistentState("");
+  const [Idbin, setIdbin] = usePersistentState(-1);
+  const [binname, setBinname] = usePersistentState("");
   const [containerName, setContainerName] = useState("");
-  const [isFreeze, freezeNeto] = useState(false);
+  const [isFreeze, freezeNeto] = usePersistentState(false);
   const [refreshModal,setRefreshModal] = useState(false);
   const [refreshBinModal,setRefreshBinModal] = useState(false);
-  const [isSubmitAllowed, setIsSubmitAllowed] = useState(false);
+  const [isSubmitAllowed, setIsSubmitAllowed] = usePersistentState(false);
   const [showModal, setShowModal] = useState(false);
   const [showContinueModal, toggleContinueModal] = useState(false);
   const [showModalDispose, setShowModalDispose] = useState(false);
@@ -57,16 +58,16 @@ const Home = () => {
   const [showErrorDispose, setShowErrorDispose] = useState(false);
   const [errDisposeMessage, setErrDisposeMessage] = useState("");
   const [finalneto, setFinalNeto] = useState(0);
-  const [neto, setNeto] = useState({});
-  const [neto50Kg, setNeto50kg] = useState(0);
-  const [neto4Kg, setNeto4kg] = useState(0);
-  const [toplockId, settoplockId] = useState({ hostname: "" });
-  const [instruksimsg, setinstruksimsg] = useState("");
-  const [message, setmessage] = useState("");
-  const [type, setType] = useState("");
-  const [typecollection, setTypeCollection] = useState("");
-  const [weightbin, setWeightbin] = useState("");
-  const [binDispose, setBinDispose] = useState(null);
+  const [neto, setNeto] = usePersistentState({});
+  const [neto50Kg, setNeto50kg] = usePersistentState(0);
+  const [neto4Kg, setNeto4kg] = usePersistentState(0);
+  const [toplockId, settoplockId] = usePersistentState({ hostname: "" });
+  const [instruksimsg, setinstruksimsg] = usePersistentState("");
+  const [message, setmessage] = usePersistentState("");
+  const [type, setType] = usePersistentState("");
+  const [typecollection, setTypeCollection] = usePersistentState("");
+  const [weightbin, setWeightbin] = usePersistentState("");
+  const [binDispose, setBinDispose] = usePersistentState(null);
   //const [ScaleName, setScaleName] = useState("");
   const inputRef = useRef(null);
   const btnSubmitRef = useRef(null);
@@ -78,9 +79,9 @@ const Home = () => {
   const [socket, setSocket] = useState(); // Sesuaikan dengan alamat server
   const [rackTarget, setRackTarget] = useState(process.env.REACT_APP_RACK);
   const [apiTarget, setApiTarget] = useState(process.env.REACT_APP_PIDSG);
-  const [transactionData, setTransactionData] = useState({});
-  const [logindate, setLoginDate] = useState("");
-  const [containers, setContainers] = useState([]);
+  const [transactionData, setTransactionData] = usePersistentState({});
+  const [logindate, setLoginDate] = usePersistentState("");
+  const [containers, setContainers] = usePersistentState([]);
   const [checkInputInverval, setCheckInputInterval] = useState(null);
   const [ipAddress, setIpAddress] = useState(process.env.REACT_APP_PIDSG);
   //const ScaleName = getScaleName();
@@ -580,6 +581,7 @@ const Home = () => {
               );
             } catch (err) {
               console.log(err);
+              await RefreshNetwork();
               setBinOffline(true);
               setScanData("");
               return;
@@ -901,6 +903,7 @@ const Home = () => {
               }
             } catch (err) {
               console.log(err);
+              await RefreshNetwork();
               setBinOffline(true);
               setContainer(null);
               return;
@@ -1372,7 +1375,7 @@ const Home = () => {
       try
       {
         await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
-        if (!reloadLocal)
+        if (!reloadLocal || true)
         {
             setTimeout(async ()=>{
             const resData = await apiClient.post(
@@ -1392,6 +1395,16 @@ const Home = () => {
     }
     if (reloadLocal)
       window.location.reload();
+  }
+  const RefreshNetwork = async ()=>{
+    try
+    {
+      await apiClient.get(`http://localhost:5000/reset-network`);
+    }
+    catch (er)
+    {
+      console.log(er);
+    }
   }
   const handleFormContinue = async (response) => {
     toggleContinueModal(false);
@@ -1445,6 +1458,7 @@ const Home = () => {
 //        const items = containers;
 //        items.splice(-1, 1);
   //      setContainers((prev) => [...items]);
+        await RefreshNetwork();
         setFinalStep(false);
         setIsSubmitAllowed(true);
         setIdbin(-1);

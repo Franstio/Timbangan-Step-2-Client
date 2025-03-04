@@ -101,7 +101,7 @@ const Home = () => {
             localStorage.clear();
             window.location.reload();
         });
-        localSocket.on('refresh',function (a){
+        const checkLampRed = ()=>{
             console.log(localStorage.getItem("bin"));
             if (localStorage.getItem("bin") == "" || localStorage.getItem("bin")=="undefined")  
                
@@ -113,8 +113,15 @@ const Home = () => {
                 setBin({...binData});
                 localSocket.emit("TriggerWeight",binData);
             }
+        }
+        localSocket.on('refresh',function (a){
+            checkLampRed();
 //            io.emit('TriggerWeight',binData);
         });
+        const intervalId = setInterval(()=>{
+            checkLampRed()
+        },5000);
+        return ()=>clearInterval(intervalId);
     }, [localSocket]);
     const startObserveBottomSensor =async (target)=>{
         await apiClient.post('http://localhost:5000/observeBottomSensor',{readTarget:target});
@@ -364,11 +371,6 @@ const Home = () => {
                                         },
                                         {
                                             limit: 50,
-                                            color: 'YELLOW',
-                                            showTick: true
-                                        },
-                                        {
-                                            limit: 89,
                                             color: 'YELLOW',
                                             showTick: true
                                         },
