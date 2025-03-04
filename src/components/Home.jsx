@@ -370,12 +370,12 @@ const Home = () => {
                                             showTick: true
                                         },
                                         {
-                                            limit: 50,
+                                            limit: 90,
                                             color: 'YELLOW',
                                             showTick: true
                                         },
                                         {
-                                            limit: 90,
+                                            limit: 100,
                                             color: 'RED',
                                             showTick: true
                                         },
