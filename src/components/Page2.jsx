@@ -68,6 +68,7 @@ const Home = () => {
   const [typecollection, setTypeCollection] = useLocalStoragePath("typecollection", { defaultValue: "" });
   const [weightbin, setWeightbin] = useLocalStoragePath("weightbin", { defaultValue: "" });
   const [binDispose, setBinDispose] = useLocalStoragePath("binDispose", { defaultValue: null });
+  const [allowReload,setAllowReload] = useLocalStoragePath('allowReload',{defaultValue:true});
   const inputRef = useRef(null);
   const btnSubmitRef = useRef(null);
   const [bottomLockHostData, setBottomLockData] = useState({
@@ -1376,13 +1377,17 @@ const Home = () => {
         if (true)
         {
             setTimeout(async ()=>{
-            const resData = await apiClient.post(
-              `http://${binDispose.name_hostname}.local:5000/Start`,
-              { bin: binDispose },
+              if (allowReload)
               {
-                timeout: 10 * 1000
-              }
-            );          
+                  const resData = await apiClient.post(
+                  `http://${binDispose.name_hostname}.local:5000/Start`,
+                  { bin: binDispose },
+                  {
+                    timeout: 10 * 1000
+                  }
+                  
+                );
+              }          
             if (reloadLocal)
               window.location.reload();
           },2000);
@@ -1424,6 +1429,7 @@ const Home = () => {
             }*/
 
 //      if (containers.length < 1 && !response) setUser(null);
+      setAllowReload(false);
       setIsSubmitAllowed(false);
       setIdbin(-1);
       freezeNeto(false);
@@ -1435,6 +1441,7 @@ const Home = () => {
       setTransactionData({});
       setFinalStep(false);
     } else {
+      setAllowReload(true);
       try {
         if (containers[0].dataContainer.waste.handletype != "Rack") {
           const resData = await apiClient.post(
