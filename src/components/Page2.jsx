@@ -32,14 +32,14 @@ const apiClient = axios.create({
   timeout: 10000,
 });
 const Home = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useLocalStoragePath('user',{defaultValue:null});
   const [Scales4Kg, setScales4Kg] = useState({});
   const [Scales50Kg, setScales50Kg] = useState({});
   const [continueState, setContinueState] = useState(false);
   const [isFinalStep, setFinalStep] = useLocalStoragePath("isFinalStep", { defaultValue: false });
   const [scanData, setScanData] = useState("");
   const [binOffline, setBinOffline] = useState(false);
-  const [container, setContainer] = useState(null);
+  const [container, setContainer] = useLocalStoragePath('container',{defaultValue:null});
   const [isOnline, setIsOnline] = useState(false);
   const [waste, setWaste] = useLocalStoragePath("waste", { defaultValue: null });
   const [wastename, setWastename] = useLocalStoragePath("wastename", { defaultValue: "" });
