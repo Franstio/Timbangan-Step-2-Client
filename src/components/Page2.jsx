@@ -25,6 +25,12 @@ import {
   CircularProgress,
   Grid,
 } from "@mui/material";
+import Keyboard from 'react-simple-keyboard';
+import 'react-simple-keyboard/build/css/index.css';
+import { IconButton } from '@mui/material';
+import { InputAdornment } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import useLocalStoragePath from 'use-local-storage-state';
 
 const apiClient = axios.create({
@@ -88,7 +94,7 @@ const Home = () => {
   const [serverErr, setServerErr] = useState({ show: false, message: "" });
   const [serverActive, setServerActive] = useState(true);
   const [rackActive, setRackActive] = useState(true);
-
+  const [restartModal, setRestartModal] = useState({showModal:false,passwordInput:'',showPassword:false})
     useEffect(()=>{
       if (!serverErr.show && !serverActive )
       {
@@ -537,8 +543,11 @@ const Home = () => {
   useEffect(() => {
     const updateFocus = () => {
       if (inputRef && inputRef.current) {
-        if (document.activeElement != inputRef.current)
-          inputRef.current.focus();
+        setRestartModal(r=>{
+          if (document.activeElement != inputRef.current && !r.showModal)
+            inputRef.current.focus();
+          return r;
+        });
       }
     };
     if (checkInputInverval != null) clearInterval(checkInputInverval);
@@ -1412,6 +1421,28 @@ const Home = () => {
       console.log(er);
     }
   }
+  const handleRestart = async()=>{
+    try
+    {
+      const verif = await apiClient.post(`http://localhost:5000/verify-password`,{password:restartModal.passwordInput});
+      setRestartModal({showModal:false,passwordInput:'',showPassword:false});
+      if (verif.data.isValid==1)
+      {
+        localStorage.clear();
+          reloadBin(true);
+      }
+      else
+      {     
+        setServerErr({show:true,message:"Password Tidak Benar"});
+      }
+    }
+    catch (err)
+    {
+      setRestartModal({showModal:false,passwordInput:'',showPassword:false});
+      console.log(err);
+      setServerErr({show:true,message:err.message ?? "Terjadi Kesalahan dengan aplikasi"});
+    }
+  }
   const handleFormContinue = async (response) => {
     toggleContinueModal(false);
     setScanData("");
@@ -1636,7 +1667,7 @@ const Home = () => {
                 id="userId"
                 value={scanData}
                 onBlur={() => {
-                  if (inputRef && inputRef.current) inputRef.current.focus();
+                  if (inputRef && inputRef.current && !restartModal.showModal) inputRef.current.focus();
                 }}
                 onKeyDown={(e) => handleKeyPress(e)}
                 ref={inputRef}
@@ -1992,6 +2023,62 @@ const Home = () => {
                 </div>
               </div>
             )}
+            {restartModal.showModal && (
+                        <div className="fixed z-10 inset-0 overflow-y-auto">
+                            <div className="flex items-center justify-center min-h-screen">
+                                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                                <div className="bg-white rounded p-8 max-w-md mx-auto z-50">
+                                    <div className="text-center mb-4">
+
+                                    </div>
+                                    <form>
+                                        <Typography variant="h4" align="center" gutterBottom>
+                                            Masukkan password untuk melakukan restart.
+                                        </Typography>
+
+                                        <TextField
+                                            type={restartModal.showPassword ? 'text' : 'password'}
+                                            label="Pin"
+                                            value={restartModal.passwordInput}
+                                            onChange={(e) => setRestartModal({...restartModal,passwordInput: e.target.value})}
+                                            variant="outlined"
+                                            fullWidth
+                                            autoFocus={true}
+                                            margin="normal"
+                                            required
+                                            focused
+                                            InputProps={{
+                                                endAdornment: (
+                                                    <InputAdornment position="end">
+                                                        <IconButton onClick={()=>setRestartModal({...restartModal,showPassword:!restartModal.showPassword})}>
+                                                            {restartModal.showPassword ? <Visibility /> : <VisibilityOff />}
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        />
+
+                                        <div className="flex justify-center mt-5">
+                                            <button type="button" onClick={handleRestart} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mr-2 rounded">Ok</button>
+                                            <button type="button" onClick={()=>setRestartModal({...restartModal,showModal:false})} className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Cancel</button>
+                                        </div>
+                                    </form>
+                                    <Keyboard
+                                        onChange={(e) => setRestartModal({...restartModal,passwordInput: e.target?.value ?? e })}
+                                        layout={{
+                                            default: [
+                                                "1 2 3",
+                                                "4 5 6",
+                                                "7 8 9",
+                                                "0 {bksp}"
+                                            ]
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
         </div>
 
         <p>Instruksi : {message} </p>
@@ -2022,6 +2109,11 @@ const Home = () => {
         // disabled={isSubmitAllowed || syncing || isFinalStep}
         className={`p-3 border rounded py-2 w-100  justify-center items-center font-bold mt-5 ${/*!isSubmitAllowed && !syncing && !isFinalStep*/ true ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
         >Refresh</button>
+                      <button 
+        onClick={()=>setRestartModal({...restartModal,showModal:true})}
+        // disabled={isSubmitAllowed || syncing || isFinalStep}
+        className={`p-3 border rounded py-2 w-100  justify-center items-center font-bold mt-5 ${/*!isSubmitAllowed && !syncing && !isFinalStep*/ true ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
+        >Restart</button>
       </div>
       
                 
