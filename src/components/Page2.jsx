@@ -101,8 +101,11 @@ const Home = () => {
           setServerErr({show:false,message:''});
   },[serverActive])
   useEffect(()=>{
-    if (!rackActive)    
+    if (!rackActive)
+    {    
+      RefreshNetwork();
       setServerErr({show:true,message: "Rack Disconnected, please try again"});
+    }
   },[rackActive])
   const checkAPI = async (url)=>{
       try
