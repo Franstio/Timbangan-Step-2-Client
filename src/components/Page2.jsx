@@ -1429,7 +1429,8 @@ const Home = () => {
       if (verif.data.isValid==1)
       {
         localStorage.clear();
-        await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
+        (binDispose.name_hostname)
+          await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
         window.location.reload();
       }
       else
