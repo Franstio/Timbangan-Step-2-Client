@@ -1431,7 +1431,7 @@ const Home = () => {
       if (verif.data.isValid==1)
       {
         localStorage.clear();
-        if (binDispose.name_hostname)
+        if (binDispose && binDispose.name_hostname)
         {
           try
           {
