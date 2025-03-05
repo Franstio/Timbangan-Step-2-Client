@@ -1437,7 +1437,8 @@ const Home = () => {
           {
             await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
           }
-          catch{}
+          catch{
+          }
         }
         window.location.reload();
       }
