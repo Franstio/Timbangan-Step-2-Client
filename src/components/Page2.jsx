@@ -593,7 +593,7 @@ const Home = () => {
             } catch (err) {
               console.log(err);
               await RefreshNetwork();
-              setBinOffline(true);
+              //setBinOffline(true);
               setScanData("");
               return;
             }
@@ -915,7 +915,7 @@ const Home = () => {
             } catch (err) {
               console.log(err);
               await RefreshNetwork();
-              setBinOffline(true);
+              //setBinOffline(true);
               setContainer(null);
               return;
             }
@@ -1515,7 +1515,7 @@ const Home = () => {
         setNeto(0);
         setScanData("");
         setAllowContinueModal(true);
-        setErrDisposeMessage('Bin Offline');
+//        setErrDisposeMessage('Bin Offline');
       }
     }
     inputRef.current.focus();
