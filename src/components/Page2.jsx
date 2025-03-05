@@ -1410,6 +1410,8 @@ const Home = () => {
         console.log(er);
       }
     }
+    else
+      window.location.reload();
   }
   const RefreshNetwork = async ()=>{
     try
@@ -1429,8 +1431,14 @@ const Home = () => {
       if (verif.data.isValid==1)
       {
         localStorage.clear();
-        (binDispose.name_hostname)
-          await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
+        if (binDispose.name_hostname)
+        {
+          try
+          {
+            await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
+          }
+          catch{}
+        }
         window.location.reload();
       }
       else
