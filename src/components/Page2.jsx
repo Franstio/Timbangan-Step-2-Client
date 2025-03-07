@@ -1394,6 +1394,8 @@ const Home = () => {
             setTimeout(async ()=>{
               if (allowReload)
               {
+                try
+                {
                   const resData = await apiClient.post(
                   `http://${binDispose.name_hostname}.local:5000/Start`,
                   { bin: binDispose },
@@ -1402,6 +1404,8 @@ const Home = () => {
                   }
                   
                 );
+                }
+                catch{}
               }          
           },2000);
         }
@@ -1817,7 +1821,7 @@ const Home = () => {
                     <div className="flex justify-center gap-8 mt-5">
                       <button
                         type="button"
-                        onClick={()=>reloadBin(true)}
+                        onClick={()=>reloadBin(false)}
                         className="bg-blue-500 hover:bg-blue-600 text-2xl text-white font-bold py-3 px-5 mr-2 rounded"
                       >
                         Iya
