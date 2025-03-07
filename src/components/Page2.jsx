@@ -841,6 +841,8 @@ const Home = () => {
           return;
         }
       }
+      else
+        setWaste(null);
       const res = await apiClient.post("http://localhost:5000/ScanContainer", {
         containerId: scanData,
       });
@@ -862,7 +864,7 @@ const Home = () => {
                         return;
                     }*/
           console.log([res.data.container.IdWaste, waste])
-          if ( waste != null && res.data.container.IdWaste != waste.Id ) {
+          if ( waste != null && containers.length > 0 && res.data.container.IdWaste != waste.Id ) {
 
             setErrDisposeMessage("Waste Mismatch");
             setScanData("");
@@ -2123,7 +2125,7 @@ const Home = () => {
                       <button 
         onClick={()=>setRestartModal({...restartModal,showModal:true})}
         // disabled={isSubmitAllowed || syncing || isFinalStep}
-        className={`p-3 border rounded py-2 w-100  justify-center items-center font-bold mt-5 ${/*!isSubmitAllowed && !syncing && !isFinalStep*/ true ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
+        className={`p-3 border rounded hidden py-2 w-100  justify-center items-center font-bold mt-5 ${/*!isSubmitAllowed && !syncing && !isFinalStep*/ true ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
         >Restart</button>
       </div>
       
