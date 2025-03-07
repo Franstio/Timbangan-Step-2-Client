@@ -1389,7 +1389,7 @@ const Home = () => {
       try
       {
         await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
-        if (true)
+        if (reloadLocal)
         {
             setTimeout(async ()=>{
               if (allowReload)
@@ -1403,10 +1403,10 @@ const Home = () => {
                   
                 );
               }          
-            if (reloadLocal)
-              window.location.reload();
           },2000);
         }
+        else
+          window.location.reload();
       }
       catch (er)
       {
