@@ -1420,6 +1420,17 @@ const Home = () => {
     else
       window.location.reload();
   }
+  const RestartSystem = async ()=>{
+    try
+    {
+      await apiClient.get(`http://localhost:5000/restart`);
+    }
+    catch (er)
+    {
+      console.log(er);
+    }
+    
+  }
   const RefreshNetwork = async ()=>{
     try
     {
@@ -1821,7 +1832,7 @@ const Home = () => {
                     <div className="flex justify-center gap-8 mt-5">
                       <button
                         type="button"
-                        onClick={()=>reloadBin(false)}
+                        onClick={()=>{reloadBin(false);RestartSystem();}}
                         className="bg-blue-500 hover:bg-blue-600 text-2xl text-white font-bold py-3 px-5 mr-2 rounded"
                       >
                         Iya
@@ -2130,7 +2141,7 @@ const Home = () => {
                       <button 
         onClick={()=>setRestartModal({...restartModal,showModal:true})}
         // disabled={isSubmitAllowed || syncing || isFinalStep}
-        className={`p-3 border rounded hidden py-2 w-100  justify-center items-center font-bold mt-5 ${/*!isSubmitAllowed && !syncing && !isFinalStep*/ true ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
+        className={`p-3 border rounded py-2 w-100  justify-center items-center font-bold mt-5 ${/*!isSubmitAllowed && !syncing && !isFinalStep*/ true ? "bg-sky-400 " : "bg-gray-600"} text-white text-lg`}
         >Restart</button>
       </div>
       
