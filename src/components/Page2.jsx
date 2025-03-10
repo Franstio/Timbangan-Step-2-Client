@@ -1423,12 +1423,22 @@ const Home = () => {
   const RestartSystem = async ()=>{
     try
     {
-      await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
+      if (binDispose && binDispose.name_hostname)
+      {
+        try
+        {
+          await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
+        }
+        catch (er){}
+      }
       await apiClient.get(`http://localhost:5000/restart`);
     }
     catch (er)
     {
       console.log(er);
+    }
+    finally{
+      window.location.reload();
     }
     
   }
@@ -1833,7 +1843,7 @@ const Home = () => {
                     <div className="flex justify-center gap-8 mt-5">
                       <button
                         type="button"
-                        onClick={()=>{RestartSystem();window.location.reload();}}
+                        onClick={()=>RestartSystem()}
                         className="bg-blue-500 hover:bg-blue-600 text-2xl text-white font-bold py-3 px-5 mr-2 rounded"
                       >
                         Iya
