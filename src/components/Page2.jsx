@@ -1833,7 +1833,7 @@ const Home = () => {
                     <div className="flex justify-center gap-8 mt-5">
                       <button
                         type="button"
-                        onClick={()=>{reloadBin(false);RestartSystem();}}
+                        onClick={()=>{RestartSystem();window.location.reload();}}
                         className="bg-blue-500 hover:bg-blue-600 text-2xl text-white font-bold py-3 px-5 mr-2 rounded"
                       >
                         Iya
