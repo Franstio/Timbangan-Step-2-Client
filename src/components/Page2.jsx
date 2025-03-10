@@ -1831,7 +1831,7 @@ const Home = () => {
                     <div className="flex justify-center gap-8 mt-5">
                       <button
                         type="button"
-                        onClick={()=>RestartSystem()}
+                        onClick={()=>{RestartSystem();setRefreshModal(false);}}
                         className="bg-blue-500 hover:bg-blue-600 text-2xl text-white font-bold py-3 px-5 mr-2 rounded"
                       >
                         Iya
