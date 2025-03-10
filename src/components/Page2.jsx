@@ -1423,24 +1423,12 @@ const Home = () => {
   const RestartSystem = async ()=>{
     try
     {
-      if (binDispose && binDispose.name_hostname)
-      {
-        try
-        {
-          await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
-        }
-        catch (er){}
-      }
       await apiClient.get(`http://localhost:5000/restart`);
     }
     catch (er)
     {
       console.log(er);
     }
-    finally{
-      window.location.reload();
-    }
-    
   }
   const RefreshNetwork = async ()=>{
     try
