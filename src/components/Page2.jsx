@@ -1423,6 +1423,7 @@ const Home = () => {
   const RestartSystem = async ()=>{
     try
     {
+      await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
       await apiClient.get(`http://localhost:5000/restart`);
     }
     catch (er)
