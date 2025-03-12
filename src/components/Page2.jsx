@@ -929,7 +929,7 @@ const Home = () => {
             const isPending = await UpdateBinWeightCollectionManual(_bin.id);
             collectionPayload = {
               ...collectionPayload,
-              status: isPending ? "PENDING|STEP3" : "",
+              status: isPending ? "PENDING|STEP3" : "Done",
               success: !isPending,
             };
             //       setinstruksimsg("Buka Penutup Bawah");
@@ -1070,6 +1070,7 @@ const Home = () => {
         data.weight,
         type
       );
+      console.log(_container);
       await apiClient.post("http://localhost:5000/SaveTransaksi", {
         payload: {
           idContainer: _container.containerId,
