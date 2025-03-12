@@ -1078,6 +1078,9 @@ const Home = () => {
           type: data.type,
           weight: data.weight,
           success: isSuccess,
+          status: _container.status,
+          fromContainer: _container.name,
+          success: _container.success
         },
       });
       //            updateBinWeight();
