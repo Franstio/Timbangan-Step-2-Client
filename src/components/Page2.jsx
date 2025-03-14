@@ -528,10 +528,14 @@ const Home = () => {
     setShowModalDispose(!showModalDispose);
   };
   const checkProcessRunning = async () => {
+
+    if (!binDispose) return false;
+    return await GetBinStatus(binDispose.name_hostname);
+  };
+  const GetBinStatus = async (binName)=>{
     try {
-      if (!binDispose) return;
       const res = await apiClient.get(
-        `http://${binDispose.name_hostname}.local:5000/status`,
+        `http://${binName}.local:5000/status`,
         {
           timeout: 10 * 1000
         }
@@ -540,7 +544,7 @@ const Home = () => {
     } catch {
       return false;
     }
-  };
+  }
   useEffect(() => {
     const updateFocus = () => {
       if (inputRef && inputRef.current) {
@@ -745,6 +749,11 @@ const Home = () => {
         setErrDisposeMessage(res.message);
         return false;
       }
+      const checkProcess = await GetBinStatus(res.bin.name_hostname);
+      if (checkProcess) {
+        setErrDisposeMessage("Transaction Process Haven't completed yet, Please Submit Again after bin transaction completed.");
+        return;
+      }
       res.bin.type = "Dispose";
       setBinDispose(res.bin);
       setBinname(res.bin.name);
@@ -898,6 +907,11 @@ const Home = () => {
               (item) => item.name == res.data.container.name
             );
 
+            const checkProcess = await GetBinStatus(_bin.name_hostname);
+            if (checkProcess) {
+              setErrDisposeMessage("Transaction Process Haven't completed yet, Please Submit Again after bin transaction completed.");
+              return;
+            }
             if (!_bin) {
               setErrDisposeMessage("Bin Collection error");
               return;
