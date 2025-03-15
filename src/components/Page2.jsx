@@ -628,21 +628,20 @@ const Home = () => {
                 return;
               }
             }
-            if (containers[i].dataTransaction.idscraplog)
-              await updateTransaksi(containers[i].dataTransaction, "Dispose");
+            // if (containers[i].dataTransaction.idscraplog)
+            //   await updateTransaksi(containers[i].dataTransaction, "Dispose");
             if (
               containers[i].dataContainer.waste.handletype == "Rack" ||
               waste.handletype == "Rack"
             ) {
-              await updateBinWeight(containers[i].dataWeight);
+//              await updateBinWeight(containers[i].dataWeight);
               await saveTransaksiRack(
                 containers[i].dataContainer,
                 binDispose.name,
                 "Dispose"
               );
             } else {
-              const success = await updateBinWeight(containers[i].dataWeight);
-              if (success)
+//              const success = await updateBinWeight(containers[i].dataWeight);
                 await saveTransaksi(
                   containers[i].dataContainer,
                   containers[i].dataWeight,
@@ -935,17 +934,17 @@ const Home = () => {
             //await sendLockBottom(_bin);
             // await sendYellowOffCollection(_bin);
             //await sendGreenlampOnCollection(_bin);
-            const isPending = await UpdateBinWeightCollectionManual(_bin.id);
-            collectionPayload = {
-              ...collectionPayload,
-              status: isPending ? "PENDING|STEP3" : "Done",
-              success: !isPending,
-            };
+            // const isPending = await UpdateBinWeightCollectionManual(_bin.id);
+            // collectionPayload = {
+            //   ...collectionPayload,
+            //   status: isPending ? "PENDING|STEP3" : "Done",
+            //   success: !isPending,
+            // };
             //       setinstruksimsg("Buka Penutup Bawah");
 
             if (res.data.container.waste.handletype == "Rack") {
-              await saveTransaksiRack(collectionPayload, "", "Collection");
-            } else await saveTransaksiCollection(collectionPayload);
+              await saveTransaksiRack(collectionPayload, "", "Collection",_bin.id);
+            } else await saveTransaksiCollection(collectionPayload,_bin.id);
             //                            UpdateBinWeightCollection();
             //                        setBottomLockData({ binId: _bin.id, hostname: _bin.name_hostname });
 
@@ -1045,7 +1044,7 @@ const Home = () => {
             
             return () => clearTimeout(timer); 
         };*/
-  const saveTransaksiRack = async (_container, binName, type) => {
+  const saveTransaksiRack = async (_container, binName, type,binId) => {
     const _finalNeto = _container.waste.scales == "4Kg" ? neto4Kg : neto50Kg;
     const res = await apiClient.post(
       `http://${rackTarget}/Transaksi`,
@@ -1070,16 +1069,15 @@ const Home = () => {
     );
     if (res.data && res.data.msg) {
       const data = res.data.msg;
-      const isSuccess = await sendDataPanasonicServer(
-        data.station && type != "Collection"
-          ? data.station
-          : _container.station,
-        transactionData.toBin ? transactionData?.toBin : _container.name,
-        binName,
-        data.weight,
-        type
-      );
-      console.log(_container);
+      // const isSuccess = await sendDataPanasonicServer(
+      //   data.station && type != "Collection"
+      //     ? data.station
+      //     : _container.station,
+      //   transactionData.toBin ? transactionData?.toBin : _container.name,
+      //   binName,
+      //   data.weight,
+      //   type
+      // );
       await apiClient.post("http://localhost:5000/SaveTransaksi", {
         payload: {
           idContainer: _container.containerId,
@@ -1087,11 +1085,15 @@ const Home = () => {
           IdWaste: _container.IdWaste,
           type: data.type,
           weight: data.weight,
-          success: isSuccess,
+          success: false,
           status: _container.status,
           fromContainer: _container.name,
-          success: _container.success
         },
+        station:         data.station && type != "Collection"
+        ? data.station
+        : _container.station,
+        logindate: logindate,
+        binId: binId
       });
       //            updateBinWeight();
       setWaste(null);
@@ -1139,17 +1141,20 @@ const Home = () => {
           ? dataTransaction?.toBin
           : dataContainer.name,
       },
+      station: dataContainer.station,
+      logindate:logindate,
+      binId:binDispose.id
     };
-    const isSuccess = await sendDataPanasonicServer(
-      dataContainer.station,
-      dataTransaction.toBin ? dataTransaction?.toBin : dataContainer.name,
-      binDispose.name,
-      _finalNeto,
-      type
-    );
+    // const isSuccess = await sendDataPanasonicServer(
+    //   dataContainer.station,
+    //   dataTransaction.toBin ? dataTransaction?.toBin : dataContainer.name,
+    //   binDispose.name,
+    //   _finalNeto,
+    //   type
+    // );
     if (dataTransaction.idscraplog)
       _p.payload.idscraplog = dataTransaction.idscraplog;
-    _p.payload.success = isSuccess;
+    _p.payload.success = false;
     if (!_p.payload.success) _p.payload.status = "Pending|PIDSG";
     await apiClient.post(
       "http://localhost:5000/SaveTransaksi",
@@ -1208,25 +1213,14 @@ const Home = () => {
     } catch (error) {}
   };
 
-  const saveTransaksiCollection = async (_container) => {
-    const resAPI = await sendDataPanasonicServer(
-      _container.station,
-      _container.name,
-      "",
-      _container.weight,
-      "Collection"
-    );
-    let status = "";
-    if (_container.status.includes("|")) {
-      // There is Issue on Step 3
-      status = resAPI ? _container.status : `${_container.status}|PIDSG`;
-    } else {
-      status = resAPI ? _container.status : "PENDING|PIDSG";
-    }
-    if (status=="")
-      status = "Done";
-    const isSuccess = !status.includes("|");
-
+  const saveTransaksiCollection = async (_container,binId) => {
+    // const resAPI = await sendDataPanasonicServer(
+    //   _container.station,
+    //   _container.name,
+    //   "",
+    //   _container.weight,
+    //   "Collection"
+    // );
     const res = await apiClient.post(
       `http://${process.env.REACT_APP_TIMBANGAN}/SaveTransaksiCollection`,
       {
@@ -1236,10 +1230,12 @@ const Home = () => {
           IdWaste: _container.IdWaste,
           type: _container.type,
           weight: _container.weight,
-          success: isSuccess,
-          status: status,
+          success: false,
+          status: "",
           fromContainer: _container.name
         },
+        station:_container.station,
+        binId: binId
       }
     );
     setWaste(null);
