@@ -1085,6 +1085,7 @@ const Home = () => {
           badgeId: user.badgeId,
           IdWaste: _container.IdWaste,
           type: data.type,
+          idscraplog: transactionData?.idscraplog ?? "",
           weight: data.weight,
           success: false,
           status: _container.status,
