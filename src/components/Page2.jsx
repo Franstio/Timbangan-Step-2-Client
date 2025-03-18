@@ -1079,7 +1079,7 @@ const Home = () => {
       //   data.weight,
       //   type
       // );
-      await apiClient.post("http://localhost:5000/SaveTransaksi", {
+      await apiClient.post(`http://localhost:5000/${type=="Collection" ? "SaveTransaksiCollection" : "SaveTransaksi"}`, {
         payload: {
           idContainer: _container.containerId,
           badgeId: user.badgeId,
