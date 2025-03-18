@@ -638,7 +638,8 @@ const Home = () => {
               await saveTransaksiRack(
                 containers[i].dataContainer,
                 binDispose.name,
-                "Dispose"
+                "Dispose",
+                binDispose.id
               );
             } else {
 //              const success = await updateBinWeight(containers[i].dataWeight);
