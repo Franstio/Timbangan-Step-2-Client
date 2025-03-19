@@ -638,7 +638,8 @@ const Home = () => {
               await saveTransaksiRack(
                 containers[i].dataContainer,
                 binDispose.name,
-                "Dispose"
+                "Dispose",
+                binDispose.id
               );
             } else {
 //              const success = await updateBinWeight(containers[i].dataWeight);
@@ -1078,12 +1079,13 @@ const Home = () => {
       //   data.weight,
       //   type
       // );
-      await apiClient.post("http://localhost:5000/SaveTransaksi", {
+      await apiClient.post(`http://localhost:5000/${type=="Collection" ? "SaveTransaksiCollection" : "SaveTransaksi"}`, {
         payload: {
           idContainer: _container.containerId,
           badgeId: user.badgeId,
           IdWaste: _container.IdWaste,
           type: data.type,
+          idscraplog: transactionData?.idscraplog ?? "",
           weight: data.weight,
           success: false,
           status: _container.status,
