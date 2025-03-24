@@ -1158,15 +1158,22 @@ const Home = () => {
       _p.payload.idscraplog = dataTransaction.idscraplog;
     _p.payload.success = false;
     if (!_p.payload.success) _p.payload.status = "Pending|PIDSG";
-    await apiClient.post(
-      "http://localhost:5000/SaveTransaksi",
-      {
-        ..._p,
-      },
-      {
-        timeout: 1000,
-      }
-    );
+    try
+    {
+      await apiClient.post(
+        "http://localhost:5000/SaveTransaksi",
+        {
+          ..._p,
+        },
+        {
+          timeout: 15000,
+        }
+      );
+    }
+    catch (e)
+    {
+      console.log(e);
+    }
   };
   const updateTransaksi = async (trdata, type) => {
     await updateTransaksiManual(trdata.idscraplog, type, waste);
