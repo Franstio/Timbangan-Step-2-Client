@@ -1336,11 +1336,13 @@ const Home = () => {
           setContainer(null);
            return;
         }
-        
-        const checkProcess = await GetBinStatus(checkBinAvailable.name_hostname);
-        if (checkProcess) {
-          setErrDisposeMessage("Transaction Process Haven't completed yet, Please Submit Again after bin transaction completed.");
-          return false;
+        if (checkBinAvailable.name_hostname && container.waste.handletype != 'Rack')
+        {
+          const checkProcess = await GetBinStatus(checkBinAvailable.name_hostname);
+          if (checkProcess) {
+            setErrDisposeMessage("Transaction Process Haven't completed yet, Please Submit Again after bin transaction completed.");
+            return false;
+          }
         }
         const curWeight =
           getTotalWeight() + getWeight() + parseFloat(checkBinAvailable.weight);
