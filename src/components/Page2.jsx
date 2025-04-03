@@ -1089,8 +1089,8 @@ const Home = () => {
           weight: data.weight,
           success: false,
           status: _container.status,
-          fromContainer: _container.name,
-          toBin:  type=="Collection" ? undefined : (transactionData?.toBin ?? _container.name)
+          fromContainer: type=="Collection" ?  _container.name :  (transactionData?.toBin ?? _container.name),
+          toBin:  type=="Collection" ? undefined : binname
         },
         station:         data.station && type != "Collection"
         ? data.station
