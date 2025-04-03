@@ -1090,6 +1090,7 @@ const Home = () => {
           success: false,
           status: _container.status,
           fromContainer: _container.name,
+          toBin:  type=="Collection" ? undefined : binName
         },
         station:         data.station && type != "Collection"
         ? data.station
