@@ -558,6 +558,29 @@ const Home = () => {
     if (checkInputInverval != null) clearInterval(checkInputInverval);
     setInterval(updateFocus, 1000);
   }, []);
+  
+  const BuildDisposePayload = (dataContainer,dataWeight,dataTransaction) =>
+  {
+    const _finalNeto = dataWeight; //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
+    const _p =  {
+        idContainer: dataContainer.containerId,
+        badgeId: user.badgeId,
+        IdWaste: dataContainer.IdWaste,
+        type: type,
+        weight: _finalNeto,
+        toBin: binDispose.name,
+        status: "Done",
+        fromContainer: dataTransaction?.toBin
+          ? dataTransaction?.toBin
+          : dataContainer.name,
+        station: dataContainer.station
+      };
+    if (dataTransaction.idscraplog)
+      _p.idscraplog = dataTransaction.idscraplog;
+    _p.success = false;
+    if (!_p.success) _p.status = "Pending|PIDSG";
+    return {..._p};
+  }
   const handleKeyPress = async (e) => {
     try {
       const check = await checkAPI("localhost:5000");
@@ -595,10 +618,10 @@ const Home = () => {
                   timeout: 10 * 1000
                 }
               );
-            } catch (err) {
+            } 
+            catch (err) {
               console.log(err);
               await RefreshNetwork();
-              //setBinOffline(true);
               setScanData("");
               return;
             }
@@ -610,11 +633,10 @@ const Home = () => {
             if (!rackCheck)
               return;
           }
+          const payloads = [];
           for (let i = 0; i < containers.length; i++) {
-            if (
-              containers[i].dataContainer.waste.handletype != "Rack" &&
-              !check
-            ) {
+            if ( containers[i].dataContainer.waste.handletype != "Rack" && !check ) 
+            {
               const isSensorTop = await readSensorTop(binDispose.name_hostname);
               check = isSensorTop;
               if (isSensorTop.error) {
@@ -628,32 +650,21 @@ const Home = () => {
                 return;
               }
             }
-            // if (containers[i].dataTransaction.idscraplog)
-            //   await updateTransaksi(containers[i].dataTransaction, "Dispose");
-            if (
-              containers[i].dataContainer.waste.handletype == "Rack" ||
-              waste.handletype == "Rack"
-            ) {
-//              await updateBinWeight(containers[i].dataWeight);
-              await saveTransaksiRack(
-                containers[i].dataContainer,
-                binDispose.name,
-                "Dispose",
-                binDispose.id
-              );
-            } else {
-//              const success = await updateBinWeight(containers[i].dataWeight);
-                await saveTransaksi(
-                  containers[i].dataContainer,
-                  containers[i].dataWeight,
-                  containers[i].dataTransaction
-                );
+            if ( containers[i].dataContainer.waste.handletype == "Rack" || waste.handletype == "Rack")
+            {
+              const res = await saveTransaksiRack(containers[i].dataContainer,binDispose.name,"Dispose",binDispose.id);
+              if (res.length > 0)
+                payloads.push(res[0])
+            } 
+            else 
+            {
+                payloads.push( 
+                  BuildDisposePayload(containers[i].dataContainer,containers[i].dataWeight,containers[i].dataTransaction
+                ));
             }
           }
-
+          await saveTransaksi(payloads);
           setmessage("DATA TELAH MASUK");
-          //setinstruksimsg(" ");
-          //await sendPesanTimbangan(binDispose.name_hostname, "");
           setContainers([]);
           setIdbin(binDispose.id);
           setTypeCollection(null);
@@ -1070,48 +1081,63 @@ const Home = () => {
     );
     if (res.data && res.data.msg) {
       const data = res.data.msg;
-      // const isSuccess = await sendDataPanasonicServer(
-      //   data.station && type != "Collection"
-      //     ? data.station
-      //     : _container.station,
-      //   transactionData.toBin ? transactionData?.toBin : _container.name,
-      //   binName,
-      //   data.weight,
-      //   type
-      // );
-      await apiClient.post(`http://localhost:5000/${type=="Collection" ? "SaveTransaksiCollection" : "SaveTransaksi"}`, {
-        payload: {
-          idContainer: _container.containerId,
-          badgeId: user.badgeId,
-          IdWaste: _container.IdWaste,
-          type: data.type,
-          idscraplog: transactionData?.idscraplog ?? "",
-          weight: data.weight,
-          success: false,
-          status: _container.status,
-          fromContainer: type=="Collection" ?  _container.name :  (transactionData?.toBin ?? _container.name),
-          toBin:  type=="Collection" ? undefined : binname
-        },
-        station:         data.station && type != "Collection"
-        ? data.station
-        : _container.station,
-        logindate: logindate,
-        binId: binId
-      });
-      //            updateBinWeight();
-      setWaste(null);
-      setTransactionData({});
-      setScanData("");
-      setUser(null);
-      setContainer(null);
-      setmessage("");
-      setNeto(0);
-      freezeNeto(false);
-      setFinalStep(false);
-      setIsSubmitAllowed(false);
-      setIdbin(-1);
-      setScanData("");
-      setinstruksimsg("");
+      if (type=='Collection')
+      {
+        await apiClient.post(`http://localhost:5000/SaveTransaksiCollection`, {
+          payload: {
+            idContainer: _container.containerId,
+            badgeId: user.badgeId,
+            IdWaste: _container.IdWaste,
+            type: data.type,
+            idscraplog: transactionData?.idscraplog ?? "",
+            weight: data.weight,
+            success: false,
+            status: _container.status,
+            fromContainer: type=="Collection" ?  _container.name :  (transactionData?.toBin ?? _container.name),
+            toBin:  type=="Collection" ? undefined : binname
+          },
+          station:         data.station && type != "Collection"
+          ? data.station
+          : _container.station,
+          logindate: logindate,
+          binId: binId
+        });
+        //            updateBinWeight();
+        setWaste(null);
+        setTransactionData({});
+        setScanData("");
+        setUser(null);
+        setContainer(null);
+        setmessage("");
+        setNeto(0);
+        freezeNeto(false);
+        setFinalStep(false);
+        setIsSubmitAllowed(false);
+        setIdbin(-1);
+        setScanData("");
+        setinstruksimsg("");
+        return [];
+      }
+      else
+      {
+        return [
+          {
+            idContainer: _container.containerId,
+            badgeId: user.badgeId,
+            IdWaste: _container.IdWaste,
+            type: data.type,
+            idscraplog: transactionData?.idscraplog ?? "",
+            weight: data.weight,
+            success: false,
+            status: _container.status,
+            fromContainer:  (transactionData?.toBin ?? _container.name),
+            toBin:   binName,
+            station:         data.station && type != "Collection"
+            ? data.station
+            : _container.station,
+          }
+        ]
+      }
     }
   };
   const sendWeight = async (name, weight) => {
@@ -1129,22 +1155,9 @@ const Home = () => {
       }
     } catch (error) {}
   };
-  const saveTransaksi = async (dataContainer, dataWeight, dataTransaction) => {
-    const _finalNeto = dataWeight; //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
+  const saveTransaksi = async (payloads) => {
     const _p = {
-      payload: {
-        idContainer: dataContainer.containerId,
-        badgeId: user.badgeId,
-        IdWaste: dataContainer.IdWaste,
-        type: type,
-        weight: _finalNeto,
-        toBin: binDispose.name,
-        status: "Done",
-        fromContainer: dataTransaction?.toBin
-          ? dataTransaction?.toBin
-          : dataContainer.name,
-      },
-      station: dataContainer.station,
+      payload: [...payloads],
       logindate:logindate,
       binId:binDispose.id
     };
@@ -1155,10 +1168,6 @@ const Home = () => {
     //   _finalNeto,
     //   type
     // );
-    if (dataTransaction.idscraplog)
-      _p.payload.idscraplog = dataTransaction.idscraplog;
-    _p.payload.success = false;
-    if (!_p.payload.success) _p.payload.status = "Pending|PIDSG";
     try
     {
       await apiClient.post(
