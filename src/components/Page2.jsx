@@ -559,8 +559,9 @@ const Home = () => {
     setInterval(updateFocus, 1000);
   }, []);
   
-  const BuildDisposePayload = (dataContainer,dataWeight,dataTransaction) =>
+  const BuildDisposePayload = (dataInput) =>
   {
+    const {dataContainer,dataWeight,dataTransaction,dtSubmit} = dataInput;
     const _finalNeto = dataWeight; //neto50Kg > neto4Kg ? neto50Kg : neto4Kg;
     const _p =  {
         idContainer: dataContainer.containerId,
@@ -573,7 +574,8 @@ const Home = () => {
         fromContainer: dataTransaction?.toBin
           ? dataTransaction?.toBin
           : dataContainer.name,
-        station: dataContainer.station
+        station: dataContainer.station,
+        recordDate: dtSubmit
       };
     if (dataTransaction.idscraplog)
       _p.idscraplog = dataTransaction.idscraplog;
@@ -659,8 +661,8 @@ const Home = () => {
             else 
             {
                 payloads.push( 
-                  BuildDisposePayload(containers[i].dataContainer,containers[i].dataWeight,containers[i].dataTransaction
-                ));
+                  BuildDisposePayload(containers[i])
+                );
             }
           }
           await saveTransaksi(payloads);
@@ -1158,7 +1160,7 @@ const Home = () => {
   const saveTransaksi = async (payloads) => {
     const _p = {
       payload: [...payloads],
-      logindate:logindate,
+//      logindate:logindate,
       binId:binDispose.id
     };
     // const isSuccess = await sendDataPanasonicServer(
@@ -1184,52 +1186,6 @@ const Home = () => {
     {
       console.log(e);
     }
-  };
-  const updateTransaksi = async (trdata, type) => {
-    await updateTransaksiManual(trdata.idscraplog, type, waste);
-  };
-  const updateTransaksiManual = async (_idscraplog, _type, _waste) => {
-    const _finalNeto = waste
-      ? getWeight()
-      : _waste.scales == "4Kg"
-      ? neto4Kg
-      : neto50Kg;
-    try {
-      const res = await apiClient.put(
-        "http://localhost:5000/Transaksi/" + _idscraplog,
-        {
-          type: _type,
-          status: "Done",
-          weight: _finalNeto,
-          logindate: logindate,
-        },
-        {
-          validateStatus: (status) => {
-            return true;
-          },
-        }
-      );
-    } catch (e) {
-      console.log(e);
-    }
-    //        setWaste(null);
-    //  setScanData("");
-    //    setinstruksimsg("");
-  };
-  const updateContainerstatus = async () => {
-    //const _finalNeto = getWeight();
-    try {
-      const response = await apiClient.post(
-        `http://localhost:5000/UpdateContainerStatus`,
-        {
-          containerName: container.name,
-          status: "",
-        }
-      );
-      if (response.status != 200) {
-        return;
-      }
-    } catch (error) {}
   };
 
   const saveTransaksiCollection = async (_container,binId) => {
@@ -1377,6 +1333,7 @@ const Home = () => {
           setContainers([
             ...containers,
             {
+              dtSubmit:formatDate(new Date().toISOString()), 
               dataContainer: container,
               dataWeight: getWeight(),
               dataTransaction: transactionData,
