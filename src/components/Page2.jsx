@@ -512,7 +512,7 @@ const Home = () => {
     let finalWeight = 0;
     const binWeight = container?.weightbin ?? 0;
     if (Scales4Kg?.weight4Kg) {
-      finalWeight = parseFloat(Scales4Kg.weight4Kg) - parseFloat(binWeight);
+      finalWeight = parseFloat(Scales4Kg.weight4Kg) - (parseFloat(binWeight)/1000);
     }
     if (isFreeze) return;
     setNeto4kg(finalWeight);
@@ -1129,7 +1129,7 @@ const Home = () => {
             IdWaste: _container.IdWaste,
             type: data.type,
             idscraplog: transactionData?.idscraplog ?? "",
-            weight: data.weight,
+            weight: _finalNeto,
             success: false,
             status: _container.status,
             fromContainer:  (transactionData?.toBin ?? _container.name),
