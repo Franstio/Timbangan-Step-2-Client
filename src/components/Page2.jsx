@@ -32,6 +32,7 @@ import { InputAdornment } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import useLocalStoragePath from 'use-local-storage-state';
+import moment from 'moment';
 
 const apiClient = axios.create({
   withCredentials: false,
@@ -86,7 +87,7 @@ const Home = () => {
   const [rackTarget, setRackTarget] = useState(process.env.REACT_APP_RACK);
   const [apiTarget, setApiTarget] = useState(process.env.REACT_APP_PIDSG);
   const [transactionData, setTransactionData] = useLocalStoragePath("transactionData", { defaultValue: {} });
-  const [logindate, setLoginDate] = useLocalStoragePath("logindate", { defaultValue: "" });
+  const [logindate, setLoginDate] = useLocalStoragePath("logindate", { defaultValue: [] });
   const [containers, setContainers] = useLocalStoragePath("containers", { defaultValue: [] });
   const [checkInputInverval, setCheckInputInterval] = useState(null);
   const [ipAddress, setIpAddress] = useState(process.env.REACT_APP_PIDSG);
@@ -815,7 +816,6 @@ const Home = () => {
           setErrDisposeMessage(res.data.error);
         } else {
           if (res.data.user) {
-            setLoginDate(formatDate(new Date().toISOString()));
             setUser(res.data.user);
             setScanData("");
             setmessage("Scan Bin Machine/Bin");
@@ -1092,7 +1092,7 @@ const Home = () => {
             IdWaste: _container.IdWaste,
             type: data.type,
             idscraplog: transactionData?.idscraplog ?? "",
-            weight: data.weight,
+            weight: 0,
             success: false,
             status: _container.status,
             fromContainer: type=="Collection" ?  _container.name :  (transactionData?.toBin ?? _container.name),
@@ -1101,7 +1101,7 @@ const Home = () => {
           station:         data.station && type != "Collection"
           ? data.station
           : _container.station,
-          logindate: logindate,
+          logindate: moment().format("YYYY-MM-DD HH:mm:ss"),
           binId: binId
         });
         //            updateBinWeight();
@@ -1333,7 +1333,7 @@ const Home = () => {
           setContainers([
             ...containers,
             {
-              dtSubmit:formatDate(new Date().toISOString()), 
+              dtSubmit:moment().format("YYYY-MM-DD HH:mm:ss"), 
               dataContainer: container,
               dataWeight: getWeight(),
               dataTransaction: transactionData,
