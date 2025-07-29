@@ -625,6 +625,7 @@ const Home = () => {
             catch (err) {
               console.log(err);
               await RefreshNetwork();
+              setBinOffline(true);
               setScanData("");
               return;
             }
@@ -940,7 +941,7 @@ const Home = () => {
             } catch (err) {
               console.log(err);
               await RefreshNetwork();
-              //setBinOffline(true);
+              setBinOffline(true);
               setContainer(null);
               return;
             }
