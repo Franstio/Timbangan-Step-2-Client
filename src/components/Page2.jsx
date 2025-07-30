@@ -611,24 +611,24 @@ const Home = () => {
             console.log({ verification: containers, binDispose: binDispose });
             binDispose.weight =
               getTotalWeight() + parseFloat(binDispose.weight);
-            try {
-              await apiClient.post(
-                `http://${binDispose.name_hostname}.local:5000/End`,
-                {
-                  bin: binDispose,
-                },
-                {
-                  timeout: 10 * 1000
-                }
-              );
-            } 
-            catch (err) {
-              console.log(err);
-              await RefreshNetwork();
-              setBinOffline(true);
-              setScanData("");
-              return;
-            }
+            // try {
+            //   await apiClient.post(
+            //     `http://${binDispose.name_hostname}.local:5000/End`,
+            //     {
+            //       bin: binDispose,
+            //     },
+            //     {
+            //       timeout: 10 * 1000
+            //     }
+            //   );
+            // } 
+            // catch (err) {
+            //   console.log(err);
+            //   await RefreshNetwork();
+            //   setBinOffline(true);
+            //   setScanData("");
+            //   return;
+            // }
           }
           else
           {
