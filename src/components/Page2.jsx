@@ -1504,15 +1504,15 @@ const Home = () => {
     } else {
       setAllowReload(true);
       try {
-        // if (containers[0].dataContainer.waste.handletype != "Rack") {
-        //   const resData = await apiClient.post(
-        //     `http://${binDispose.name_hostname}.local:5000/Start`,
-        //     { bin: binDispose },
-        //     {
-        //       timeout: 10 * 1000
-        //     }
-        //   );
-        // }
+       if (containers[0].dataContainer.waste.handletype != "Rack") {
+           const resData = await apiClient.post(
+             `http://localhost:5000/Start`,
+             { bin: binDispose },
+             {
+               timeout: 10 * 1000
+             }
+           );
+         }
         setFinalStep(true);
         setmessage("Waiting For Verification");
         settoplockId(binDispose.name_hostname);
