@@ -801,7 +801,7 @@ const Home = () => {
   };
   useEffect(() => {
     if (!binDispose || binDispose == null || !binDispose.name_hostname) return;
-    setinstruksimsg("Buka Penutup Atas");
+//    setinstruksimsg("Buka Penutup Atas");
     //    sendType(binDispose.name_hostname, "Dispose");
   }, [binDispose]);
   useEffect(() => {
