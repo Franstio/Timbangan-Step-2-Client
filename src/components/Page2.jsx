@@ -543,7 +543,7 @@ const Home = () => {
       );
       return res.data.isRunning;
     } catch {
-      return false;
+      return true;
     }
   }
   useEffect(() => {
