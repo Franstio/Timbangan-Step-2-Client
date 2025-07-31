@@ -543,7 +543,7 @@ const Home = () => {
       );
       return res.data.isRunning;
     } catch {
-      return true;
+      return null;
     }
   }
   useEffect(() => {
@@ -604,6 +604,11 @@ const Home = () => {
           let check = true;
           if (containers[0].dataContainer.waste.handletype != "Rack") {
             const checkProcess = await checkProcessRunning();
+            if (checkProcess == null)
+            {
+              setBinOffline(true);
+              return;              
+            }
             if (checkProcess) {
               setErrDisposeMessage("Transaction Process Haven't completed yet");
               return;
