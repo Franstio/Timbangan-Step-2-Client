@@ -604,11 +604,6 @@ const Home = () => {
           let check = true;
           if (containers[0].dataContainer.waste.handletype != "Rack") {
             const checkProcess = await checkProcessRunning();
-            if (checkProcess == null)
-            {
-              setBinOffline(true);
-              return;              
-            }
             if (checkProcess) {
               setErrDisposeMessage("Transaction Process Haven't completed yet");
               return;
@@ -922,6 +917,11 @@ const Home = () => {
             );
 
             const checkProcess = await GetBinStatus(_bin.name_hostname);
+            if (checkProcess == null)
+            {
+              setBinOffline(true);
+              return;              
+            }
             if (checkProcess) {
               setErrDisposeMessage("Transaction Process Haven't completed yet, Please Submit Again after bin transaction completed.");
               return;
