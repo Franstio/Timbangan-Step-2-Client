@@ -530,7 +530,7 @@ const Home = () => {
   };
   const checkProcessRunning = async () => {
 
-    if (!binDispose) return false;
+    if (!binDispose) return true;
     return await GetBinStatus(binDispose.name_hostname);
   };
   const GetBinStatus = async (binName)=>{
@@ -1299,7 +1299,7 @@ const Home = () => {
           } else checkBinAvailable = await CheckBinCapacity();
         }
         if (checkBinAvailable == null && container.waste.handletype!='Rack') {
-          setErrDisposeMessage("Invalid Bin Detected");
+          setErrDisposeMessage("Invalid Bin Detected/Bin Disconnect");
           setContainer(null);
           return;
         }
