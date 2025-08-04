@@ -1383,8 +1383,10 @@ const Home = () => {
     freezeNeto(false);
   };
   const reloadBin = async (reloadLocal)=>{
+    await apiClient.get(`http://localhost:5000/reset-dispose`);
     if (containers.length > 0 && binDispose != null && binDispose.name_hostname) 
     {
+      
       try
       {
         await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
