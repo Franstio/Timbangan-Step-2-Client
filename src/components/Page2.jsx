@@ -1448,6 +1448,8 @@ const Home = () => {
       setRestartModal({showModal:false,passwordInput:'',showPassword:false});
       if (verif.data.isValid==1)
       {
+        
+      await apiClient.get(`http://localhost:5000/reset-dispose`);
         localStorage.clear();
         if (binDispose && binDispose.name_hostname)
         {
