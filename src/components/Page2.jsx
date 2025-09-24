@@ -63,6 +63,8 @@ const Home = () => {
   const [allowContinueModal, setAllowContinueModal] = useState(false);
   const [showModalInfoScale, setShowModalInfoScales] = useState(false);
   const [showErrorDispose, setShowErrorDispose] = useState(false);
+  const [showBinProblemMessage,setShowBinProblemMessage] = useState(false);
+  const [binProblem,setBinProblem] = useState({continue: false});
   const [errDisposeMessage, setErrDisposeMessage] = useState("");
   const [finalneto, setFinalNeto] = useState(0);
   const [neto, setNeto] = useLocalStoragePath("neto", { defaultValue: {} });
@@ -546,6 +548,19 @@ const Home = () => {
       return null;
     }
   }
+  const GetBinStatusFull = async (binName)=>{
+    try {
+      const res = await apiClient.get(
+        `http://${binName}.local:5000/status`,
+        {
+          timeout: 10 * 1000
+        }
+      );
+      return res.data;
+    } catch {
+      return null;
+    }
+  }
   useEffect(() => {
     const updateFocus = () => {
       if (inputRef && inputRef.current) {
@@ -584,6 +599,96 @@ const Home = () => {
     if (!_p.success) _p.status = "Pending|PIDSG";
     return {..._p};
   }
+  const verifProcess =async  ()=>{
+    if (binDispose.name != scanData) {
+      setErrDisposeMessage("mismatch name");
+      setScanData("");
+      return;
+    }
+    let check = true;
+    if (containers[0].dataContainer.waste.handletype != "Rack") {
+      const checkProcess = await checkProcessRunning();
+      if (checkProcess && !binProblem.continue) {
+        setShowBinProblemMessage(true);
+//        setErrDisposeMessage("Transaction Process Haven't completed yet");
+        return;
+      }
+      console.log({ verification: containers, binDispose: binDispose });
+      binDispose.weight =
+        getTotalWeight() + parseFloat(binDispose.weight);
+      // try {
+      //   await apiClient.post(
+      //     `http://${binDispose.name_hostname}.local:5000/End`,
+      //     {
+      //       bin: binDispose,
+      //     },
+      //     {
+      //       timeout: 10 * 1000
+      //     }
+      //   );
+      // } 
+      // catch (err) {
+      //   console.log(err);
+      //   await RefreshNetwork();
+      //   setBinOffline(true);
+      //   setScanData("");
+      //   return;
+      // }
+    }
+    else
+    {
+      const rackCheck = await checkAPI(rackTarget);
+      setRackActive(rackCheck);
+      if (!rackCheck)
+        return;
+    }
+    const payloads = [];
+    for (let i = 0; i < containers.length; i++) {
+      if ( containers[i].dataContainer.waste.handletype != "Rack" && !check ) 
+      {
+        const isSensorTop = await readSensorTop(binDispose.name_hostname);
+        check = isSensorTop;
+        if (isSensorTop.error) {
+          setErrDisposeMessage("Error Ketika Membaca Sensor");
+          setScanData("");
+          return;
+        }
+        if (!isSensorTop) {
+          setErrDisposeMessage("Tutup Penutup Atas.");
+          setScanData("");
+          return;
+        }
+      }
+      if ( containers[i].dataContainer.waste.handletype == "Rack" || waste.handletype == "Rack")
+      {
+        const res = await saveTransaksiRack(containers[i].dataContainer,binDispose.name,"Dispose",binDispose.id);
+        if (res.length > 0)
+          payloads.push(res[0])
+      } 
+      else 
+      {
+          payloads.push( 
+            BuildDisposePayload(containers[i])
+          );
+      }
+    }
+    await saveTransaksi(payloads);
+    setmessage("DATA TELAH MASUK");
+    setContainers([]);
+    setIdbin(binDispose.id);
+    setTypeCollection(null);
+    setBinDispose(null);
+    setFinalStep(false);
+    setWaste(null);
+    setBinProblem({continue:false});
+    //setinstruksimsg("DATA TELAH MASUK");
+    setTimeout(async () => {
+      setmessage("");
+    }, 700);
+    //VerificationScan();
+
+    //                setScanData('');
+  }
   const handleKeyPress = async (e) => {
     try {
       const check = await checkAPI("localhost:5000");
@@ -596,92 +701,7 @@ const Home = () => {
         if (inputRef.current) inputRef.current.disabled = true;
         if (user == null) handleScan();
         else if (isFinalStep) {
-          if (binDispose.name != scanData) {
-            setErrDisposeMessage("mismatch name");
-            setScanData("");
-            return;
-          }
-          let check = true;
-          if (containers[0].dataContainer.waste.handletype != "Rack") {
-            const checkProcess = await checkProcessRunning();
-            if (checkProcess) {
-              setErrDisposeMessage("Transaction Process Haven't completed yet");
-              return;
-            }
-            console.log({ verification: containers, binDispose: binDispose });
-            binDispose.weight =
-              getTotalWeight() + parseFloat(binDispose.weight);
-            // try {
-            //   await apiClient.post(
-            //     `http://${binDispose.name_hostname}.local:5000/End`,
-            //     {
-            //       bin: binDispose,
-            //     },
-            //     {
-            //       timeout: 10 * 1000
-            //     }
-            //   );
-            // } 
-            // catch (err) {
-            //   console.log(err);
-            //   await RefreshNetwork();
-            //   setBinOffline(true);
-            //   setScanData("");
-            //   return;
-            // }
-          }
-          else
-          {
-            const rackCheck = await checkAPI(rackTarget);
-            setRackActive(rackCheck);
-            if (!rackCheck)
-              return;
-          }
-          const payloads = [];
-          for (let i = 0; i < containers.length; i++) {
-            if ( containers[i].dataContainer.waste.handletype != "Rack" && !check ) 
-            {
-              const isSensorTop = await readSensorTop(binDispose.name_hostname);
-              check = isSensorTop;
-              if (isSensorTop.error) {
-                setErrDisposeMessage("Error Ketika Membaca Sensor");
-                setScanData("");
-                return;
-              }
-              if (!isSensorTop) {
-                setErrDisposeMessage("Tutup Penutup Atas.");
-                setScanData("");
-                return;
-              }
-            }
-            if ( containers[i].dataContainer.waste.handletype == "Rack" || waste.handletype == "Rack")
-            {
-              const res = await saveTransaksiRack(containers[i].dataContainer,binDispose.name,"Dispose",binDispose.id);
-              if (res.length > 0)
-                payloads.push(res[0])
-            } 
-            else 
-            {
-                payloads.push( 
-                  BuildDisposePayload(containers[i])
-                );
-            }
-          }
-          await saveTransaksi(payloads);
-          setmessage("DATA TELAH MASUK");
-          setContainers([]);
-          setIdbin(binDispose.id);
-          setTypeCollection(null);
-          setBinDispose(null);
-          setFinalStep(false);
-          setWaste(null);
-          //setinstruksimsg("DATA TELAH MASUK");
-          setTimeout(async () => {
-            setmessage("");
-          }, 700);
-          //VerificationScan();
-
-          //                setScanData('');
+            await verifProcess();
         } else if (container == null) {
           handleScan1();
         }
@@ -765,8 +785,6 @@ const Home = () => {
         return false;
       }
       res.bin.type = "Dispose";
-      setBinDispose(res.bin);
-      setBinname(res.bin.name);
       return res.bin;
     } catch (error) {
       console.log(error);
@@ -1291,8 +1309,20 @@ const Home = () => {
             }
             checkBinAvailable = await CheckBinCapacityRack(checkName);
 //            checkBinAvailable.max_weight = 100;
-          } else checkBinAvailable = await CheckBinCapacity();
+          } else 
+          {
+            checkBinAvailable = await CheckBinCapacity();
+            const statusBin = await GetBinStatusFull(checkBinAvailable.name); 
+            if (statusBin.isPending)
+            {
+              setErrDisposeMessage(`Bin ${checkBinAvailable.name} Dalam Kondisi Pending`);
+              return;
+            }
+          }
         }
+        setBinDispose(checkBinAvailable);
+        setBinname(checkBinAvailable.name);
+  
         if (checkBinAvailable == null && container.waste.handletype!='Rack') {
           setErrDisposeMessage("Invalid Bin Detected/Bin Disconnect");
           setContainer(null);
@@ -1382,8 +1412,22 @@ const Home = () => {
     toggleModal();
     freezeNeto(false);
   };
+  const resetBin = async ()=>{
+    if (binDispose && binDispose.name_hostname)
+    {
+      await apiClient.get(`http://${binDispose.name_hostname}.local:5000/clear-bin`);
+      setTimeout(async () => {
+        const resData = await apiClient.post(
+          `http://${binDispose.name_hostname}.local:5000/Start`,
+          { bin: binDispose },
+          {
+            timeout: 10 * 1000
+          });
+      }, 3000);
+    }
+  }
   const reloadBin = async (reloadLocal)=>{
-    await apiClient.get(`http://localhost:5000/reset-dispose`);
+//    await apiClient.get(`http://localhost:5000/reset-dispose`);
     if (containers.length > 0 && binDispose != null && binDispose.name_hostname) 
     {
       
@@ -1988,6 +2032,58 @@ const Home = () => {
             </div>
           )}
         </div>
+        <div className="flex justify-start">
+          {showBinProblemMessage && (
+            <div
+              className="fixed z-10 inset-0 overflow-y-auto"
+              onKeyDown={handleKeyPressModal}
+            >
+              <div className="flex items-center justify-center min-h-screen">
+                <div
+                  className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                  aria-hidden="true"
+                ></div>
+
+                <div className="bg-white rounded p-8 max-w-md mx-auto z-50">
+                  <div className="text-center mb-4"></div>
+                  <form>
+                    <Typography variant="h4" align="center" gutterBottom>
+                      Bin {binname} Belum Selesai Transaksi.
+                    </Typography>
+                    <div className="flex justify-center gap-2 mt-5">
+                      <button
+                        type="button"
+                        autoFocus={true}
+                        onClick={  () => {
+                          setShowBinProblemMessage(false);
+                          setBinProblem({continue:false});
+                          resetBin();
+                        }}
+                        className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                      >
+                        Ulangi Proses Transaksi di Bin
+                      </button>
+                      <button
+                        type="button"
+                        autoFocus={true}
+                        onClick={() => {
+
+                          setShowBinProblemMessage(false);
+                          setBinProblem({continue:true});
+                          verifProcess();
+                        }}
+                        className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                      >
+                        Tetap Lanjutkan Verifikasi
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        
         <div className="flex justify-start">
         {serverErr.show && (
                         <div className="fixed z-10 inset-0 overflow-y-auto">
