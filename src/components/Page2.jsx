@@ -1312,10 +1312,10 @@ const Home = () => {
           } else 
           {
             checkBinAvailable = await CheckBinCapacity();
-            const statusBin = await GetBinStatusFull(checkBinAvailable.name); 
+            const statusBin = await GetBinStatusFull(checkBinAvailable.name_hostname); 
             if (statusBin.isPending)
             {
-              setErrDisposeMessage(`Bin ${checkBinAvailable.name} Dalam Kondisi Pending`);
+              setErrDisposeMessage(`Bin ${checkBinAvailable.name_hostname} Dalam Kondisi Pending`);
               return;
             }
           }
