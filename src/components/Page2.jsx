@@ -609,8 +609,8 @@ const Home = () => {
     if (containers[0].dataContainer.waste.handletype != "Rack") {
       const checkProcess = await checkProcessRunning();
       if (checkProcess && !binProblem.continue) {
-        setShowBinProblemMessage(true);
-//        setErrDisposeMessage("Transaction Process Haven't completed yet");
+        //setShowBinProblemMessage(true);
+        setErrDisposeMessage("Transaction Process Haven't completed yet");
         return;
       }
       console.log({ verification: containers, binDispose: binDispose });
