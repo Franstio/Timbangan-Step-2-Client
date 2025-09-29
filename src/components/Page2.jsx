@@ -545,7 +545,7 @@ const Home = () => {
       );
       return res.data.isRunning;
     } catch {
-      return true;
+      return null;
     }
   }
   const GetBinStatusFull = async (binName)=>{
@@ -935,6 +935,11 @@ const Home = () => {
             );
 
             const checkProcess = await GetBinStatus(_bin.name_hostname);
+            if (checkProcess == null)
+            {
+              setBinOffline(true);
+              return;
+            }
             if (checkProcess) {
               setErrDisposeMessage("Transaction Process Haven't completed yet, Please Submit Again after bin transaction completed.");
               return;
@@ -1313,11 +1318,11 @@ const Home = () => {
           {
             checkBinAvailable = await CheckBinCapacity();
             const statusBin = await GetBinStatusFull(checkBinAvailable.name_hostname); 
-            if (statusBin.isPending)
-            {
-              setErrDisposeMessage(`Bin ${checkBinAvailable.name_hostname} Dalam Kondisi Pending`);
-              return;
-            }
+            // if (statusBin.isPending)
+            // {
+            //   setErrDisposeMessage(`Bin ${checkBinAvailable.name_hostname} Dalam Kondisi Pending`);
+            //   return;
+            // }
           }
         }
         setBinDispose(checkBinAvailable);
