@@ -545,7 +545,7 @@ const Home = () => {
       );
       return res.data.isRunning;
     } catch {
-      return null;
+      return true;
     }
   }
   const GetBinStatusFull = async (binName)=>{
