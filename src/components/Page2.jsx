@@ -599,7 +599,7 @@ const Home = () => {
     if (!_p.success) _p.status = "Pending|PIDSG";
     return {..._p};
   }
-  const verifProcess =async  ()=>{
+  const verifProcess =async  (disabled)=>{
     if (binDispose.name != scanData) {
       setErrDisposeMessage("mismatch name");
       setScanData("");
@@ -609,8 +609,8 @@ const Home = () => {
     if (containers[0].dataContainer.waste.handletype != "Rack") {
       const checkProcess = await checkProcessRunning();
       if (checkProcess && !binProblem.continue) {
-        //setShowBinProblemMessage(true);
-        setErrDisposeMessage("Transaction Process Haven't completed yet");
+        setShowBinProblemMessage(true);
+        //setErrDisposeMessage("Transaction Process Haven't completed yet");
         return;
       }
       console.log({ verification: containers, binDispose: binDispose });
@@ -672,7 +672,7 @@ const Home = () => {
           );
       }
     }
-    await saveTransaksi(payloads);
+    await saveTransaksi(payloads,disabled);
     setmessage("DATA TELAH MASUK");
     setContainers([]);
     setIdbin(binDispose.id);
@@ -701,7 +701,7 @@ const Home = () => {
         if (inputRef.current) inputRef.current.disabled = true;
         if (user == null) handleScan();
         else if (isFinalStep) {
-            await verifProcess();
+            await verifProcess(false);
         } else if (container == null) {
           handleScan1();
         }
@@ -1181,11 +1181,12 @@ const Home = () => {
       }
     } catch (error) {}
   };
-  const saveTransaksi = async (payloads) => {
+  const saveTransaksi = async (payloads,disabled) => {
     const _p = {
       payload: [...payloads],
 //      logindate:logindate,
-      binId:binDispose.id
+      binId:binDispose.id,
+      disabled: disabled ? 1: 0
     };
     // const isSuccess = await sendDataPanasonicServer(
     //   dataContainer.station,
@@ -2075,7 +2076,7 @@ const Home = () => {
 
                           setShowBinProblemMessage(false);
                           setBinProblem({continue:true});
-                          verifProcess();
+                          verifProcess(true);
                         }}
                         className="bg-gray-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
                       >
