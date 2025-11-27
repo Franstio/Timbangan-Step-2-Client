@@ -935,7 +935,7 @@ const Home = () => {
             );
 
             const checkProcess = await GetBinStatus(_bin.name_hostname);
-            if (checkProcess == null)
+            if (checkProcess == null && res.data.container.waste.handletype != "Rack")
             {
               setBinOffline(true);
               return;
