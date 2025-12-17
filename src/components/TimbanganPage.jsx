@@ -566,7 +566,9 @@ const TimbanganPage = () => {
                         const tr = checkTr.data;
                         setTransactionData(tr);
                     } catch (err) {
-                        setErrDisposeMessage("Error Fetching Transaction");
+                        setErrDisposeMessage("Step-1 Data Not Registered in Current step-2. Synchronizing data, please retry transaction from start.");
+                        setUser(null);
+                        setScanData("");
                         return;
                     }
                 }
