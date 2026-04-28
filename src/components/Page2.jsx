@@ -515,7 +515,7 @@ const Home = () => {
     let finalWeight = 0;
     const binWeight = container?.weightbin ?? 0;
     if (Scales4Kg?.weight4Kg) {
-      finalWeight = parseFloat(Scales4Kg.weight4Kg) - (parseFloat(binWeight)/1000);
+      finalWeight = parseFloat(Scales4Kg.weight4Kg) - (parseFloat(binWeight));
     }
     if (isFreeze) return;
     setNeto4kg(finalWeight);
