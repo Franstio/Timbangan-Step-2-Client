@@ -520,7 +520,21 @@ const Home = () => {
     if (isFreeze) return;
     setNeto4kg(finalWeight);
   }, [Scales4Kg, container?.weightbin]);
-
+  const submitEvent = ()=>{
+    if (waste.scales == null || waste.scales == undefined || (waste.scales == "4Kg" &&  (neto4Kg < 0 || Scales4Kg?.weight4Kg < 0 ) ) || (waste.scales == "50Kg" && (neto50Kg < 0 || Scales50Kg.weight50Kg)) )
+    {
+      if ((waste.scales == "4Kg" &&  (neto4Kg == 0 || Scales4Kg?.weight4Kg == 0 ) ) || (waste.scales == "50Kg" && (neto50Kg < 0 || Scales50Kg.weight50Kg)) )
+      {
+        setErrDisposeMessage("Berat tidak boleh 0 Cek kembali timbangan");
+      }
+      else if ((waste.scales == "4Kg" &&  (neto4Kg == 0 || Scales4Kg?.weight4Kg == 0 ) ) || (waste.scales == "50Kg" && (neto50Kg < 0 || Scales50Kg.weight50Kg)) ) 
+      {
+        setErrDisposeMessage("Berat Tidak Valid/minus");
+      }
+    }
+    else
+      toggleModal();
+  }
   const toggleModal = () => {
     freezeNeto(true);
     setShowModal(!showModal);
@@ -1759,7 +1773,7 @@ const Home = () => {
               <button
                 className="block w-full border rounded py-2 flex justify-center items-center font-bold mt-5 bg-sky-400 text-white text-lg"
                 disabled={!isSubmitAllowed}
-                onClick={toggleModal}
+                onClick={submitEvent}
               >
                 Submit
               </button>
